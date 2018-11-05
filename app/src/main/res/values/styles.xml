@@ -1,5 +1,8 @@
 <resources>
 
+    <!-- Login Facebook -->
+    <string name="facebook_app_id">531716617299342</string> <string name="fb_login_protocol_scheme">fb531716617299342</string>
+
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
