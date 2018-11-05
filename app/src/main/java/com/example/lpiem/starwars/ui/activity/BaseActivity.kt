@@ -1,8 +1,8 @@
-package com.example.lpiem.starwars.View
+package com.example.lpiem.starwars.ui.activity
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 
-open class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()

@@ -1,4 +1,4 @@
-package com.example.lpiem.starwars.Model
+package com.example.lpiem.starwars.model
 
 data class Card(
         var idCard: Int,
