@@ -3,6 +3,7 @@ package com.example.lpiem.starwars.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import com.example.lpiem.starwars.R
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -22,8 +23,11 @@ import kotlinx.android.synthetic.main.connection_activity.*
 import timber.log.Timber
 import java.util.*
 import kotlin.math.sign
+import com.facebook.AccessToken
 
-class ConnectionActivity : BaseActivity() {
+
+
+class ConnectionActivity : AppCompatActivity() {
 
     private val RC_SIGN_IN = 0
     private var TAG = "ConectionActivity"
@@ -35,9 +39,6 @@ class ConnectionActivity : BaseActivity() {
         setContentView(R.layout.connection_activity)
         FacebookSdk.sdkInitialize(applicationContext)
         AppEventsLogger.activateApp(this)
-
-        loginWithFacebook()
-        loginWithGoogle()
 
         b_login_google.clicks()
                 .subscribe(
@@ -56,21 +57,19 @@ class ConnectionActivity : BaseActivity() {
     fun loginWithFacebook(){
 
             callbackManager = CallbackManager.Factory.create()
-            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"))
             LoginManager.getInstance().registerCallback(callbackManager,
                     object : FacebookCallback<LoginResult> {
                         override fun onSuccess(loginResult: LoginResult) {
                             Log.d(TAG, "Facebook token: " + loginResult.accessToken.token)
+                            MainActivity.start(this@ConnectionActivity)
                         }
 
                         override fun onCancel() {
                             Log.d(TAG, "Facebook onCancel.")
-
                         }
 
                         override fun onError(error: FacebookException) {
                             Log.d(TAG, "Facebook onError.")
-
                         }
                     })
     }
@@ -79,21 +78,14 @@ class ConnectionActivity : BaseActivity() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build()
-
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
-
-        signIn()
-
-    }
-
-    private fun signIn() {
         val signInIntent = mGoogleSignInClient.getSignInIntent()
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
         callbackManager?.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
@@ -104,16 +96,18 @@ class ConnectionActivity : BaseActivity() {
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account = completedTask.getResult(ApiException::class.java)
-
-            // Signed in successfully, show authenticated UI.
-            //updateUI(account)
+            updateUI(account)
         } catch (e: ApiException) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "signInResult:failed code=" + e.statusCode)
-            //updateUI(null)
+            updateUI(null)
         }
+    }
 
+    private fun updateUI(account: GoogleSignInAccount?) {
+        if(account != null){
+            Log.d(TAG, "Google token: " +  account.email)
+            MainActivity.start(this)
+        }
     }
 
 }

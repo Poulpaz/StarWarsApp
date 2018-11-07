@@ -15,6 +15,14 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        fun start(fromActivity: AppCompatActivity) {
+            fromActivity.startActivity(
+                    Intent(fromActivity, MainActivity::class.java)
+            )
+        }
+    }
+
     private lateinit var currentController: NavController
     private lateinit var navControllerHome: NavController
     private lateinit var navControllerProfile: NavController
