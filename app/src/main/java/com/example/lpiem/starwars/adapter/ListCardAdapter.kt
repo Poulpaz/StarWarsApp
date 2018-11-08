@@ -1,5 +1,7 @@
 package com.example.lpiem.starwars.adapter
 
+import android.content.res.Resources
+import android.graphics.drawable.Drawable
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +15,7 @@ import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.view.clicks
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.item_card.view.*
+import org.kodein.di.generic.kcontext
 
 class ListCardAdapter : ListAdapter<Card, ListCardAdapter.CardViewHolder>(DiffCardCallback()) {
 
@@ -30,6 +33,7 @@ class ListCardAdapter : ListAdapter<Card, ListCardAdapter.CardViewHolder>(DiffCa
     inner class CardViewHolder(itemView: View, private val indexClickPublisher: PublishSubject<Int>) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(card: Card) {
+            itemView.iv_item_starship.drawable
             itemView.item_card_name.text = card.name
             itemView.item_card_speed.text = card.hyperdrive_rating.toString()
             itemView.item_card_passengers.text = card.passengers.toString()
