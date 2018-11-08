@@ -4,9 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import com.example.lpiem.starwars.BuildConfig
-import com.example.lpiem.starwars.adapter.ListCardAdapter
 import com.example.lpiem.starwars.datasource.SWService
-import com.example.lpiem.starwars.model.Card
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.Interceptor

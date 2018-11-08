@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lpiem.starwars.R
-import com.example.lpiem.starwars.model.Card
+import com.example.lpiem.starwars.Model.Card
 import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.view.clicks
 import io.reactivex.subjects.PublishSubject

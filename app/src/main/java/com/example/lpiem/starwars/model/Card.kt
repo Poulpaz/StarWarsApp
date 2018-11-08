@@ -1,4 +1,4 @@
-package com.example.lpiem.starwars.model
+package com.example.lpiem.starwars.Model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

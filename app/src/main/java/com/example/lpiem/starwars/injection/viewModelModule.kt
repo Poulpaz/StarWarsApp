@@ -22,4 +22,5 @@ val viewModelModule = Kodein.Module("ViewModelModule") {
         val factory = HomeFragmentViewModel.Factory(instance())
         ViewModelProvider(fragment, factory).get(HomeFragmentViewModel::class.java)
     }
+
 }
