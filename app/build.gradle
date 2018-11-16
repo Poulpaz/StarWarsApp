@@ -80,4 +80,6 @@ dependencies {
     implementation "android.arch.navigation:navigation-fragment:$versions.navigationVersion"
     implementation "android.arch.navigation:navigation-ui:$versions.navigationVersion"
 
+    //Picasso
+    implementation "com.squareup.picasso:picasso:$versions.picasso"
 }

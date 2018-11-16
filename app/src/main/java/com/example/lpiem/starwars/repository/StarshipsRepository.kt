@@ -1,9 +1,8 @@
 package com.example.lpiem.starwars.repository
 
-import android.util.Log
-import com.example.lpiem.starwars.Model.RawCard
 import com.example.lpiem.starwars.datasource.SWService
-import com.example.lpiem.starwars.Model.Card
+import com.example.lpiem.starwars.model.Card
+import com.example.lpiem.starwars.model.RawCard
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -22,7 +21,7 @@ class StarshipsRepository(private val service: SWService){
 
         obs.subscribe(
                 {
-                    starshipsList.onNext(it.results)
+                    starshipsList.onNext(it.cards)
                 },
                 { Timber.e(it)}
         )

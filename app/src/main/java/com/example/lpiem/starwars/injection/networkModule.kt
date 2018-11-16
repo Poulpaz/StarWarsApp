@@ -28,7 +28,7 @@ val networkModule = Kodein.Module("Network") {
     val tagGsonConverterFactory = "gsonConverterFactory"
     val tagRxJavaCallAdapterFactory = "rxJavaCallAdapterFactory"
 
-    constant(Tag.TAG_PROD_BASE_URL) with "https://swapi.co/api/"
+    constant(Tag.TAG_PROD_BASE_URL) with "https://api.magicthegathering.io/v1/"
 
     bind<Interceptor>(tagLoggingInterceptor) with singleton {
         val hli = HttpLoggingInterceptor()

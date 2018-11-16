@@ -1,63 +1,78 @@
-package com.example.lpiem.starwars.Model
+package com.example.lpiem.starwars.model
 
-import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 data class Card(
-        var idCard: Int = 0,
-        var idUser: Int?,
-        @SerializedName("name")
-        @Expose
-        var name: String? = null,
-        @SerializedName("model")
-        @Expose
-        var model: String? = null,
-        @SerializedName("manufacturer")
-        @Expose
-        var manufactureur: String? = null,
-        @SerializedName("cost_in_credits")
-        @Expose
-        var cost_in_credits: String? = null,
-        @SerializedName("length")
-        @Expose
-        var length: String? = null,
-        @SerializedName("max_atmosphering_speed")
-        @Expose
-        var max_atmosphering_speed: String? = null,
-        @SerializedName("crew")
-        @Expose
-        var crew: String? = null,
-        @SerializedName("passengers")
-        @Expose
-        var passengers: String? = null,
-        @SerializedName("cargo_capacity")
-        @Expose
-        var cargo_capacity: String? = null,
-        @SerializedName("consumables")
-        @Expose
-        var consumables: String? = null,
-        @SerializedName("hyperdrive_rating")
-        @Expose
-        var hyperdrive_rating: String? = null,
-        @SerializedName("MGLT")
-        @Expose
-        var MGLT: String? = null,
-        @SerializedName("starship_class")
-        @Expose
-        var starship_class: String? = null,
-        @SerializedName("pilot")
-        @Expose
-        var pilot: List<String>? = null,
-        @SerializedName("films")
-        @Expose
-        var films: List<String>? = null,
-        @SerializedName("created")
-        @Expose
-        var created: String? = null,
-        @SerializedName("edited")
-        @Expose
-        var edited: String? = null,
-        @SerializedName("url")
-        @Expose
-        var url: String? = null
+
+	@field:SerializedName("colorIdentity")
+	val colorIdentity: List<String?>? = null,
+
+	@field:SerializedName("setName")
+	val setName: String,
+
+	@field:SerializedName("multiverseid")
+	val idCard: Int,
+
+	@field:SerializedName("types")
+	val types: List<String?>? = null,
+
+	@field:SerializedName("set")
+	val set: String? = null,
+
+	@field:SerializedName("originalType")
+	val originalType: String? = null,
+
+	@field:SerializedName("artist")
+	val artist: String? = null,
+
+	@field:SerializedName("rulings")
+	val rulings: List<RulingsItem?>? = null,
+
+	@field:SerializedName("type")
+	val type: String? = null,
+
+	@field:SerializedName("colors")
+	val colors: List<String?>? = null,
+
+	@field:SerializedName("subtypes")
+	val subtypes: List<String?>? = null,
+
+	@field:SerializedName("layout")
+	val layout: String? = null,
+
+	@field:SerializedName("originalText")
+	val originalText: String? = null,
+
+	@field:SerializedName("number")
+	val number: String? = null,
+
+	@field:SerializedName("printings")
+	val printings: List<String?>? = null,
+
+	@field:SerializedName("imageUrl")
+	val imageUrl: String? = null,
+
+	@field:SerializedName("name")
+	val name: String? = null,
+
+	@field:SerializedName("cmc")
+	val cmc: Int? = null,
+
+	@field:SerializedName("text")
+	val text: String? = null,
+
+	@field:SerializedName("power")
+	val power: String? = null,
+
+	@field:SerializedName("id")
+	val id: String? = null,
+
+	@field:SerializedName("manaCost")
+	val manaCost: String? = null,
+
+	@field:SerializedName("toughness")
+	val toughness: String? = null,
+
+	@field:SerializedName("rarity")
+	val rarity: String? = null
 )

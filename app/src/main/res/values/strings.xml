@@ -5,7 +5,7 @@
     <string name="title_profile">Profile</string>
 
     <!-- Login Facebook -->
-    <string name="facebook_app_id">531716617299342</string>
-    <string name="fb_login_protocol_scheme">fb531716617299342</string>
+    <string name="facebook_app_id">1046138468897261</string>
+    <string name="fb_login_protocol_scheme">fb1046138468897261</string>
 
 </resources>

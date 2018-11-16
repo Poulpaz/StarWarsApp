@@ -1,20 +1,9 @@
-package com.example.lpiem.starwars.Model
+package com.example.lpiem.starwars.model
 
-import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class RawCard (
-        @SerializedName("count")
-        @Expose
-        var count: Int = 0,
-        @SerializedName("next")
-        @Expose
-        var next: String? = null,
-        @SerializedName("previous")
-        @Expose
-        var previous: Object? = null,
-        @SerializedName("results")
-        @Expose
-        var results: List<Card>
-)
+data class RawCard(
 
+	@field:SerializedName("cards")
+	val cards: List<Card>
+)
