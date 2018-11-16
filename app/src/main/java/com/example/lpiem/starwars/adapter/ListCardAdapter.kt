@@ -1,8 +1,5 @@
 package com.example.lpiem.starwars.adapter
 
-import android.content.res.Resources
-import android.graphics.drawable.Drawable
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +12,6 @@ import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.view.clicks
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.item_card.view.*
-import org.kodein.di.generic.kcontext
 
 class ListCardAdapter : ListAdapter<Card, ListCardAdapter.CardViewHolder>(DiffCardCallback()) {
 
