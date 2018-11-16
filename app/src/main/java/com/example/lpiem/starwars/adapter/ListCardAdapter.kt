@@ -1,8 +1,5 @@
 package com.example.lpiem.starwars.adapter
 
-import android.content.Context
-import android.graphics.pdf.PdfDocument
-import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +14,6 @@ import com.jakewharton.rxbinding2.view.clicks
 import com.squareup.picasso.Picasso
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.item_card.view.*
-import java.net.URI
 
 class ListCardAdapter : ListAdapter<Card, ListCardAdapter.CardViewHolder>(DiffCardCallback()) {
 
@@ -39,7 +35,7 @@ class ListCardAdapter : ListAdapter<Card, ListCardAdapter.CardViewHolder>(DiffCa
 
                 //itemView.iv_item_card.setImageURI(Uri.parse("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=439390&type=card"))
                 Picasso.get()
-                        .load("http://gatherer.wizards.com/Handlers/Image?multiverseid=439390&type=card")
+                        .load(Uri.decode("http://gatherer.wizards.com/Handlers/Image?multiverseid=439390&type=card"))
                         .into(itemView.iv_item_card)
             }
             itemView.item_card_name.text = card.name
