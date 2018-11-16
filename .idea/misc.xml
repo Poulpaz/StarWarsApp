@@ -2,9 +2,12 @@
 <project version="4">
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" project-jdk-name="1.8" project-jdk-type="JavaSDK">
 =======
 =======
+=======
+>>>>>>> 5e9fb54611d6f40a96b40639e82cc075dd14d233
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="android.support.annotation.Nullable" />
     <option name="myDefaultNotNull" value="android.support.annotation.NonNull" />
@@ -34,6 +37,9 @@
       </value>
     </option>
   </component>
+<<<<<<< HEAD
+>>>>>>> 5e9fb54611d6f40a96b40639e82cc075dd14d233
+=======
 >>>>>>> 5e9fb54611d6f40a96b40639e82cc075dd14d233
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
 >>>>>>> 3c2f7e3e74c11225502019d93c9f802621652e73
