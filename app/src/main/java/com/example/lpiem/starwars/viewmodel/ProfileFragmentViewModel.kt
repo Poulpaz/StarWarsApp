@@ -8,15 +8,15 @@ import com.example.lpiem.starwars.utils.disposedBy
 import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
 
-class HomeFragmentViewModel(repository: CardsRepository) : BaseViewModel() {
+class ProfileFragmentViewModel(repository: CardsRepository) : BaseViewModel() {
 
     val starshipsList: BehaviorSubject<List<Card>?> = BehaviorSubject.create()
 
     init {
-        repository.fetchStarships()
+        repository.starshipsList
                 .subscribe(
                         {
-                            starshipsList.onNext(it.cards)
+                            starshipsList.onNext(it)
                         },
                         { Timber.e(it) }
                 )
@@ -26,7 +26,8 @@ class HomeFragmentViewModel(repository: CardsRepository) : BaseViewModel() {
     class Factory(private val repository: CardsRepository) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             @Suppress("UNCHECKED_CAST")
-            return HomeFragmentViewModel(repository) as T
+            return ProfileFragmentViewModel(repository) as T
         }
     }
+
 }

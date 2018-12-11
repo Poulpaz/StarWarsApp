@@ -31,13 +31,11 @@ class ListCardAdapter : ListAdapter<Card, ListCardAdapter.CardViewHolder>(DiffCa
 
         fun bind(card: Card) {
             if (card.imageUrl != null) {
-
-                //itemView.iv_item_card.setImageURI(Uri.parse("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=439390&type=card"))
                 Picasso.get()
                         .load(card.imageUrl)
+                        .placeholder(R.drawable.card_placeholder)
                         .into(itemView.iv_item_card)
             }
-            itemView.item_card_name.text = card.name
             bindPositionClick(card.idCard)
         }
 

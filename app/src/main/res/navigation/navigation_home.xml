@@ -9,6 +9,20 @@
         android:id="@+id/my_home_fragment"
         android:name="com.example.lpiem.starwars.ui.fragment.HomeFragment"
         android:label="MyHomeFragment"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_my_home_fragment_to_card_details_fragment"
+            app:destination="@id/card_details_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/card_details_fragment"
+        android:name="com.example.lpiem.starwars.ui.fragment.CardDetailsFragment"
+        android:label="MyCardDetailsFragment"
+        tools:layout="@layout/fragment_card_details" >
+        <argument
+            android:name="card"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

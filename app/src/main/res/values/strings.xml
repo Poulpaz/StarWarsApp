@@ -1,11 +1,15 @@
 <resources>
     <string name="app_name">Star Wars</string>
 
+    <string name="title_connexion">Connexion</string>
     <string name="title_home">Home</string>
     <string name="title_profile">Profile</string>
 
     <!-- Login Facebook -->
     <string name="facebook_app_id">1046138468897261</string>
     <string name="fb_login_protocol_scheme">fb1046138468897261</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

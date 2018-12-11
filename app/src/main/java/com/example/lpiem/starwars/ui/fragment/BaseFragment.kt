@@ -1,9 +1,12 @@
 package com.example.lpiem.starwars.ui.fragment
 
+import android.opengl.Visibility
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.lpiem.starwars.utils.RxLifecycleDelegate
 import io.reactivex.Observable
+import kotlinx.android.synthetic.main.activity_main.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 
@@ -43,6 +46,12 @@ abstract class BaseFragment: Fragment(), KodeinAware{
 
     protected fun setDisplayHomeAsUpEnabled(value : Boolean) {
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(value)
+    }
+
+    protected fun setDisplayBotomBarNavigation(value : Boolean) {
+        if(value){
+            (activity as AppCompatActivity).navigation.visibility = View.VISIBLE
+        } else (activity as AppCompatActivity).navigation.visibility = View.GONE
     }
 
 }

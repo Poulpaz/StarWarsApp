@@ -27,7 +27,7 @@ import com.facebook.AccessToken
 
 
 
-class ConnectionActivity : AppCompatActivity() {
+class ConnectionActivity : BaseActivity() {
 
     private val RC_SIGN_IN = 0
     private var TAG = "ConectionActivity"
@@ -108,6 +108,11 @@ class ConnectionActivity : AppCompatActivity() {
             Log.d(TAG, "Google token: " +  account.email)
             MainActivity.start(this)
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        finish()
     }
 
 }
