@@ -26,12 +26,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var currentController: NavController
     private lateinit var navControllerHome: NavController
     private lateinit var navControllerProfile: NavController
+    private lateinit var navControllerExchange: NavController
+    private lateinit var navControllerChat: NavController
+    private lateinit var navControllerBattle: NavController
 
     private lateinit var homeWrapper: FrameLayout
     private lateinit var profileWrapper: FrameLayout
-
-    private lateinit var homeFragment: Fragment
-    private lateinit var profileFragment: Fragment
+    private lateinit var exchangeWrapper: FrameLayout
+    private lateinit var chatWrapper: FrameLayout
+    private lateinit var battleWrapper: FrameLayout
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         var returnValue = false
@@ -42,6 +45,9 @@ class MainActivity : AppCompatActivity() {
 
                 homeWrapper.visibility = View.VISIBLE
                 profileWrapper.visibility = View.INVISIBLE
+                exchangeWrapper.visibility = View.INVISIBLE
+                chatWrapper.visibility = View.INVISIBLE
+                battleWrapper.visibility = View.INVISIBLE
                 supportActionBar?.setTitle(R.string.title_home)
 
                 returnValue = true
@@ -52,7 +58,50 @@ class MainActivity : AppCompatActivity() {
 
                 homeWrapper.visibility = View.INVISIBLE
                 profileWrapper.visibility = View.VISIBLE
+                exchangeWrapper.visibility = View.INVISIBLE
+                chatWrapper.visibility = View.INVISIBLE
+                battleWrapper.visibility = View.INVISIBLE
                 supportActionBar?.setTitle(R.string.title_profile)
+
+                returnValue = true
+            }
+            R.id.navigation_exchange -> {
+
+                currentController = navControllerProfile
+
+                homeWrapper.visibility = View.INVISIBLE
+                profileWrapper.visibility = View.INVISIBLE
+                exchangeWrapper.visibility = View.VISIBLE
+                chatWrapper.visibility = View.INVISIBLE
+                battleWrapper.visibility = View.INVISIBLE
+                supportActionBar?.setTitle(R.string.title_exchange)
+
+                returnValue = true
+            }
+            R.id.navigation_battle -> {
+
+                currentController = navControllerProfile
+
+                homeWrapper.visibility = View.INVISIBLE
+                profileWrapper.visibility = View.INVISIBLE
+                exchangeWrapper.visibility = View.INVISIBLE
+                chatWrapper.visibility = View.INVISIBLE
+                battleWrapper.visibility = View.VISIBLE
+                supportActionBar?.setTitle(R.string.title_battle)
+
+                returnValue = true
+            }
+            R.id.navigation_chat -> {
+
+                currentController = navControllerProfile
+
+                homeWrapper.visibility = View.INVISIBLE
+                profileWrapper.visibility = View.INVISIBLE
+                exchangeWrapper.visibility = View.INVISIBLE
+                chatWrapper.visibility = View.VISIBLE
+                battleWrapper.visibility = View.INVISIBLE
+                supportActionBar?.setTitle(R.string.title_chat)
+
 
                 returnValue = true
             }
@@ -81,11 +130,23 @@ class MainActivity : AppCompatActivity() {
                 .findFragmentById(R.id.content_profile) as NavHostFragment)
                 .navController
 
+        navControllerExchange = (supportFragmentManager
+                .findFragmentById(R.id.content_exchange) as NavHostFragment)
+                .navController
+
+        navControllerChat = (supportFragmentManager
+                .findFragmentById(R.id.content_chat) as NavHostFragment)
+                .navController
+
+        navControllerBattle = (supportFragmentManager
+                .findFragmentById(R.id.content_battle) as NavHostFragment)
+                .navController
+
         homeWrapper = content_home_wrapper
         profileWrapper = content_profile_wrapper
-
-        homeFragment = content_home
-        profileFragment = content_profile
+        exchangeWrapper = content_exchange_wrapper
+        chatWrapper = content_chat_wrapper
+        battleWrapper = content_battle_wrapper
     }
 
     override fun supportNavigateUpTo(upIntent: Intent) {

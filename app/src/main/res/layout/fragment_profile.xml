@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Tristan Reffay"
-                android:textSize="@dimen/title"
+                style="@style/Title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/iv_photo_fragment_profile" />
@@ -50,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="20 ans"
-                android:textSize="@dimen/subtitle"
+                style="@style/Subtitle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_name_fragment_profile" />
@@ -60,7 +60,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="10"
-                android:textSize="@dimen/subtitle"
+                style="@style/Body"
                 android:gravity="end"
                 app:layout_constraintEnd_toStartOf="@id/iv_wallet_icon_fragment_profile"
                 app:layout_constraintStart_toStartOf="parent"

@@ -14,9 +14,10 @@ import com.squareup.picasso.Picasso
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.item_card.view.*
 
-class ListCardAdapter : ListAdapter<Card, ListCardAdapter.CardViewHolder>(DiffCardCallback()) {
+class ListCardExchangeAdapter : ListAdapter<Card, ListCardExchangeAdapter.CardViewHolder>(DiffCardCallback()) {
 
     val indexClickPublisher: PublishSubject<String> = PublishSubject.create()
+    var idItemSelected : String? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_card, parent, false)
@@ -24,18 +25,20 @@ class ListCardAdapter : ListAdapter<Card, ListCardAdapter.CardViewHolder>(DiffCa
     }
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val card = getItem(position)
+        holder.bind(getItem(position), card.idCard == idItemSelected)
     }
 
     inner class CardViewHolder(itemView: View, private val indexClickPublisher: PublishSubject<String>) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(card: Card) {
+        fun bind(card: Card, isSelected : Boolean) {
             if (card.imageUrl != null) {
                 Picasso.get()
                         .load(card.imageUrl)
                         .placeholder(R.drawable.card_placeholder)
                         .into(itemView.iv_item_card)
             }
+            itemView.iv_item_card.isSelected = isSelected
             bindPositionClick(card.idCard)
         }
 
@@ -43,7 +46,11 @@ class ListCardAdapter : ListAdapter<Card, ListCardAdapter.CardViewHolder>(DiffCa
             itemView.clicks()
                     .takeUntil(RxView.detaches(itemView))
                     .filter { adapterPosition != RecyclerView.NO_POSITION }
-                    .subscribe { indexClickPublisher.onNext(idCard) }
+                    .subscribe {
+                        indexClickPublisher.onNext(idCard)
+                        idItemSelected = idCard
+                        notifyDataSetChanged()
+                    }
         }
     }
 

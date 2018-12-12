@@ -3,8 +3,23 @@
 
     <item
         android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:icon="@drawable/ic_home"
         android:title="@string/title_home" />
+
+    <item
+        android:id="@+id/navigation_battle"
+        android:icon="@drawable/ic_swords"
+        android:title="@string/title_battle" />
+
+    <item
+        android:id="@+id/navigation_exchange"
+        android:icon="@drawable/ic_exchange"
+        android:title="@string/title_exchange" />
+
+    <item
+        android:id="@+id/navigation_chat"
+        android:icon="@drawable/ic_chat"
+        android:title="@string/title_chat" />
 
     <item
         android:id="@+id/navigation_profile"
