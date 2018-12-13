@@ -40,6 +40,8 @@ class ConnectionActivity : BaseActivity() {
         FacebookSdk.sdkInitialize(applicationContext)
         AppEventsLogger.activateApp(this)
 
+        testUserConnected()
+
         b_login_google.clicks()
                 .subscribe(
                         {loginWithGoogle()},
@@ -54,6 +56,11 @@ class ConnectionActivity : BaseActivity() {
 
     }
 
+    private fun testUserConnected() {
+        val accessToken = AccessToken.getCurrentAccessToken()
+        if(accessToken != null && !accessToken.isExpired) startHome()
+    }
+
     fun loginWithFacebook(){
 
             callbackManager = CallbackManager.Factory.create()
@@ -61,7 +68,7 @@ class ConnectionActivity : BaseActivity() {
                     object : FacebookCallback<LoginResult> {
                         override fun onSuccess(loginResult: LoginResult) {
                             Log.d(TAG, "Facebook token: " + loginResult.accessToken.token)
-                            MainActivity.start(this@ConnectionActivity)
+                            startHome()
                         }
 
                         override fun onCancel() {
@@ -108,6 +115,10 @@ class ConnectionActivity : BaseActivity() {
             Log.d(TAG, "Google token: " +  account.email)
             MainActivity.start(this)
         }
+    }
+
+    private fun startHome(){
+        MainActivity.start(this@ConnectionActivity)
     }
 
     override fun onStop() {

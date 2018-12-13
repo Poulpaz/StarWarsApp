@@ -28,7 +28,7 @@ val networkModule = Kodein.Module("Network") {
     val tagGsonConverterFactory = "gsonConverterFactory"
     val tagRxJavaCallAdapterFactory = "rxJavaCallAdapterFactory"
 
-    constant(Tag.TAG_PROD_BASE_URL) with "https://api.elderscrollslegends.io/v1/"
+    constant(Tag.TAG_PROD_BASE_URL) with "https://tristancarlosapi.herokuapp.com/api/"
 
     bind<Interceptor>(tagLoggingInterceptor) with singleton {
         val hli = HttpLoggingInterceptor()

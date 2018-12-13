@@ -14,6 +14,7 @@ import org.kodein.di.generic.instance
 import timber.log.Timber
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.lpiem.starwars.adapter.HomeViewPagerAdapter
 
 
 class HomeFragment : BaseFragment() {
@@ -34,35 +35,19 @@ class HomeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupViewPager()
+
         setDisplayHomeAsUpEnabled(false)
         setDisplayBotomBarNavigation(true)
 
-        viewModel = kodein.direct.instance(arg = this)
+    }
 
-        val adapter = ListCardAdapter()
-        val mLayoutManager = GridLayoutManager(this.context, 2)
-        rv_cards_home_fragment.setLayoutManager(mLayoutManager)
-        rv_cards_home_fragment.setItemAnimator(DefaultItemAnimator())
-        rv_cards_home_fragment.adapter = adapter
-
-        viewModel.starshipsList
-                .subscribe(
-                        {
-                            adapter.submitList(it)
-                        },
-                        { Timber.e(it) }
-                )
-
-        adapter.indexClickPublisher
-                .subscribe(
-                        {
-                            val action = HomeFragmentDirections.actionMyHomeFragmentToCardDetailsFragment(it)
-
-                            NavHostFragment.findNavController(this).navigate(action)
-                        },
-                        { Timber.e(it) }
-                )
-
+    private fun setupViewPager() {
+        val adapter = HomeViewPagerAdapter(childFragmentManager)
+        adapter.addFragment(BuyCardFragment.newInstance(), getString(R.string.ti_buy_home_fragment))
+        adapter.addFragment(SellCardFragment.newInstance(), getString(R.string.ti_sell_home_fragment))
+        vp_saved_searches_history.adapter = adapter
+        tl_buy_sell_home_fragment.setupWithViewPager(vp_saved_searches_history)
     }
 
 }

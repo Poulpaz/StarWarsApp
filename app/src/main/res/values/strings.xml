@@ -9,8 +9,13 @@
     <string name="title_chat">Chat</string>
     <string name="title_battle">Battle</string>
 
+    <!-- Home Fragment -->
+    <string name="ti_buy_home_fragment">Buy</string>
+    <string name="ti_sell_home_fragment">Sell</string>
+
     <!-- Card Details Fragment -->
-    <string name="tv_choose_player">Choose a player</string>
+    <string name="tv_pick_card">Pick a card</string>
+    <string name="tv_pick_player">Pick a player</string>
 
     <!-- Exchange Fragment -->
     <string name="detail_rarity">Rarity</string>

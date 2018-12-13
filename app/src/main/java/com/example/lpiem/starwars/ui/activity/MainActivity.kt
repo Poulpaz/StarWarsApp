@@ -2,6 +2,9 @@ package com.example.lpiem.starwars.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +15,9 @@ import com.example.lpiem.starwars.R
 import com.example.lpiem.starwars.utils.or
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
+import com.facebook.AccessToken
+import com.facebook.login.LoginManager
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -48,6 +54,7 @@ class MainActivity : AppCompatActivity() {
                 exchangeWrapper.visibility = View.INVISIBLE
                 chatWrapper.visibility = View.INVISIBLE
                 battleWrapper.visibility = View.INVISIBLE
+                app_bar.visibility = View.VISIBLE
                 supportActionBar?.setTitle(R.string.title_home)
 
                 returnValue = true
@@ -61,6 +68,7 @@ class MainActivity : AppCompatActivity() {
                 exchangeWrapper.visibility = View.INVISIBLE
                 chatWrapper.visibility = View.INVISIBLE
                 battleWrapper.visibility = View.INVISIBLE
+                app_bar.visibility = View.GONE
                 supportActionBar?.setTitle(R.string.title_profile)
 
                 returnValue = true
@@ -74,6 +82,7 @@ class MainActivity : AppCompatActivity() {
                 exchangeWrapper.visibility = View.VISIBLE
                 chatWrapper.visibility = View.INVISIBLE
                 battleWrapper.visibility = View.INVISIBLE
+                app_bar.visibility = View.VISIBLE
                 supportActionBar?.setTitle(R.string.title_exchange)
 
                 returnValue = true
@@ -87,6 +96,7 @@ class MainActivity : AppCompatActivity() {
                 exchangeWrapper.visibility = View.INVISIBLE
                 chatWrapper.visibility = View.INVISIBLE
                 battleWrapper.visibility = View.VISIBLE
+                app_bar.visibility = View.VISIBLE
                 supportActionBar?.setTitle(R.string.title_battle)
 
                 returnValue = true
@@ -100,6 +110,7 @@ class MainActivity : AppCompatActivity() {
                 exchangeWrapper.visibility = View.INVISIBLE
                 chatWrapper.visibility = View.VISIBLE
                 battleWrapper.visibility = View.INVISIBLE
+                app_bar.visibility = View.VISIBLE
                 supportActionBar?.setTitle(R.string.title_chat)
 
 
@@ -115,6 +126,10 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         initView()
+
+        val accessToken = AccessToken.getCurrentAccessToken()
+        val isLoggedIn = accessToken != null && !accessToken.isExpired
+        Log.d("TEST2", isLoggedIn.toString())
 
         currentController = navControllerHome
 

@@ -12,7 +12,7 @@ interface SWService {
     @GET("cards")
     fun getStarships(): Flowable<RawCard>
 
-    @GET("cards/{cardId}")
+    @GET("card/{cardId}")
     fun getCard(@Path("cardId") cardId : String) : Observable<GetCardResponse>
 
 }

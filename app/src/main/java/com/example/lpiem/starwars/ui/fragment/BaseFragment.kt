@@ -1,9 +1,12 @@
 package com.example.lpiem.starwars.ui.fragment
 
 import android.opengl.Visibility
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.lpiem.starwars.R
 import com.example.lpiem.starwars.utils.RxLifecycleDelegate
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_main.*
