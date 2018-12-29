@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.example.lpiem.starwars.Manager.GoogleManager
 import com.example.lpiem.starwars.R
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -24,7 +25,7 @@ import timber.log.Timber
 import java.util.*
 import kotlin.math.sign
 import com.facebook.AccessToken
-
+import org.kodein.di.generic.instance
 
 
 class ConnectionActivity : BaseActivity() {
@@ -32,7 +33,15 @@ class ConnectionActivity : BaseActivity() {
     private val RC_SIGN_IN = 0
     private var TAG = "ConectionActivity"
     private var callbackManager: CallbackManager? = null
-    private lateinit var mGoogleSignInClient: GoogleSignInClient
+    private val googleManager : GoogleManager by instance()
+
+    companion object {
+        fun start(fromActivity: AppCompatActivity) {
+            fromActivity.startActivity(
+                    Intent(fromActivity, ConnectionActivity::class.java)
+            )
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +67,8 @@ class ConnectionActivity : BaseActivity() {
 
     private fun testUserConnected() {
         val accessToken = AccessToken.getCurrentAccessToken()
-        if(accessToken != null && !accessToken.isExpired) startHome()
+        val googleAccount = GoogleSignIn.getLastSignedInAccount(this)
+        if(googleAccount != null || accessToken != null && !accessToken.isExpired) startHome()
     }
 
     fun loginWithFacebook(){
@@ -82,11 +92,7 @@ class ConnectionActivity : BaseActivity() {
     }
 
     fun loginWithGoogle(){
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build()
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
-        val signInIntent = mGoogleSignInClient.getSignInIntent()
+        val signInIntent = googleManager.getGoogleSignInClient().getSignInIntent()
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 

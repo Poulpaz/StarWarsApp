@@ -19,7 +19,7 @@ import com.example.lpiem.starwars.adapter.HomeViewPagerAdapter
 
 class HomeFragment : BaseFragment() {
 
-    private lateinit var viewModel: HomeFragmentViewModel
+    private val viewModel: HomeFragmentViewModel by instance(arg = this)
 
     companion object {
         const val TAG = "HOMEFRAGMENT"

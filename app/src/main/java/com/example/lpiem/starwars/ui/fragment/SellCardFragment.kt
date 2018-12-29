@@ -16,7 +16,7 @@ import org.kodein.di.generic.instance
 
 class SellCardFragment : BaseFragment() {
 
-    private lateinit var viewModel: HomeFragmentViewModel
+    private val viewModel: HomeFragmentViewModel by instance(arg = this)
 
     companion object {
         const val TAG = "SELLCARDFRAGMENT"
@@ -30,13 +30,10 @@ class SellCardFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = kodein.direct.instance(arg = this)
-
         val adapter = ListCardAdapter()
         val mLayoutManager = GridLayoutManager(this.context, 3)
         rv_cards_sell_fragment.setLayoutManager(mLayoutManager)
         rv_cards_sell_fragment.setItemAnimator(DefaultItemAnimator())
         rv_cards_sell_fragment.adapter = adapter
     }
-
 }

@@ -23,6 +23,12 @@
     <string name="detail_attributes">Attributes</string>
     <string name="b_exchange">Exchange</string>
 
+    <!-- Profile Fragment -->
+    <string name="tv_title_dialog_logout">Deconnexion</string>
+    <string name="tv_message_dialog_logout">Voulez-vous vraiment vous déconnecter ?</string>
+    <string name="b_cancel_dialog_logout">Non</string>
+    <string name="b_validate_dialog_logout">Oui</string>
+
     <!-- Login Facebook -->
     <string name="facebook_app_id">1046138468897261</string>
     <string name="fb_login_protocol_scheme">fb1046138468897261</string>

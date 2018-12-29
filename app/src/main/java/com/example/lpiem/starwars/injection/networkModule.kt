@@ -4,7 +4,11 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import com.example.lpiem.starwars.BuildConfig
+import com.example.lpiem.starwars.Manager.GoogleManager
 import com.example.lpiem.starwars.datasource.SWService
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
@@ -69,4 +73,6 @@ val networkModule = Kodein.Module("Network") {
     bind<ConnectivityManager>() with provider {
         instance<Application>().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
+
+    bind<GoogleManager>() with singleton { GoogleManager(instance()) }
 }
