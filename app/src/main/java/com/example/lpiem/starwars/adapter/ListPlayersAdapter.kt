@@ -37,7 +37,9 @@ class ListPlayersAdapter : ListAdapter<User, ListPlayersAdapter.UserViewHolder>(
             itemView.cl_item_player.isSelected = isSelected
             itemView.tv_firstname_item_player.text = user.firstname
             itemView.tv_lastname_item_player.text = user.lastname
-            bindPositionClick(user.idUser)
+            user.idUser?.let {
+                bindPositionClick(it)
+            }
         }
 
         private fun bindPositionClick(idUser: Int) {

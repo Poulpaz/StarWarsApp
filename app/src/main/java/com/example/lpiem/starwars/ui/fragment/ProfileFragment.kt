@@ -1,26 +1,20 @@
 package com.example.lpiem.starwars.ui.fragment
 
-import android.content.Intent
 import android.os.Bundle
-import android.provider.Settings
 import android.view.*
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.lpiem.starwars.Manager.GoogleManager
+import com.example.lpiem.starwars.manager.GoogleManager
 import com.example.lpiem.starwars.R
 import com.example.lpiem.starwars.adapter.ListCardAdapter
 import com.example.lpiem.starwars.ui.activity.ConnectionActivity
 import com.example.lpiem.starwars.ui.activity.MainActivity
-import com.example.lpiem.starwars.viewmodel.HomeFragmentViewModel
 import com.example.lpiem.starwars.viewmodel.ProfileFragmentViewModel
 import com.facebook.AccessToken
 import com.facebook.login.LoginManager
-import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_profile.*
-import org.kodein.di.direct
 import org.kodein.di.generic.instance
 import timber.log.Timber
 
