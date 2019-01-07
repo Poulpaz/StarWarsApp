@@ -16,7 +16,7 @@ class CardsRepository(private val service: SWService){
     val starshipsList: BehaviorSubject<List<Card>> = BehaviorSubject.create()
 
     fun fetchStarships(): Flowable<RawCard> {
-        val obs = service.getStarships()
+        val obs = service.getCards()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .share()

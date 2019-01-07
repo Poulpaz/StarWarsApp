@@ -4,8 +4,8 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import com.example.lpiem.starwars.BuildConfig
-import com.example.lpiem.starwars.manager.GoogleManager
 import com.example.lpiem.starwars.datasource.SWService
+import com.example.lpiem.starwars.manager.GoogleConnectionManager
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
@@ -71,5 +71,5 @@ val networkModule = Kodein.Module("Network") {
         instance<Application>().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
 
-    bind<GoogleManager>() with singleton { GoogleManager(instance()) }
+    bind<GoogleConnectionManager>() with singleton { GoogleConnectionManager(instance()) }
 }

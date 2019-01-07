@@ -7,7 +7,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import kotlinx.android.synthetic.main.activity_main.view.*
 
-class GoogleManager(val context : Context){
+class GoogleConnectionManager(val context : Context){
 
     private lateinit var mGoogleSignInClient : GoogleSignInClient
 

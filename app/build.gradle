@@ -9,7 +9,7 @@ apply plugin: 'androidx.navigation.safeargs'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.example.lpiem.starwars"
+        applicationId "com.example.lpiem.theelderscrolls"
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 1

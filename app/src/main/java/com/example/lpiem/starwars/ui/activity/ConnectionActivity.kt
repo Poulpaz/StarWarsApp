@@ -4,8 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.example.lpiem.starwars.manager.GoogleManager
 import com.example.lpiem.starwars.R
+import com.example.lpiem.starwars.manager.GoogleConnectionManager
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
@@ -29,7 +29,7 @@ class ConnectionActivity : BaseActivity() {
     private val RC_SIGN_IN = 0
     private var TAG = "ConectionActivity"
     private var callbackManager: CallbackManager? = null
-    private val googleManager: GoogleManager by instance()
+    private val googleManager: GoogleConnectionManager by instance()
 
     companion object {
         fun start(fromActivity: AppCompatActivity) {

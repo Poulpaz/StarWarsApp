@@ -6,9 +6,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.lpiem.starwars.manager.GoogleManager
 import com.example.lpiem.starwars.R
 import com.example.lpiem.starwars.adapter.ListCardAdapter
+import com.example.lpiem.starwars.manager.GoogleConnectionManager
 import com.example.lpiem.starwars.ui.activity.ConnectionActivity
 import com.example.lpiem.starwars.ui.activity.MainActivity
 import com.example.lpiem.starwars.viewmodel.ProfileFragmentViewModel
@@ -21,7 +21,7 @@ import timber.log.Timber
 class ProfileFragment : BaseFragment() {
 
     private val viewModel: ProfileFragmentViewModel by instance(arg = this)
-    private val googleManager : GoogleManager by instance()
+    private val googleManager : GoogleConnectionManager by instance()
 
     companion object {
         const val TAG = "PROFILEFRAGMENT"
