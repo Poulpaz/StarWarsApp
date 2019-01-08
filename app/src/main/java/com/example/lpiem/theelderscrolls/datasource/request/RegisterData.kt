@@ -1,13 +1,12 @@
-package com.example.lpiem.theelderscrolls.model
+package com.example.lpiem.theelderscrolls.datasource.request
 
 import com.google.gson.annotations.SerializedName
 
-data class User(
-        @SerializedName("idUser") var idUser: Int,
+data class SignUpData(
         @SerializedName("firstname") var firstname: String,
         @SerializedName("lastname") var lastname: String,
-        @SerializedName("age") var age: Int?,
+        @SerializedName("age") var age: Int,
         @SerializedName("mail") var mail: String,
         @SerializedName("wallet") var wallet: Int,
-        @SerializedName("imageUrlProfile") var imageUrlProfile: String
+        @SerializedName("url") var imageUrlProfile: String
 )

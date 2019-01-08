@@ -3,17 +3,31 @@ package com.example.lpiem.theelderscrolls.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
+import com.example.lpiem.theelderscrolls.datasource.request.SignUpData
+import com.example.lpiem.theelderscrolls.model.User
 import com.example.lpiem.theelderscrolls.repository.UserRepository
 import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
 
 class ConnectionActivityViewModel(private val repository: UserRepository) : BaseViewModel() {
 
+    val signInState: BehaviorSubject<NetworkEvent> = BehaviorSubject.createDefault(NetworkEvent.None)
     val signUpState: BehaviorSubject<NetworkEvent> = BehaviorSubject.createDefault(NetworkEvent.None)
 
-    fun signUp(token: String) {
+    fun signIn(token: String) {
 
-        repository.signUp(token)
+        repository.signIn(token)
+                .subscribe(
+                        {
+                            signInState.onNext(it)
+                        },
+                        { Timber.e(it) }
+                )
+    }
+
+    fun signUp(token: String, user: SignUpData) {
+
+        repository.signUp(token, user)
                 .subscribe(
                         {
                             signUpState.onNext(it)

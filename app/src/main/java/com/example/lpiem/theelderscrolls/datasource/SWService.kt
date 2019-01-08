@@ -1,13 +1,13 @@
 package com.example.lpiem.theelderscrolls.datasource
 
+import com.example.lpiem.theelderscrolls.datasource.request.SignUpData
+import com.example.lpiem.theelderscrolls.datasource.response.BaseResponse
 import com.example.lpiem.theelderscrolls.datasource.response.GetCardResponse
 import com.example.lpiem.theelderscrolls.model.RawCard
 import com.example.lpiem.theelderscrolls.model.User
 import io.reactivex.Flowable
 import io.reactivex.Observable
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface SWService {
 
@@ -19,5 +19,8 @@ interface SWService {
 
     @GET("registeredUser")
     fun getConnectedUser(@Header("token") token: String?): Observable<User>
+
+    @POST("registerUser")
+    fun signUpUser(@Header("token") token: String?, @Body user: SignUpData): Observable<BaseResponse>
 
 }

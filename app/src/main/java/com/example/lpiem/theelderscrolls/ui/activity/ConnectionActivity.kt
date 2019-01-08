@@ -3,11 +3,14 @@ package com.example.lpiem.theelderscrolls.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lpiem.theelderscrolls.R
+import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
+import com.example.lpiem.theelderscrolls.datasource.request.SignUpData
 import com.example.lpiem.theelderscrolls.manager.GoogleConnectionManager
+import com.example.lpiem.theelderscrolls.model.User
 import com.example.lpiem.theelderscrolls.viewmodel.ConnectionActivityViewModel
-import com.example.lpiem.theelderscrolls.viewmodel.HomeFragmentViewModel
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
@@ -63,6 +66,53 @@ class ConnectionActivity : BaseActivity() {
                         { Timber.e(it) }
                 )
 
+        viewModel.signInState
+                .subscribe(
+                        {
+                            when (it) {
+                                NetworkEvent.None -> {
+                                    // Nothing
+                                }
+                                NetworkEvent.InProgress -> {
+                                    onSignInStateInProgress()
+                                }
+                                is NetworkEvent.Error -> {
+                                    onSignInStateError(it)
+                                }
+                                is NetworkEvent.Success -> {
+                                    onSignInStateSuccess()
+                                }
+                            }
+                        }, { Timber.e(it) }
+                )
+    }
+
+    private fun onSignInStateSuccess() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private fun onSignInStateError(network: NetworkEvent.Error) {
+        val dialog = AlertDialog.Builder(this)
+        dialog.setTitle(R.string.tv_title_dialog_logout)
+                .setMessage(R.string.tv_message_dialog_logout)
+                .setNegativeButton(R.string.b_cancel_dialog_logout, { dialoginterface, i ->
+                    b_login_facebook.isEnabled = true
+                    b_login_google.isEnabled = true
+                })
+                .setPositiveButton(R.string.b_validate_dialog_logout) { dialoginterface, i ->
+                    signUpUser()
+                }.show()
+    }
+
+    private fun signUpUser() {
+        val token = AccessToken.getCurrentAccessToken().token
+        val user = SignUpData("Carlos", "Chastagnier", 28, "carlos@gmail.com", 10, "google.com")
+        viewModel.signUp(token, user)
+    }
+
+    private fun onSignInStateInProgress() {
+        //b_login_facebook.isEnabled = false
+        //b_login_google.isEnabled = false
     }
 
     private fun testUserConnected() {
@@ -76,7 +126,7 @@ class ConnectionActivity : BaseActivity() {
             val personId = googleAccount?.id
             val personPhoto = googleAccount?.photoUrl
             val token = googleAccount?.idToken
-            startHome()
+            //startHome()
         }
     }
 
@@ -88,7 +138,9 @@ class ConnectionActivity : BaseActivity() {
                     override fun onSuccess(loginResult: LoginResult) {
                         val token = loginResult.accessToken.token
                         Log.d(TAG, "Facebook token: " + token)
-                        viewModel.signUp("15")
+                        //val user = SignUpData("Carlos", "Chastagnier", 28, "carlos@gmail.com", 10, "google.com")
+                        //viewModel.signUp(token, user)
+                        viewModel.signIn(token)
                         //startHome()
                     }
 
