@@ -31,8 +31,9 @@
     <string name="b_validate_dialog_logout">Oui</string>
 
     <!-- Login Facebook -->
-    <string name="facebook_app_id">1046138468897261</string>
-    <string name="fb_login_protocol_scheme">fb1046138468897261</string>
+    <string name="facebook_app_id">2343808665854934</string>
+    <string name="fb_login_protocol_scheme">fb2343808665854934</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

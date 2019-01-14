@@ -11,10 +11,7 @@ import com.example.lpiem.theelderscrolls.datasource.request.SignUpData
 import com.example.lpiem.theelderscrolls.manager.GoogleConnectionManager
 import com.example.lpiem.theelderscrolls.model.User
 import com.example.lpiem.theelderscrolls.viewmodel.ConnectionActivityViewModel
-import com.facebook.CallbackManager
-import com.facebook.FacebookCallback
-import com.facebook.FacebookException
-import com.facebook.FacebookSdk
+import com.facebook.*
 import com.jakewharton.rxbinding2.view.clicks
 import com.facebook.appevents.AppEventsLogger
 import com.facebook.login.LoginManager
@@ -25,7 +22,6 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import kotlinx.android.synthetic.main.connection_activity.*
 import timber.log.Timber
-import com.facebook.AccessToken
 import org.kodein.di.generic.instance
 
 
@@ -140,6 +136,15 @@ class ConnectionActivity : BaseActivity() {
                         Log.d(TAG, "Facebook token: " + token)
                         //val user = SignUpData("Carlos", "Chastagnier", 28, "carlos@gmail.com", 10, "google.com")
                         //viewModel.signUp(token, user)
+                        GraphRequest(
+                                AccessToken.getCurrentAccessToken(),
+                                "/{person-id}/",
+                                null,
+                                HttpMethod.GET,
+                                GraphRequest.Callback {
+                                    it.rawResponse
+                                }
+                        ).executeAsync()
                         viewModel.signIn(token)
                         //startHome()
                     }
