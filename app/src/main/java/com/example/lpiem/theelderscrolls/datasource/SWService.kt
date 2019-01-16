@@ -1,6 +1,6 @@
 package com.example.lpiem.theelderscrolls.datasource
 
-import com.example.lpiem.theelderscrolls.datasource.request.SignUpData
+import com.example.lpiem.theelderscrolls.datasource.request.RegisterData
 import com.example.lpiem.theelderscrolls.datasource.response.BaseResponse
 import com.example.lpiem.theelderscrolls.datasource.response.GetCardResponse
 import com.example.lpiem.theelderscrolls.model.RawCard
@@ -21,6 +21,6 @@ interface SWService {
     fun getConnectedUser(@Header("token") token: String?): Observable<User>
 
     @POST("registerUser")
-    fun signUpUser(@Header("token") token: String?, @Body user: SignUpData): Observable<BaseResponse>
+    fun signUpUser(@Body user: RegisterData): Observable<BaseResponse>
 
 }

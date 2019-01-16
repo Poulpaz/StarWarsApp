@@ -7,7 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
-import com.example.lpiem.theelderscrolls.datasource.request.SignUpData
+import com.example.lpiem.theelderscrolls.datasource.request.RegisterData
 import com.example.lpiem.theelderscrolls.manager.GoogleConnectionManager
 import com.example.lpiem.theelderscrolls.model.User
 import com.example.lpiem.theelderscrolls.viewmodel.ConnectionActivityViewModel
@@ -23,6 +23,13 @@ import com.google.android.gms.tasks.Task
 import kotlinx.android.synthetic.main.connection_activity.*
 import timber.log.Timber
 import org.kodein.di.generic.instance
+import com.facebook.GraphResponse
+import org.json.JSONObject
+import com.facebook.GraphRequest
+import org.json.JSONException
+import com.facebook.Profile.getCurrentProfile
+import com.facebook.internal.ImageRequest.getProfilePictureUri
+import java.util.*
 
 
 class ConnectionActivity : BaseActivity() {
@@ -101,9 +108,7 @@ class ConnectionActivity : BaseActivity() {
     }
 
     private fun signUpUser() {
-        val token = AccessToken.getCurrentAccessToken().token
-        val user = SignUpData("Carlos", "Chastagnier", 28, "carlos@gmail.com", 10, "google.com")
-        viewModel.signUp(token, user)
+
     }
 
     private fun onSignInStateInProgress() {
@@ -136,17 +141,7 @@ class ConnectionActivity : BaseActivity() {
                         Log.d(TAG, "Facebook token: " + token)
                         //val user = SignUpData("Carlos", "Chastagnier", 28, "carlos@gmail.com", 10, "google.com")
                         //viewModel.signUp(token, user)
-                        GraphRequest(
-                                AccessToken.getCurrentAccessToken(),
-                                "/{person-id}/",
-                                null,
-                                HttpMethod.GET,
-                                GraphRequest.Callback {
-                                    it.rawResponse
-                                }
-                        ).executeAsync()
-                        viewModel.signIn(token)
-                        //startHome()
+                        setFacebookData(loginResult)
                     }
 
                     override fun onCancel() {
@@ -157,6 +152,36 @@ class ConnectionActivity : BaseActivity() {
                         Log.d(TAG, "Facebook onError.")
                     }
                 })
+    }
+
+    private fun setFacebookData(loginResult: LoginResult) {
+        val request = GraphRequest.newMeRequest(
+                loginResult.accessToken
+        ) { `object`, response ->
+            // Application code
+            try {
+                Log.i("Response", response.toString())
+
+                val profile = Profile.getCurrentProfile()
+
+                if(profile != null){
+                    val id = profile.id
+                    val email = `object`.getString("email")
+                    val birthday = `object`.getString("birthday")
+                    val firstName = profile.firstName
+                    val lastName = profile.lastName
+                    val photoUri = Profile.getCurrentProfile().getProfilePictureUri(200, 200)
+                    val registerData = RegisterData(id, firstName, lastName, birthday,  email, 10, photoUri.toString())
+                    viewModel.signUp(registerData)
+                }
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+        }
+        val parameters = Bundle()
+        parameters.putString("fields", "id,email,first_name,last_name, birthday")
+        request.parameters = parameters
+        request.executeAsync()
     }
 
     fun loginWithGoogle() {

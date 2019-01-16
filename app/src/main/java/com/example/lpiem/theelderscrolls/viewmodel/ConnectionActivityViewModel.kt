@@ -3,7 +3,7 @@ package com.example.lpiem.theelderscrolls.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
-import com.example.lpiem.theelderscrolls.datasource.request.SignUpData
+import com.example.lpiem.theelderscrolls.datasource.request.RegisterData
 import com.example.lpiem.theelderscrolls.model.User
 import com.example.lpiem.theelderscrolls.repository.UserRepository
 import io.reactivex.subjects.BehaviorSubject
@@ -25,9 +25,9 @@ class ConnectionActivityViewModel(private val repository: UserRepository) : Base
                 )
     }
 
-    fun signUp(token: String, user: SignUpData) {
+    fun signUp(user: RegisterData) {
 
-        repository.signUp(token, user)
+        repository.signUp(user)
                 .subscribe(
                         {
                             signUpState.onNext(it)

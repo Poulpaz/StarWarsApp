@@ -2,7 +2,7 @@ package com.example.lpiem.theelderscrolls.repository
 
 import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
 import com.example.lpiem.theelderscrolls.datasource.SWService
-import com.example.lpiem.theelderscrolls.datasource.request.SignUpData
+import com.example.lpiem.theelderscrolls.datasource.request.RegisterData
 import com.example.lpiem.theelderscrolls.model.User
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -21,9 +21,9 @@ class UserRepository(private val service: SWService) {
                 .share()
     }
 
-    fun signUp(token : String, user: SignUpData): Observable<NetworkEvent> {
+    fun signUp(user: RegisterData): Observable<NetworkEvent> {
 
-        return service.signUpUser(token, user)
+        return service.signUpUser(user)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map<NetworkEvent> { NetworkEvent.Success }
