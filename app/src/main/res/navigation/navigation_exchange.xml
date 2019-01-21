@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/exchange_fragment"
-        android:name="com.example.lpiem.starwars.ui.fragment.ExchangeFragment"
+        android:name="com.example.lpiem.theelderscrolls.ui.fragment.ExchangeFragment"
         android:label="ExchangeFragment"
         tools:layout="@layout/fragment_exchange" >
     </fragment>

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/my_home_fragment"
-        android:name="com.example.lpiem.starwars.ui.fragment.HomeFragment"
+        android:name="com.example.lpiem.theelderscrolls.ui.fragment.HomeFragment"
         android:label="MyHomeFragment"
         tools:layout="@layout/fragment_home" >
         <action
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/card_details_fragment"
-        android:name="com.example.lpiem.starwars.ui.fragment.CardDetailsFragment"
+        android:name="com.example.lpiem.theelderscrolls.ui.fragment.CardDetailsFragment"
         android:label="MyCardDetailsFragment"
         tools:layout="@layout/fragment_card_details" >
         <argument
