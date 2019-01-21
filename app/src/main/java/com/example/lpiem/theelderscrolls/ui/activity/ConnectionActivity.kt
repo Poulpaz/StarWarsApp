@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lpiem.theelderscrolls.R
+import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
 import com.example.lpiem.theelderscrolls.datasource.request.RegisterData
 import com.example.lpiem.theelderscrolls.manager.GoogleConnectionManager
 import com.example.lpiem.theelderscrolls.viewmodel.ConnectionActivityViewModel
@@ -61,13 +62,46 @@ class ConnectionActivity : BaseActivity() {
                         { loginWithFacebook() },
                         { Timber.e(it) }
                 )
+
+        viewModel.signInState.subscribe(
+                {
+                    when (it) {
+                        NetworkEvent.None -> {
+                            // Nothing
+                        }
+                        NetworkEvent.InProgress -> {
+                            onSignInStateInProgress()
+                        }
+                        is NetworkEvent.Error -> {
+                            onSignInStateError(it)
+                        }
+                        is NetworkEvent.Success -> {
+                            onSignInStateSuccess()
+                        }
+                    }
+                }, { Timber.e(it) }
+        )
+
+        viewModel.signUpState
+    }
+
+    private fun onSignInStateSuccess() {
+        startHome()
+    }
+
+    private fun onSignInStateError(error: NetworkEvent.Error) {
+
+    }
+
+    private fun onSignInStateInProgress() {
+
     }
 
     private fun testUserConnected() {
         val accessToken = AccessToken.getCurrentAccessToken()
         val googleAccount = GoogleSignIn.getLastSignedInAccount(this)
         if (accessToken != null && !accessToken.isExpired) {
-            startHome()
+            viewModel.loadUser()
         }
     }
 
@@ -104,7 +138,10 @@ class ConnectionActivity : BaseActivity() {
 
                 if (profile != null) {
                     val id = profile.id
-                    val email = `object`.getString("email")
+                    var email : String? = null
+                    `object`.getString("email")?.let {
+                        email = it
+                    }
                     val birthday = `object`.getString("birthday")
                     val firstName = profile.firstName
                     val lastName = profile.lastName
@@ -112,15 +149,13 @@ class ConnectionActivity : BaseActivity() {
                     val registerData = RegisterData(id, firstName, lastName, birthday, email, 10, photoUri.toString())
                     viewModel.accountExistState.subscribe(
                             {
-                                if (it) {
-                                    startHome()
-                                } else {
+                                if (!it) {
                                     val dialog = AlertDialog.Builder(this)
                                     dialog.setTitle(R.string.tv_title_dialog_signup)
                                             .setMessage(R.string.tv_message_dialog_signup)
                                             .setNegativeButton(R.string.b_cancel_dialog_signup, { dialoginterface, i -> })
                                             .setPositiveButton(R.string.b_validate_dialog_signup) { dialoginterface, i ->
-                                                viewModel.signUp(registerData)
+                                                signUpWithFacebook(registerData)
                                             }.show()
                                 }
                             },
@@ -136,6 +171,39 @@ class ConnectionActivity : BaseActivity() {
         parameters.putString("fields", "email, birthday")
         request.parameters = parameters
         request.executeAsync()
+    }
+
+    fun signUpWithFacebook(registerData : RegisterData){
+        viewModel.signUp(registerData).subscribe(
+                {
+                    when (it) {
+                        NetworkEvent.None -> {
+                            // Nothing
+                        }
+                        NetworkEvent.InProgress -> {
+                            onSignUpStateInProgress()
+                        }
+                        is NetworkEvent.Error -> {
+                            onSignUpStateError(it)
+                        }
+                        is NetworkEvent.Success -> {
+                            onSignUpStateSuccess(registerData.id)
+                        }
+                    }
+                }, { Timber.e(it) }
+        )
+    }
+
+    private fun onSignUpStateSuccess(id : String) {
+        viewModel.signIn(id)
+    }
+
+    private fun onSignUpStateError(it: NetworkEvent.Error) {
+
+    }
+
+    private fun onSignUpStateInProgress() {
+
     }
 
     fun loginWithGoogle() {

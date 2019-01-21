@@ -30,7 +30,7 @@ val viewModelModule = Kodein.Module("ViewModelModule") {
                 .get(CardDetailsFragmentViewModel::class.java)
     }
 
-    bind<ProfileFragmentViewModel.Factory>() with provider { ProfileFragmentViewModel.Factory(instance()) }
+    bind<ProfileFragmentViewModel.Factory>() with provider { ProfileFragmentViewModel.Factory(instance(), instance()) }
     bind<ProfileFragmentViewModel>() with factory { fragment: Fragment ->
         ViewModelProvider(fragment, instance<ProfileFragmentViewModel.Factory>())
                 .get(ProfileFragmentViewModel::class.java)

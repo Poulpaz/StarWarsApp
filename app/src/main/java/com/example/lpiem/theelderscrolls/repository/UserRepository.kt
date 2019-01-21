@@ -39,6 +39,22 @@ class UserRepository(private val service: TESService,
             saveToken(field)
         }
 
+    fun loadUser(): Observable<NetworkEvent> {
+        return service.getConnectedUser(token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext {
+                    if(it.code == 200){
+                        connectedUser.onNext(it.user.toOptional())
+                        this.token = it.token
+                    }
+                }
+                .map<NetworkEvent> { NetworkEvent.Success }
+                .onErrorReturn { NetworkEvent.Error(it) }
+                .startWith(NetworkEvent.InProgress)
+                .share()
+    }
+
     fun signIn(token : String): Observable<LogInResponse> {
         return service.getConnectedUser(token)
                 .subscribeOn(Schedulers.io())

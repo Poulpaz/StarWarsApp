@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.adapter.ListCardAdapter
 import com.example.lpiem.theelderscrolls.manager.GoogleConnectionManager
+import com.example.lpiem.theelderscrolls.model.User
 import com.example.lpiem.theelderscrolls.ui.activity.ConnectionActivity
 import com.example.lpiem.theelderscrolls.ui.activity.MainActivity
 import com.example.lpiem.theelderscrolls.viewmodel.ProfileFragmentViewModel
@@ -17,6 +18,10 @@ import com.facebook.login.LoginManager
 import kotlinx.android.synthetic.main.fragment_profile.*
 import org.kodein.di.generic.instance
 import timber.log.Timber
+import android.util.Config.LOGD
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 class ProfileFragment : BaseFragment() {
 
@@ -63,6 +68,11 @@ class ProfileFragment : BaseFragment() {
                     }.show()
         }
 
+        viewModel.connectedUser
+                .subscribe({
+                    onConnectedUserChange(it.toNullable())
+                }, { Timber.e(it) })
+
         viewModel.starshipsList
                 .map {
                     it.dropLast(it.size-6)
@@ -84,6 +94,48 @@ class ProfileFragment : BaseFragment() {
                         { Timber.e(it) }
                 )
 
+    }
+
+    private fun onConnectedUserChange(user: User?) {
+        user?.let {
+            tv_name_fragment_profile.text = getNameString(it.firstname, it.lastname)
+            it.birthday?.let {birthday ->
+                tv_age_fragment_profile.text = getAgeString(birthday)
+            }
+            tv_wallet_fragment_profile.text = it.wallet.toString()
+        }
+
+    }
+
+    private fun getAgeString(birthday: String): String {
+
+        val dateOfBirth = getStringToDate(birthday)
+
+        val cal = GregorianCalendar()
+        val y = cal.get(Calendar.YEAR)
+        val m = cal.get(Calendar.MONTH)
+        val d = cal.get(Calendar.DAY_OF_MONTH)
+        cal.set(dateOfBirth.year, dateOfBirth.month, dateOfBirth.day)
+        var noofyears = (y - cal.get(Calendar.YEAR))
+
+        if (m < cal.get(Calendar.MONTH) || m == cal.get(Calendar.MONTH) && d < cal.get(Calendar.DAY_OF_MONTH)) {
+            noofyears--
+        }
+
+        if (noofyears != 0) {
+            return "$noofyears ans"
+        } else {
+            return ""
+        }
+    }
+
+    private fun getNameString(firstname: String, lastname: String): String {
+        return firstname + " " + lastname
+    }
+
+    private fun getStringToDate(date : String): Date{
+        val sdf = SimpleDateFormat("MM/dd/yyyy HH:mm", Locale.getDefault())
+        return sdf.parse(date)
     }
 
 }

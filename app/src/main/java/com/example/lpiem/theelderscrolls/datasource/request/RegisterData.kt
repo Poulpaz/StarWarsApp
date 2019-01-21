@@ -6,8 +6,8 @@ data class RegisterData(
         @SerializedName("token") var id: String,
         @SerializedName("firstname") var firstname: String,
         @SerializedName("lastname") var lastname: String,
-        @SerializedName("birthday") var birthday: String,
-        @SerializedName("mail") var mail: String,
+        @SerializedName("birthday") var birthday: String?,
+        @SerializedName("mail") var mail: String?,
         @SerializedName("wallet") var wallet: Int,
-        @SerializedName("url") var imageUrlProfile: String
+        @SerializedName("url") var imageUrlProfile: String?
 )
