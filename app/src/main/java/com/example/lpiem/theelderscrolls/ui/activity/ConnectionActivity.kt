@@ -6,10 +6,8 @@ import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lpiem.theelderscrolls.R
-import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
 import com.example.lpiem.theelderscrolls.datasource.request.RegisterData
 import com.example.lpiem.theelderscrolls.manager.GoogleConnectionManager
-import com.example.lpiem.theelderscrolls.model.User
 import com.example.lpiem.theelderscrolls.viewmodel.ConnectionActivityViewModel
 import com.facebook.*
 import com.jakewharton.rxbinding2.view.clicks
@@ -23,13 +21,8 @@ import com.google.android.gms.tasks.Task
 import kotlinx.android.synthetic.main.connection_activity.*
 import timber.log.Timber
 import org.kodein.di.generic.instance
-import com.facebook.GraphResponse
-import org.json.JSONObject
 import com.facebook.GraphRequest
 import org.json.JSONException
-import com.facebook.Profile.getCurrentProfile
-import com.facebook.internal.ImageRequest.getProfilePictureUri
-import java.util.*
 
 
 class ConnectionActivity : BaseActivity() {
@@ -68,66 +61,13 @@ class ConnectionActivity : BaseActivity() {
                         { loginWithFacebook() },
                         { Timber.e(it) }
                 )
-
-        viewModel.signInState
-                .subscribe(
-                        {
-                            when (it) {
-                                NetworkEvent.None -> {
-                                    // Nothing
-                                }
-                                NetworkEvent.InProgress -> {
-                                    onSignInStateInProgress()
-                                }
-                                is NetworkEvent.Error -> {
-                                    onSignInStateError(it)
-                                }
-                                is NetworkEvent.Success -> {
-                                    onSignInStateSuccess()
-                                }
-                            }
-                        }, { Timber.e(it) }
-                )
-    }
-
-    private fun onSignInStateSuccess() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    private fun onSignInStateError(network: NetworkEvent.Error) {
-        val dialog = AlertDialog.Builder(this)
-        dialog.setTitle(R.string.tv_title_dialog_logout)
-                .setMessage(R.string.tv_message_dialog_logout)
-                .setNegativeButton(R.string.b_cancel_dialog_logout, { dialoginterface, i ->
-                    b_login_facebook.isEnabled = true
-                    b_login_google.isEnabled = true
-                })
-                .setPositiveButton(R.string.b_validate_dialog_logout) { dialoginterface, i ->
-                    signUpUser()
-                }.show()
-    }
-
-    private fun signUpUser() {
-
-    }
-
-    private fun onSignInStateInProgress() {
-        //b_login_facebook.isEnabled = false
-        //b_login_google.isEnabled = false
     }
 
     private fun testUserConnected() {
         val accessToken = AccessToken.getCurrentAccessToken()
         val googleAccount = GoogleSignIn.getLastSignedInAccount(this)
-        if (googleAccount != null || accessToken != null && !accessToken.isExpired) {
-            val personName = googleAccount?.displayName
-            val personGivenName = googleAccount?.givenName
-            val personFamilyName = googleAccount?.familyName
-            val personEmail = googleAccount?.email
-            val personId = googleAccount?.id
-            val personPhoto = googleAccount?.photoUrl
-            val token = googleAccount?.idToken
-            //startHome()
+        if (accessToken != null && !accessToken.isExpired) {
+            startHome()
         }
     }
 
@@ -139,9 +79,7 @@ class ConnectionActivity : BaseActivity() {
                     override fun onSuccess(loginResult: LoginResult) {
                         val token = loginResult.accessToken.token
                         Log.d(TAG, "Facebook token: " + token)
-                        //val user = SignUpData("Carlos", "Chastagnier", 28, "carlos@gmail.com", 10, "google.com")
-                        //viewModel.signUp(token, user)
-                        setFacebookData(loginResult)
+                        signInUserWithFacebook(loginResult)
                     }
 
                     override fun onCancel() {
@@ -154,32 +92,48 @@ class ConnectionActivity : BaseActivity() {
                 })
     }
 
-    private fun setFacebookData(loginResult: LoginResult) {
+    private fun signInUserWithFacebook(loginResult: LoginResult) {
         val request = GraphRequest.newMeRequest(
                 loginResult.accessToken
         ) { `object`, response ->
-            // Application code
+
             try {
                 Log.i("Response", response.toString())
 
                 val profile = Profile.getCurrentProfile()
 
-                if(profile != null){
+                if (profile != null) {
                     val id = profile.id
                     val email = `object`.getString("email")
                     val birthday = `object`.getString("birthday")
                     val firstName = profile.firstName
                     val lastName = profile.lastName
                     val photoUri = Profile.getCurrentProfile().getProfilePictureUri(200, 200)
-                    val registerData = RegisterData(id, firstName, lastName, birthday,  email, 10, photoUri.toString())
-                    viewModel.signUp(registerData)
+                    val registerData = RegisterData(id, firstName, lastName, birthday, email, 10, photoUri.toString())
+                    viewModel.accountExistState.subscribe(
+                            {
+                                if (it) {
+                                    startHome()
+                                } else {
+                                    val dialog = AlertDialog.Builder(this)
+                                    dialog.setTitle(R.string.tv_title_dialog_signup)
+                                            .setMessage(R.string.tv_message_dialog_signup)
+                                            .setNegativeButton(R.string.b_cancel_dialog_signup, { dialoginterface, i -> })
+                                            .setPositiveButton(R.string.b_validate_dialog_signup) { dialoginterface, i ->
+                                                viewModel.signUp(registerData)
+                                            }.show()
+                                }
+                            },
+                            { Timber.e(it) }
+                    )
+                    viewModel.signIn(id)
                 }
             } catch (e: JSONException) {
                 e.printStackTrace()
             }
         }
         val parameters = Bundle()
-        parameters.putString("fields", "id,email,first_name,last_name, birthday")
+        parameters.putString("fields", "email, birthday")
         request.parameters = parameters
         request.executeAsync()
     }

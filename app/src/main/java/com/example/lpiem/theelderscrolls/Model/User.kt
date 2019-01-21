@@ -6,8 +6,8 @@ data class User(
         @SerializedName("idUser") var idUser: Int,
         @SerializedName("firstname") var firstname: String,
         @SerializedName("lastname") var lastname: String,
-        @SerializedName("age") var age: Int?,
+        @SerializedName("birthday") var birthday: String?,
         @SerializedName("mail") var mail: String,
         @SerializedName("wallet") var wallet: Int,
-        @SerializedName("imageUrlProfile") var imageUrlProfile: String
+        @SerializedName("url") var imageUrlProfile: String
 )

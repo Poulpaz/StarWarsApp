@@ -12,7 +12,6 @@ class GoogleConnectionManager(val context : Context){
 
     init {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(R.string.client_server_id.toString())
                 .requestEmail()
                 .build()
         mGoogleSignInClient = GoogleSignIn.getClient(context, gso)

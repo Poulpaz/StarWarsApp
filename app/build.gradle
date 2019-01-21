@@ -53,6 +53,7 @@ dependencies {
     implementation "com.jakewharton.rxbinding2:rxbinding-design:$versions.rxbinding"
     implementation "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:$versions.rxbinding"
     implementation "com.jakewharton.rxrelay2:rxrelay:$versions.rxrelay"
+    implementation 'com.gojuno.koptional:koptional-rxjava2-extensions:1.6.0'
 
     // Timber
     implementation "com.jakewharton.timber:timber:$versions.timber"

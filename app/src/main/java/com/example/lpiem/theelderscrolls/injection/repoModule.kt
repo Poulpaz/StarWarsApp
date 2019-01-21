@@ -9,5 +9,5 @@ import org.kodein.di.generic.singleton
 
 val repoModule = Kodein.Module("RepoModule") {
     bind<CardsRepository>() with singleton { CardsRepository(instance()) }
-    bind<UserRepository>() with singleton { UserRepository(instance()) }
+    bind<UserRepository>() with singleton { UserRepository(instance(), instance(), instance()) }
 }

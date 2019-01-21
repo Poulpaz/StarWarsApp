@@ -8,20 +8,30 @@ import com.example.lpiem.theelderscrolls.model.User
 import com.example.lpiem.theelderscrolls.repository.UserRepository
 import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
+import kotlin.math.sign
 
 class ConnectionActivityViewModel(private val repository: UserRepository) : BaseViewModel() {
 
     val signInState: BehaviorSubject<NetworkEvent> = BehaviorSubject.createDefault(NetworkEvent.None)
     val signUpState: BehaviorSubject<NetworkEvent> = BehaviorSubject.createDefault(NetworkEvent.None)
 
-    fun signIn(token: String) {
+    val accountExistState: BehaviorSubject<Boolean> = BehaviorSubject.create()
 
+    fun signIn(token: String)  {
+        signInState.onNext(NetworkEvent.InProgress)
         repository.signIn(token)
                 .subscribe(
                         {
-                            signInState.onNext(it)
+                            if (it.code == 200){
+                                accountExistState.onNext(true)
+                                signInState.onNext(NetworkEvent.Success)
+                            }else if (it.code == 1){
+                                accountExistState.onNext(false)
+                            }
                         },
-                        { Timber.e(it) }
+                        {
+                            signInState.onNext(NetworkEvent.Error(it))
+                            Timber.e(it) }
                 )
     }
 

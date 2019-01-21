@@ -1,6 +1,6 @@
 package com.example.lpiem.theelderscrolls.repository
 
-import com.example.lpiem.theelderscrolls.datasource.SWService
+import com.example.lpiem.theelderscrolls.datasource.TESService
 import com.example.lpiem.theelderscrolls.datasource.response.GetCardResponse
 import com.example.lpiem.theelderscrolls.model.Card
 import com.example.lpiem.theelderscrolls.model.RawCard
@@ -11,7 +11,7 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
 
-class CardsRepository(private val service: SWService){
+class CardsRepository(private val service: TESService){
 
     val starshipsList: BehaviorSubject<List<Card>> = BehaviorSubject.create()
 

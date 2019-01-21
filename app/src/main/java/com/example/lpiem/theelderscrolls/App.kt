@@ -2,9 +2,7 @@ package com.example.lpiem.theelderscrolls
 
 import android.app.Application
 import android.content.Context
-import com.example.lpiem.theelderscrolls.injection.networkModule
-import com.example.lpiem.theelderscrolls.injection.repoModule
-import com.example.lpiem.theelderscrolls.injection.viewModelModule
+import com.example.lpiem.theelderscrolls.injection.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.bind
@@ -22,6 +20,8 @@ class App : Application(), KodeinAware {
         import(networkModule)
         import(repoModule)
         import(viewModelModule)
+        import(managerModule)
+        import(preferenceModule)
     }
 
     override fun onCreate() {

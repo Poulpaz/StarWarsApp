@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import com.example.lpiem.theelderscrolls.BuildConfig
-import com.example.lpiem.theelderscrolls.datasource.SWService
+import com.example.lpiem.theelderscrolls.datasource.TESService
 import com.example.lpiem.theelderscrolls.manager.GoogleConnectionManager
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -57,19 +57,17 @@ val networkModule = Kodein.Module("Network") {
 
     bind<Retrofit.Builder>() with singleton { Retrofit.Builder() }
 
-    bind<SWService>() with singleton {
+    bind<TESService>() with singleton {
         instance<Retrofit.Builder>()
                 .baseUrl(instance<String>(Tag.TAG_PROD_BASE_URL))
                 .client(instance())
                 .addConverterFactory(instance(tagGsonConverterFactory))
                 .addCallAdapterFactory(instance(tagRxJavaCallAdapterFactory))
                 .build()
-                .create(SWService::class.java)
+                .create(TESService::class.java)
     }
 
     bind<ConnectivityManager>() with provider {
         instance<Application>().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
-
-    bind<GoogleConnectionManager>() with singleton { GoogleConnectionManager(instance()) }
 }
