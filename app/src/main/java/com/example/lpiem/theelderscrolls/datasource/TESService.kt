@@ -15,6 +15,9 @@ interface TESService {
     @GET("cardsFromShop")
     fun getCards(): Flowable<RawCard>
 
+    @GET("users")
+    fun getAllUsers(@Header("token") token: String?): Flowable<List<User>>
+
     @GET("detailsCard/{cardId}")
     fun getCard(@Path("cardId") cardId : String) : Observable<GetCardResponse>
 

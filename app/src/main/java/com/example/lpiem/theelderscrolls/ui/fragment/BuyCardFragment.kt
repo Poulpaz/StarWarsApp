@@ -47,7 +47,7 @@ class BuyCardFragment : BaseFragment() {
                         { Timber.e(it) }
                 )
 
-        adapter.indexClickPublisher
+        adapter.cardsClickPublisher
                 .subscribe(
                         {
                             val action = HomeFragmentDirections.actionMyHomeFragmentToCardDetailsFragment(it)

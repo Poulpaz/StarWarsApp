@@ -18,7 +18,7 @@ import com.facebook.login.LoginManager
 import kotlinx.android.synthetic.main.fragment_profile.*
 import org.kodein.di.generic.instance
 import timber.log.Timber
-import android.util.Config.LOGD
+import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -73,7 +73,7 @@ class ProfileFragment : BaseFragment() {
                     onConnectedUserChange(it.toNullable())
                 }, { Timber.e(it) })
 
-        viewModel.starshipsList
+        viewModel.userCardsList
                 .map {
                     it.dropLast(it.size-6)
                 }
@@ -84,7 +84,7 @@ class ProfileFragment : BaseFragment() {
                         { Timber.e(it) }
                 )
 
-        adapter.indexClickPublisher
+        adapter.cardsClickPublisher
                 .subscribe(
                         {
                             val action = ProfileFragmentDirections.actionMyProfileFragmentToCardDetailsFragment(it)
@@ -103,6 +103,12 @@ class ProfileFragment : BaseFragment() {
                 tv_age_fragment_profile.text = getAgeString(birthday)
             }
             tv_wallet_fragment_profile.text = it.wallet.toString()
+            it.imageUrlProfile.let {photo ->
+                Picasso.get()
+                        .load(photo)
+                        .placeholder(R.drawable.ic_profile)
+                        .into(iv_photo_fragment_profile)
+            }
         }
 
     }
@@ -122,6 +128,8 @@ class ProfileFragment : BaseFragment() {
             noofyears--
         }
 
+        noofyears -= 1900
+
         if (noofyears != 0) {
             return "$noofyears ans"
         } else {
@@ -134,7 +142,7 @@ class ProfileFragment : BaseFragment() {
     }
 
     private fun getStringToDate(date : String): Date{
-        val sdf = SimpleDateFormat("MM/dd/yyyy HH:mm", Locale.getDefault())
+        val sdf = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
         return sdf.parse(date)
     }
 

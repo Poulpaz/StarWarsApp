@@ -43,14 +43,11 @@ class ListCardExchangeAdapter : ListAdapter<Card, ListCardExchangeAdapter.CardVi
         }
 
         private fun bindPositionClick(idCard: String) {
-            itemView.clicks()
-                    .takeUntil(RxView.detaches(itemView))
-                    .filter { adapterPosition != RecyclerView.NO_POSITION }
-                    .subscribe {
-                        indexClickPublisher.onNext(idCard)
-                        idItemSelected = idCard
-                        notifyDataSetChanged()
-                    }
+            itemView.setOnClickListener {
+                indexClickPublisher.onNext(idCard)
+                idItemSelected = idCard
+                notifyDataSetChanged()
+            }
         }
     }
 
