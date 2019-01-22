@@ -70,7 +70,7 @@ dependencies {
 
     //Test
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation "androidx.test.espresso:espresso-core:$versions.androidx.espresso"
     androidTestImplementation "androidx.test:runner:$versions.androidx.test_runner"

@@ -125,6 +125,9 @@ class ConnectionActivity : BaseActivity() {
         if (accessToken != null && !accessToken.isExpired) {
             viewModel.loadUser()
         }
+        googleAccount?.let {
+            viewModel.loadUser()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -247,8 +250,31 @@ class ConnectionActivity : BaseActivity() {
 
     private fun updateUI(account: GoogleSignInAccount?) {
         if (account != null) {
-            Log.d(TAG, "Google token: " + account.email)
-            MainActivity.start(this)
+            val id = account.id
+            var email = account.email
+            val firstName = account.givenName
+            val lastName = account.familyName
+            val photoUri = account.photoUrl
+            if(id.isNullOrEmpty() || firstName.isNullOrEmpty() || lastName.isNullOrEmpty()){
+                Toast.makeText(this, getString(R.string.tv_error_login), Toast.LENGTH_SHORT).show()
+            } else {
+                val registerData = RegisterData(id, firstName, lastName, null, email, 10, photoUri.toString())
+                viewModel.accountExistState.subscribe(
+                        {
+                            if (!it) {
+                                val dialog = AlertDialog.Builder(this)
+                                dialog.setTitle(R.string.tv_title_dialog_signup)
+                                        .setMessage(R.string.tv_message_dialog_signup)
+                                        .setNegativeButton(R.string.b_cancel_dialog_signup, { dialoginterface, i -> })
+                                        .setPositiveButton(R.string.b_validate_dialog_signup) { dialoginterface, i ->
+                                            signUpWithFacebook(registerData)
+                                        }.show()
+                            }
+                        },
+                        { Timber.e(it) }
+                )
+                viewModel.signIn(id)
+            }
         }
     }
 
