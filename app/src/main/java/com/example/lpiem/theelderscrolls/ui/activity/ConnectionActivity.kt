@@ -3,6 +3,8 @@ package com.example.lpiem.theelderscrolls.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lpiem.theelderscrolls.R
@@ -81,20 +83,40 @@ class ConnectionActivity : BaseActivity() {
                     }
                 }, { Timber.e(it) }
         )
-
-        viewModel.signUpState
     }
+
+    //region Facebook & Google
 
     private fun onSignInStateSuccess() {
         startHome()
+        progress_bar_connection_activity.visibility = View.GONE
     }
 
     private fun onSignInStateError(error: NetworkEvent.Error) {
-
+        AccessToken.getCurrentAccessToken()?.let {
+            LoginManager.getInstance().logOut()
+        }
+        googleManager.getGoogleSignInClient().signOut()
+        progress_bar_connection_activity.visibility = View.GONE
+        Toast.makeText(this, getString(R.string.tv_error_login), Toast.LENGTH_SHORT).show()
     }
 
     private fun onSignInStateInProgress() {
+        progress_bar_connection_activity.visibility = View.VISIBLE
+    }
 
+    private fun onSignUpStateSuccess(id : String) {
+        viewModel.signIn(id)
+        progress_bar_connection_activity.visibility = View.GONE
+    }
+
+    private fun onSignUpStateError(it: NetworkEvent.Error) {
+        Toast.makeText(this, getString(R.string.tv_error_signup), Toast.LENGTH_SHORT).show()
+        progress_bar_connection_activity.visibility = View.GONE
+    }
+
+    private fun onSignUpStateInProgress() {
+        progress_bar_connection_activity.visibility = View.VISIBLE
     }
 
     private fun testUserConnected() {
@@ -104,6 +126,18 @@ class ConnectionActivity : BaseActivity() {
             viewModel.loadUser()
         }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        callbackManager?.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            handleSignInResult(task)
+        }
+    }
+
+    //region Facebook
 
     fun loginWithFacebook() {
 
@@ -194,31 +228,11 @@ class ConnectionActivity : BaseActivity() {
         )
     }
 
-    private fun onSignUpStateSuccess(id : String) {
-        viewModel.signIn(id)
-    }
-
-    private fun onSignUpStateError(it: NetworkEvent.Error) {
-
-    }
-
-    private fun onSignUpStateInProgress() {
-
-    }
+    //region Google
 
     fun loginWithGoogle() {
         val signInIntent = googleManager.getGoogleSignInClient().getSignInIntent()
         startActivityForResult(signInIntent, RC_SIGN_IN)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        callbackManager?.onActivityResult(requestCode, resultCode, data)
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            handleSignInResult(task)
-        }
     }
 
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {

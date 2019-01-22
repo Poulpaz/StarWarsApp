@@ -10,6 +10,7 @@ import com.example.lpiem.theelderscrolls.model.User
 import com.gojuno.koptional.None
 import com.gojuno.koptional.Optional
 import com.gojuno.koptional.toOptional
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -38,6 +39,13 @@ class UserRepository(private val service: TESService,
             field = value
             saveToken(field)
         }
+
+    fun getAllUsers(): Flowable<List<User>>{
+        return service.getAllUsers(token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .share()
+    }
 
     fun loadUser(): Observable<NetworkEvent> {
         return service.getConnectedUser(token)

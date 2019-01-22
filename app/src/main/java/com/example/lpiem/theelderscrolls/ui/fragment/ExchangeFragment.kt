@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.adapter.ListCardExchangeAdapter
 import com.example.lpiem.theelderscrolls.adapter.ListPlayersAdapter
-import com.example.lpiem.theelderscrolls.viewmodel.ProfileFragmentViewModel
+import com.example.lpiem.theelderscrolls.viewmodel.ExchangeFragmentViewModel
 import kotlinx.android.synthetic.main.fragment_exchange.*
 import org.kodein.di.direct
 import org.kodein.di.generic.instance
@@ -18,7 +18,7 @@ import timber.log.Timber
 
 class ExchangeFragment : BaseFragment() {
 
-    private lateinit var viewModel: ProfileFragmentViewModel
+    private lateinit var viewModel: ExchangeFragmentViewModel
 
     companion object {
         const val TAG = "EXCHANGEFRAGMENT"
@@ -49,13 +49,21 @@ class ExchangeFragment : BaseFragment() {
         val layoutManager = LinearLayoutManager(context)
         rv_players_exchange_fragment.layoutManager = layoutManager
 
-        viewModel.starshipsList
+        viewModel.userCardsList
                 .map {
-                    it.dropLast(it.size-9)
+                    it.dropLast(it.size - 9)
                 }
                 .subscribe(
                         {
                             adapterCards.submitList(it)
+                        },
+                        { Timber.e(it) }
+                )
+
+        viewModel.usersList
+                .subscribe(
+                        {
+                            adapterPlayers.submitList(it)
                         },
                         { Timber.e(it) }
                 )

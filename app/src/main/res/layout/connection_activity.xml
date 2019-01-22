@@ -37,6 +37,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
+    <ProgressBar
+        android:id="@+id/progress_bar_connection_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/iv_logo"
+        app:layout_constraintBottom_toBottomOf="@id/iv_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
     <com.facebook.login.widget.LoginButton
         android:id="@+id/b_login_facebook"
         android:layout_width="match_parent"

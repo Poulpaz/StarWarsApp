@@ -8,27 +8,31 @@ import com.example.lpiem.theelderscrolls.repository.CardsRepository
 import com.example.lpiem.theelderscrolls.repository.UserRepository
 import com.example.lpiem.theelderscrolls.utils.disposedBy
 import com.gojuno.koptional.Optional
-import com.gojuno.koptional.toOptional
 import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
 
 class ProfileFragmentViewModel(private val cardsRepository: CardsRepository, private val userRepository: UserRepository) : BaseViewModel() {
 
-    val starshipsList: BehaviorSubject<List<Card>?> = BehaviorSubject.create()
-    val connectedUser: BehaviorSubject<Optional<User>>
-        get() {
-            return userRepository.connectedUser
-        }
+    val userCardsList: BehaviorSubject<List<Card>?> = BehaviorSubject.create()
+    val connectedUser: BehaviorSubject<Optional<User>> = BehaviorSubject.create()
+
 
     init {
-        cardsRepository.starshipsList
+        cardsRepository.userCardsList
                 .subscribe(
                         {
-                            starshipsList.onNext(it)
+                            userCardsList.onNext(it)
                         },
                         { Timber.e(it) }
                 )
                 .disposedBy(disposeBag)
+
+        userRepository.connectedUser.subscribe(
+                {
+                    connectedUser.onNext(it)
+                },
+                { Timber.e(it) }
+        )
     }
 
     class Factory(private val cardsRepository: CardsRepository, private val userRepository: UserRepository) : ViewModelProvider.Factory {

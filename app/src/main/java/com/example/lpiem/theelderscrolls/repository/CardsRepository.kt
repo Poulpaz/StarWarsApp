@@ -13,7 +13,7 @@ import timber.log.Timber
 
 class CardsRepository(private val service: TESService){
 
-    val starshipsList: BehaviorSubject<List<Card>> = BehaviorSubject.create()
+    val userCardsList: BehaviorSubject<List<Card>> = BehaviorSubject.create()
 
     fun fetchStarships(): Flowable<RawCard> {
         val obs = service.getCards()
@@ -23,7 +23,7 @@ class CardsRepository(private val service: TESService){
 
         obs.subscribe(
                 {
-                    starshipsList.onNext(it.cards)
+                    userCardsList.onNext(it.cards)
                 },
                 { Timber.e(it)}
         )

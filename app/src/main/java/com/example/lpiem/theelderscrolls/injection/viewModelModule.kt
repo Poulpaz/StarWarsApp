@@ -36,7 +36,7 @@ val viewModelModule = Kodein.Module("ViewModelModule") {
                 .get(ProfileFragmentViewModel::class.java)
     }
 
-    bind<ExchangeFragmentViewModel.Factory>() with provider { ExchangeFragmentViewModel.Factory(instance()) }
+    bind<ExchangeFragmentViewModel.Factory>() with provider { ExchangeFragmentViewModel.Factory(instance(), instance()) }
     bind<ExchangeFragmentViewModel>() with factory { fragment: Fragment ->
         ViewModelProvider(fragment, instance<ExchangeFragmentViewModel.Factory>())
                 .get(ExchangeFragmentViewModel::class.java)

@@ -40,6 +40,10 @@
     <string name="b_cancel_dialog_signup">Non</string>
     <string name="b_validate_dialog_signup">Oui</string>
 
+    <!-- Error -->
+    <string name="tv_error_login">Une erreur a eu lieu lors de la connexion</string>
+    <string name="tv_error_signup">Une erreur a eu lieu lors de l\'inscription</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
