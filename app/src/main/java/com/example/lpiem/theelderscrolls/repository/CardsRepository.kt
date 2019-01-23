@@ -1,6 +1,8 @@
 package com.example.lpiem.theelderscrolls.repository
 
+import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
 import com.example.lpiem.theelderscrolls.datasource.TESService
+import com.example.lpiem.theelderscrolls.datasource.request.UserCardData
 import com.example.lpiem.theelderscrolls.datasource.response.GetCardResponse
 import com.example.lpiem.theelderscrolls.model.Card
 import com.example.lpiem.theelderscrolls.model.RawCard
@@ -15,7 +17,7 @@ class CardsRepository(private val service: TESService){
 
     val userCardsList: BehaviorSubject<List<Card>> = BehaviorSubject.create()
 
-    fun fetchStarships(): Flowable<RawCard> {
+    fun fetchCards(): Flowable<RawCard> {
         val obs = service.getCards()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -35,6 +37,19 @@ class CardsRepository(private val service: TESService){
         return service.getCard(idCard)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .share()
+    }
+
+    fun addUserCard(idUser : Int, idCard : String) : Observable<NetworkEvent>{
+
+        val userCardData = UserCardData(idUser, idCard)
+
+        return service.addUserCard(userCardData)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map<NetworkEvent> { NetworkEvent.Success }
+                .onErrorReturn { NetworkEvent.Error(it) }
+                .startWith(NetworkEvent.InProgress)
                 .share()
     }
 }

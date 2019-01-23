@@ -24,7 +24,7 @@ val viewModelModule = Kodein.Module("ViewModelModule") {
                 .get(HomeFragmentViewModel::class.java)
     }
 
-    bind<CardDetailsFragmentViewModel.Factory>() with factory { idCard : String -> CardDetailsFragmentViewModel.Factory(instance(), idCard) }
+    bind<CardDetailsFragmentViewModel.Factory>() with factory { idCard : String -> CardDetailsFragmentViewModel.Factory(instance(),instance(), idCard) }
     bind<CardDetailsFragmentViewModel>() with factory { fragment: Fragment, idCard : String ->
         ViewModelProvider(fragment, instance<String, CardDetailsFragmentViewModel.Factory>(arg = idCard))
                 .get(CardDetailsFragmentViewModel::class.java)
