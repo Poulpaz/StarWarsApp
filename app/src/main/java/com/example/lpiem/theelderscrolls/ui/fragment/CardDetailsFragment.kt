@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.lpiem.theelderscrolls.R
+import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
 import com.example.lpiem.theelderscrolls.model.Card
 import com.example.lpiem.theelderscrolls.viewmodel.CardDetailsFragmentViewModel
 import com.google.android.material.chip.Chip
@@ -39,8 +41,37 @@ class CardDetailsFragment : BaseFragment() {
                         {
                             displayCard(it)
                         },
-                        {Timber.e(it)}
+                        { Timber.e(it) }
                 )
+
+        b_buy_fragment_card_details.setOnClickListener {
+            viewModel.buyCard()
+        }
+
+        viewModel.cardDetailsError.subscribe(
+                {
+                    Toast.makeText(activity, getString(it), Toast.LENGTH_SHORT).show()
+                },
+                { Timber.e(it) }
+        )
+
+        viewModel.buyCardState.subscribe({
+            when (it) {
+                NetworkEvent.None -> {
+                    // Nothing
+                }
+                NetworkEvent.InProgress -> {
+
+                }
+                is NetworkEvent.Error -> {
+                    Toast.makeText(activity, getString(R.string.tv_error_buy_card), Toast.LENGTH_SHORT).show()
+                }
+                is NetworkEvent.Success -> {
+                    Toast.makeText(activity, getString(R.string.tv_buy_card_success), Toast.LENGTH_SHORT).show()
+                }
+            }
+        }, { Timber.e(it) }
+        )
     }
 
     private fun displayCard(card: Card) {
@@ -63,7 +94,7 @@ class CardDetailsFragment : BaseFragment() {
         b_buy_fragment_card_details.text = getStringButtonPay(card.cost)
     }
 
-    private fun getChip(textChip : String?): Chip{
+    private fun getChip(textChip: String?): Chip {
         val chip = Chip(context)
         chip.chipBackgroundColor = ContextCompat.getColorStateList(chip.context, R.color.colorAccent)
         chip.isClickable = false
@@ -73,7 +104,7 @@ class CardDetailsFragment : BaseFragment() {
         return chip
     }
 
-    private fun getStringButtonPay(cost : Int?): String {
+    private fun getStringButtonPay(cost: Int?): String {
         return "Acheter " + cost.toString()
     }
 }

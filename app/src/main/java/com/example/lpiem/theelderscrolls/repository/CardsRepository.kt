@@ -1,6 +1,8 @@
 package com.example.lpiem.theelderscrolls.repository
 
+import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
 import com.example.lpiem.theelderscrolls.datasource.TESService
+import com.example.lpiem.theelderscrolls.datasource.request.UserCardData
 import com.example.lpiem.theelderscrolls.datasource.response.GetCardResponse
 import com.example.lpiem.theelderscrolls.datasource.response.IdCardResponse
 import com.example.lpiem.theelderscrolls.model.Card
@@ -18,7 +20,7 @@ class CardsRepository(private val service: TESService){
 
     lateinit var cardsList: List<Card>
 
-    fun fetchStarships(): Flowable<List<Card>> {
+    fun fetchCards(): Flowable<List<Card>> {
         val obs = service.getCards()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -50,10 +52,16 @@ class CardsRepository(private val service: TESService){
                 .share()
     }
 
-    fun getUserCards2(idUser : Int) : Flowable<List<IdCardResponse>> {
-        return service.getAllUserCardsWithId(idUser)
+    fun addUserCard(idUser : Int, idCard : String) : Observable<NetworkEvent>{
+
+        val userCardData = UserCardData(idUser, idCard)
+
+        return service.addUserCard(userCardData)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .map<NetworkEvent> { NetworkEvent.Success }
+                .onErrorReturn { NetworkEvent.Error(it) }
+                .startWith(NetworkEvent.InProgress)
                 .share()
     }
 }

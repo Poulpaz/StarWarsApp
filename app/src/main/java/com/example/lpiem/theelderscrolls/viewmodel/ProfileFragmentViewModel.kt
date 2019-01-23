@@ -37,7 +37,7 @@ class ProfileFragmentViewModel(private val cardsRepository: CardsRepository, pri
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
         if(idUser != null) {
             Flowable.combineLatest(
-                    cardsRepository.fetchStarships(),
+                    cardsRepository.fetchCards(),
                     cardsRepository.getUserCards(idUser),
                     BiFunction<List<Card>, List<IdCardResponse>, Pair<List<Card>, List<IdCardResponse>>> { t1, t2 -> Pair(t1, t2) })
                     .subscribe(

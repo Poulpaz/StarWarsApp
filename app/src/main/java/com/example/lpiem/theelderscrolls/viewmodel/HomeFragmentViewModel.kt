@@ -8,25 +8,29 @@ import com.example.lpiem.theelderscrolls.utils.disposedBy
 import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
 
-class HomeFragmentViewModel(repository: CardsRepository) : BaseViewModel() {
+class HomeFragmentViewModel(private val cardsRepository: CardsRepository) : BaseViewModel() {
 
-    val starshipsList: BehaviorSubject<List<Card>?> = BehaviorSubject.create()
+    val cardsList: BehaviorSubject<List<Card>?> = BehaviorSubject.create()
 
     init {
-        repository.fetchStarships()
+        fetchCards()
+    }
+
+    fun fetchCards(){
+        cardsRepository.fetchCards()
                 .subscribe(
                         {
-                            starshipsList.onNext(it)
+                            cardsList.onNext(it)
                         },
                         { Timber.e(it) }
                 )
                 .disposedBy(disposeBag)
     }
 
-    class Factory(private val repository: CardsRepository) : ViewModelProvider.Factory {
+    class Factory(private val cardsRepository: CardsRepository) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             @Suppress("UNCHECKED_CAST")
-            return HomeFragmentViewModel(repository) as T
+            return HomeFragmentViewModel(cardsRepository) as T
         }
     }
 }

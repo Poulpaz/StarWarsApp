@@ -45,7 +45,7 @@ class ProfileFragment : BaseFragment() {
         setDisplayBotomBarNavigation(true)
 
         val adapter = ListCardAdapter()
-        val mLayoutManager = GridLayoutManager(this.context, 3)
+        val mLayoutManager = GridLayoutManager(this.context, 2)
         rv_cards_profile_fragment.setLayoutManager(mLayoutManager)
         rv_cards_profile_fragment.setItemAnimator(DefaultItemAnimator())
         rv_cards_profile_fragment.adapter = adapter
