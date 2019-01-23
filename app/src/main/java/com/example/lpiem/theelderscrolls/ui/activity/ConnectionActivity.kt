@@ -175,14 +175,10 @@ class ConnectionActivity : BaseActivity() {
 
                 if (profile != null) {
                     val id = profile.id
-                    var email : String? = null
-                    `object`.getString("email")?.let {
-                        email = it
-                    }
                     val firstName = profile.firstName
                     val lastName = profile.lastName
                     val photoUri = Profile.getCurrentProfile().getProfilePictureUri(200, 200)
-                    val registerData = RegisterData(id, firstName, lastName, email, 10, photoUri.toString())
+                    val registerData = RegisterData(id, firstName, lastName, 10, photoUri.toString())
                     viewModel.accountExistState.subscribe(
                             {
                                 if (!it) {
@@ -250,14 +246,13 @@ class ConnectionActivity : BaseActivity() {
     private fun updateUI(account: GoogleSignInAccount?) {
         if (account != null) {
             val id = account.id
-            var email = account.email
             val firstName = account.givenName
             val lastName = account.familyName
             val photoUri = account.photoUrl
             if(id.isNullOrEmpty() || firstName.isNullOrEmpty() || lastName.isNullOrEmpty()){
                 Toast.makeText(this, getString(R.string.tv_error_login), Toast.LENGTH_SHORT).show()
             } else {
-                val registerData = RegisterData(id, firstName, lastName, email, 10, photoUri.toString())
+                val registerData = RegisterData(id, firstName, lastName, 10, photoUri.toString())
                 viewModel.accountExistState.subscribe(
                         {
                             if (!it) {
