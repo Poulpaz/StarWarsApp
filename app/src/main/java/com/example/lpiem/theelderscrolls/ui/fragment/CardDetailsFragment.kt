@@ -114,4 +114,14 @@ class CardDetailsFragment : BaseFragment() {
             else { b_buy_fragment_card_details.text = getString(R.string.b_sell, cost) }
         } else { b_buy_fragment_card_details.text = getString(R.string.b_buy, cost) }
     }
+
+    override fun onResume() {
+        super.onResume()
+        setDisplayDeconnexion(false)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        setDisplayDeconnexion(true)
+    }
 }

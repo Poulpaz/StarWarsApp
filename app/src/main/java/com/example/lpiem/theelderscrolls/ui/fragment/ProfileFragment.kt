@@ -12,6 +12,7 @@ import com.example.lpiem.theelderscrolls.manager.GoogleConnectionManager
 import com.example.lpiem.theelderscrolls.model.User
 import com.example.lpiem.theelderscrolls.ui.activity.ConnectionActivity
 import com.example.lpiem.theelderscrolls.ui.activity.MainActivity
+import com.example.lpiem.theelderscrolls.utils.CircleTransform
 import com.example.lpiem.theelderscrolls.viewmodel.ProfileFragmentViewModel
 import com.facebook.AccessToken
 import com.facebook.login.LoginManager
@@ -87,6 +88,7 @@ class ProfileFragment : BaseFragment(), DisconnectUserInterface {
             it.imageUrlProfile.let { photo ->
                 Picasso.get()
                         .load(photo)
+                        .transform(CircleTransform())
                         .placeholder(R.drawable.ic_profile)
                         .into(iv_photo_fragment_profile)
             }
@@ -114,16 +116,6 @@ class ProfileFragment : BaseFragment(), DisconnectUserInterface {
                         closeMainActivity()
                     }
                 }.show()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setDisplayDeconnexion(true)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        setDisplayDeconnexion(false)
     }
 }
 

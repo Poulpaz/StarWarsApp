@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.model.User
+import com.example.lpiem.theelderscrolls.utils.CircleTransform
 import com.squareup.picasso.Picasso
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.item_player.view.*
@@ -34,6 +35,7 @@ class ListPlayersAdapter : ListAdapter<User, ListPlayersAdapter.UserViewHolder>(
             itemView.tv_firstname_item_player.text = user.firstname
             itemView.tv_lastname_item_player.text = user.lastname
             Picasso.get().load(user.imageUrlProfile)
+                    .transform(CircleTransform())
                     .placeholder(R.drawable.ic_profile)
                     .into(itemView.iv_item_player)
             user.idUser?.let {
