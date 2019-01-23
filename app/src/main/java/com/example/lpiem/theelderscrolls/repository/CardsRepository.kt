@@ -39,7 +39,7 @@ class CardsRepository(private val service: TESService){
         return obs
     }
 
-    fun loadCard(idCard : String) : Observable<GetCardResponse> {
+    fun loadCard(idCard : String) : Flowable<GetCardResponse> {
         return service.getCard(idCard)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

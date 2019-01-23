@@ -199,9 +199,6 @@ class ConnectionActivity : BaseActivity() {
                 e.printStackTrace()
             }
         }
-        val parameters = Bundle()
-        parameters.putString("fields", "email")
-        request.parameters = parameters
         request.executeAsync()
     }
 
