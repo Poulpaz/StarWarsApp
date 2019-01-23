@@ -50,9 +50,6 @@ class ExchangeFragment : BaseFragment() {
         rv_players_exchange_fragment.layoutManager = layoutManager
 
         viewModel.userCardsList
-                .map {
-                    it.dropLast(it.size - 9)
-                }
                 .subscribe(
                         {
                             adapterCards.submitList(it)
@@ -67,6 +64,9 @@ class ExchangeFragment : BaseFragment() {
                         },
                         { Timber.e(it) }
                 )
+
+        viewModel.getAllUsers()
+        viewModel.getCardsForConnectedUser()
 
     }
 

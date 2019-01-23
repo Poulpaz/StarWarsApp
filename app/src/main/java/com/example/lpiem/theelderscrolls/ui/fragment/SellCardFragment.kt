@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.lpiem.theelderscrolls.R
@@ -40,6 +41,16 @@ class SellCardFragment : BaseFragment() {
                 .subscribe(
                         {
                             adapter.submitList(it)
+                        },
+                        { Timber.e(it) }
+                )
+
+        adapter.cardsClickPublisher
+                .subscribe(
+                        {
+                            val action = HomeFragmentDirections.actionMyHomeFragmentToCardDetailsFragment(it)
+
+                            NavHostFragment.findNavController(this).navigate(action)
                         },
                         { Timber.e(it) }
                 )

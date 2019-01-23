@@ -107,4 +107,14 @@ class CardDetailsFragment : BaseFragment() {
     private fun getStringButtonPay(cost: Int?): String {
         return "Acheter " + cost.toString()
     }
+
+    override fun onResume() {
+        super.onResume()
+        setDisplayDeconnexion(false)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        setDisplayDeconnexion(true)
+    }
 }
