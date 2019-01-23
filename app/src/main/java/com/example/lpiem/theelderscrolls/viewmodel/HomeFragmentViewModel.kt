@@ -16,7 +16,7 @@ class HomeFragmentViewModel(repository: CardsRepository) : BaseViewModel() {
         repository.fetchStarships()
                 .subscribe(
                         {
-                            starshipsList.onNext(it.cards)
+                            starshipsList.onNext(it)
                         },
                         { Timber.e(it) }
                 )

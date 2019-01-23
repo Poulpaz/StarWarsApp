@@ -179,11 +179,10 @@ class ConnectionActivity : BaseActivity() {
                     `object`.getString("email")?.let {
                         email = it
                     }
-                    val birthday = `object`.getString("birthday")
                     val firstName = profile.firstName
                     val lastName = profile.lastName
                     val photoUri = Profile.getCurrentProfile().getProfilePictureUri(200, 200)
-                    val registerData = RegisterData(id, firstName, lastName, birthday, email, 10, photoUri.toString())
+                    val registerData = RegisterData(id, firstName, lastName, email, 10, photoUri.toString())
                     viewModel.accountExistState.subscribe(
                             {
                                 if (!it) {
@@ -205,7 +204,7 @@ class ConnectionActivity : BaseActivity() {
             }
         }
         val parameters = Bundle()
-        parameters.putString("fields", "email, birthday")
+        parameters.putString("fields", "email")
         request.parameters = parameters
         request.executeAsync()
     }
@@ -258,7 +257,7 @@ class ConnectionActivity : BaseActivity() {
             if(id.isNullOrEmpty() || firstName.isNullOrEmpty() || lastName.isNullOrEmpty()){
                 Toast.makeText(this, getString(R.string.tv_error_login), Toast.LENGTH_SHORT).show()
             } else {
-                val registerData = RegisterData(id, firstName, lastName, null, email, 10, photoUri.toString())
+                val registerData = RegisterData(id, firstName, lastName, email, 10, photoUri.toString())
                 viewModel.accountExistState.subscribe(
                         {
                             if (!it) {

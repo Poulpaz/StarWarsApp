@@ -3,7 +3,9 @@ package com.example.lpiem.theelderscrolls.datasource
 import com.example.lpiem.theelderscrolls.datasource.request.RegisterData
 import com.example.lpiem.theelderscrolls.datasource.response.BaseResponse
 import com.example.lpiem.theelderscrolls.datasource.response.GetCardResponse
+import com.example.lpiem.theelderscrolls.datasource.response.IdCardResponse
 import com.example.lpiem.theelderscrolls.datasource.response.LogInResponse
+import com.example.lpiem.theelderscrolls.model.Card
 import com.example.lpiem.theelderscrolls.model.RawCard
 import com.example.lpiem.theelderscrolls.model.User
 import io.reactivex.Flowable
@@ -27,4 +29,6 @@ interface TESService {
     @POST("registerUser")
     fun signUpUser(@Body user: RegisterData): Observable<BaseResponse>
 
+    @GET("getAllUserCardsWithId/{id}")
+    fun getAllUserCardsWithId(@Path("id") id : Int) : Flowable<List<IdCardResponse>>
 }

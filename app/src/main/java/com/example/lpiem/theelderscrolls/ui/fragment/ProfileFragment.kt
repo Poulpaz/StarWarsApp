@@ -26,7 +26,7 @@ import java.util.*
 class ProfileFragment : BaseFragment() {
 
     private val viewModel: ProfileFragmentViewModel by instance(arg = this)
-    private val googleManager : GoogleConnectionManager by instance()
+    private val googleManager: GoogleConnectionManager by instance()
 
     companion object {
         const val TAG = "PROFILEFRAGMENT"
@@ -69,14 +69,14 @@ class ProfileFragment : BaseFragment() {
         }
 
         viewModel.connectedUser
-                .subscribe({
-                    onConnectedUserChange(it.toNullable())
-                }, { Timber.e(it) })
+                .subscribe(
+                        {
+                            onConnectedUserChange(it.toNullable())
+                        },
+                        { Timber.e(it) }
+                )
 
         viewModel.userCardsList
-                .map {
-                    it.dropLast(it.size-6)
-                }
                 .subscribe(
                         {
                             adapter.submitList(it)
@@ -94,16 +94,15 @@ class ProfileFragment : BaseFragment() {
                         { Timber.e(it) }
                 )
 
+        viewModel.getCardsForConnectedUser()
+
     }
 
     private fun onConnectedUserChange(user: User?) {
         user?.let {
             tv_name_fragment_profile.text = getNameString(it.firstname, it.lastname)
-            it.birthday?.let {birthday ->
-                tv_age_fragment_profile.text = getAgeString(birthday)
-            }
             tv_wallet_fragment_profile.text = it.wallet.toString()
-            it.imageUrlProfile.let {photo ->
+            it.imageUrlProfile.let { photo ->
                 Picasso.get()
                         .load(photo)
                         .placeholder(R.drawable.ic_profile)
@@ -113,37 +112,8 @@ class ProfileFragment : BaseFragment() {
 
     }
 
-    private fun getAgeString(birthday: String): String {
-
-        val dateOfBirth = getStringToDate(birthday)
-
-        val cal = GregorianCalendar()
-        val y = cal.get(Calendar.YEAR)
-        val m = cal.get(Calendar.MONTH)
-        val d = cal.get(Calendar.DAY_OF_MONTH)
-        cal.set(dateOfBirth.year, dateOfBirth.month, dateOfBirth.day)
-        var noofyears = (y - cal.get(Calendar.YEAR))
-
-        if (m < cal.get(Calendar.MONTH) || m == cal.get(Calendar.MONTH) && d < cal.get(Calendar.DAY_OF_MONTH)) {
-            noofyears--
-        }
-
-        noofyears -= 1900
-
-        if (noofyears != 0) {
-            return "$noofyears ans"
-        } else {
-            return ""
-        }
-    }
-
     private fun getNameString(firstname: String, lastname: String): String {
         return firstname + " " + lastname
-    }
-
-    private fun getStringToDate(date : String): Date{
-        val sdf = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-        return sdf.parse(date)
     }
 
 }
