@@ -58,7 +58,9 @@ class BuyCardFragment : BaseFragment() {
                         { Timber.e(it) }
                 )
 
-        swiperefrsh_fragment_buy.setOnRefreshListener { viewModel.fetchCards() }
+        viewModel.getCardsForConnectedUser()
+
+        swiperefrsh_fragment_buy.setOnRefreshListener { viewModel.getCardsForConnectedUser() }
 
     }
 
