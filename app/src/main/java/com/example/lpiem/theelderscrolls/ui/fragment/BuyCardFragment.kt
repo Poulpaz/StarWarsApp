@@ -39,10 +39,11 @@ class BuyCardFragment : BaseFragment() {
         rv_cards_buy_fragment.setItemAnimator(DefaultItemAnimator())
         rv_cards_buy_fragment.adapter = adapter
 
-        viewModel.starshipsList
+        viewModel.cardsList
                 .subscribe(
                         {
                             adapter.submitList(it)
+                            swiperefrsh_fragment_buy.isRefreshing = false
                         },
                         { Timber.e(it) }
                 )
@@ -56,6 +57,8 @@ class BuyCardFragment : BaseFragment() {
                         },
                         { Timber.e(it) }
                 )
+
+        swiperefrsh_fragment_buy.setOnRefreshListener { viewModel.fetchCards() }
 
     }
 

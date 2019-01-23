@@ -17,6 +17,7 @@
     <!-- Card Details Fragment -->
     <string name="tv_pick_card">Pick a card</string>
     <string name="tv_pick_player">Pick a player</string>
+    <string name="tv_buy_card_success">Votre carte a bien été achetée</string>
 
     <!-- Exchange Fragment -->
     <string name="detail_rarity">Rarity</string>
@@ -43,6 +44,7 @@
     <!-- Error -->
     <string name="tv_error_login">Une erreur a eu lieu lors de la connexion</string>
     <string name="tv_error_signup">Une erreur a eu lieu lors de l\'inscription</string>
+    <string name="tv_error_buy_card">Une erreur a eu lieu lors de l\'achat de la carte</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
