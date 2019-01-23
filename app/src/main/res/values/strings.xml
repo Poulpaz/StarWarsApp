@@ -18,6 +18,8 @@
     <string name="tv_pick_card">Pick a card</string>
     <string name="tv_pick_player">Pick a player</string>
     <string name="tv_buy_card_success">Votre carte a bien été achetée</string>
+    <string name="b_buy">Acheter    %d</string>
+    <string name="b_sell">Vendre    %d</string>
 
     <!-- Exchange Fragment -->
     <string name="detail_rarity">Rarity</string>

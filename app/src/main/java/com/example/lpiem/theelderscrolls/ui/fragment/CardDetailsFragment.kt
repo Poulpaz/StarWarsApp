@@ -17,6 +17,7 @@ import org.kodein.di.direct
 import org.kodein.di.generic.M
 import org.kodein.di.generic.instance
 import timber.log.Timber
+import kotlin.math.cos
 
 class CardDetailsFragment : BaseFragment() {
 
@@ -72,6 +73,12 @@ class CardDetailsFragment : BaseFragment() {
             }
         }, { Timber.e(it) }
         )
+
+        viewModel.setButtonBuyState.subscribe(
+                {
+                    getStringButtonPay(it.first, it.second)
+                }, { Timber.e(it) }
+        )
     }
 
     private fun displayCard(card: Card) {
@@ -89,9 +96,6 @@ class CardDetailsFragment : BaseFragment() {
         card.attributes?.forEach {
             chipGroup_attributes_fragment_card_details.addView(getChip(it))
         }
-
-        //DisplayButton
-        b_buy_fragment_card_details.text = getStringButtonPay(card.cost)
     }
 
     private fun getChip(textChip: String?): Chip {
@@ -104,7 +108,10 @@ class CardDetailsFragment : BaseFragment() {
         return chip
     }
 
-    private fun getStringButtonPay(cost: Int?): String {
-        return "Acheter " + cost.toString()
+    private fun getStringButtonPay(isBuy: Boolean, cost: Int) {
+        if (isBuy) {
+            if(cost > 2){ b_buy_fragment_card_details.text = getString(R.string.b_sell, 2) }
+            else { b_buy_fragment_card_details.text = getString(R.string.b_sell, cost) }
+        } else { b_buy_fragment_card_details.text = getString(R.string.b_buy, cost) }
     }
 }

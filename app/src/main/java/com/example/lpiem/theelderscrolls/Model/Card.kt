@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class Card(
 
 	@field:SerializedName("cost")
-	val cost: Int? = null,
+	val cost: Int,
 
 	@field:SerializedName("set")
 	val set: Set? = null,
