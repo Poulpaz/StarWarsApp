@@ -30,7 +30,7 @@ interface TESService {
     fun getCards(): Flowable<RawCard>
 
     @GET("detailsCard/{cardId}")
-    fun getCard(@Path("cardId") cardId : String) : Observable<GetCardResponse>
+    fun getCard(@Path("cardId") cardId : String) : Flowable<GetCardResponse>
 
     @POST("addNewUserCard")
     fun addUserCard(@Body userCard: UserCardData) : Observable<BaseResponse>
