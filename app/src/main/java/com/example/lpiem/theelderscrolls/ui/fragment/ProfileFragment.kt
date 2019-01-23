@@ -23,7 +23,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class ProfileFragment : BaseFragment() {
+class ProfileFragment : BaseFragment(), DisconnectUserInterface {
 
     private val viewModel: ProfileFragmentViewModel by instance(arg = this)
     private val googleManager: GoogleConnectionManager by instance()
@@ -49,24 +49,6 @@ class ProfileFragment : BaseFragment() {
         rv_cards_profile_fragment.setLayoutManager(mLayoutManager)
         rv_cards_profile_fragment.setItemAnimator(DefaultItemAnimator())
         rv_cards_profile_fragment.adapter = adapter
-
-        b_logout_profile.setOnClickListener {
-            val dialog = AlertDialog.Builder(requireContext())
-            dialog.setTitle(R.string.tv_title_dialog_logout)
-                    .setMessage(R.string.tv_message_dialog_logout)
-                    .setNegativeButton(R.string.b_cancel_dialog_logout, { dialoginterface, i -> })
-                    .setPositiveButton(R.string.b_validate_dialog_logout) { dialoginterface, i ->
-                        AccessToken.getCurrentAccessToken()?.let {
-                            LoginManager.getInstance().logOut()
-                            ConnectionActivity.start(activity as MainActivity)
-                            closeMainActivity()
-                        }
-                        googleManager.getGoogleSignInClient().signOut().addOnCompleteListener {
-                            ConnectionActivity.start(activity as MainActivity)
-                            closeMainActivity()
-                        }
-                    }.show()
-        }
 
         viewModel.connectedUser
                 .subscribe(
@@ -116,4 +98,35 @@ class ProfileFragment : BaseFragment() {
         return firstname + " " + lastname
     }
 
+    override fun disconnectUser() {
+        val dialog = AlertDialog.Builder(requireContext())
+        dialog.setTitle(R.string.tv_title_dialog_logout)
+                .setMessage(R.string.tv_message_dialog_logout)
+                .setNegativeButton(R.string.b_cancel_dialog_logout, { dialoginterface, i -> })
+                .setPositiveButton(R.string.b_validate_dialog_logout) { dialoginterface, i ->
+                    AccessToken.getCurrentAccessToken()?.let {
+                        LoginManager.getInstance().logOut()
+                        ConnectionActivity.start(activity as MainActivity)
+                        closeMainActivity()
+                    }
+                    googleManager.getGoogleSignInClient().signOut().addOnCompleteListener {
+                        ConnectionActivity.start(activity as MainActivity)
+                        closeMainActivity()
+                    }
+                }.show()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setDisplayDeconnexion(true)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        setDisplayDeconnexion(false)
+    }
+}
+
+interface DisconnectUserInterface {
+    fun disconnectUser()
 }

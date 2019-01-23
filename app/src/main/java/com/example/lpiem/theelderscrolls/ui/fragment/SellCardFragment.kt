@@ -9,8 +9,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.adapter.ListCardAdapter
 import com.example.lpiem.theelderscrolls.viewmodel.HomeFragmentViewModel
+import kotlinx.android.synthetic.main.fragment_buy_card.*
 import kotlinx.android.synthetic.main.fragment_sell_card.*
 import org.kodein.di.generic.instance
+import timber.log.Timber
 
 class SellCardFragment : BaseFragment() {
 
@@ -29,9 +31,19 @@ class SellCardFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = ListCardAdapter()
-        val mLayoutManager = GridLayoutManager(this.context, 3)
+        val mLayoutManager = GridLayoutManager(this.context, 2)
         rv_cards_sell_fragment.setLayoutManager(mLayoutManager)
         rv_cards_sell_fragment.setItemAnimator(DefaultItemAnimator())
         rv_cards_sell_fragment.adapter = adapter
+
+        viewModel.userCardsList
+                .subscribe(
+                        {
+                            adapter.submitList(it)
+                        },
+                        { Timber.e(it) }
+                )
+
+        viewModel.getCardsForConnectedUser()
     }
 }
