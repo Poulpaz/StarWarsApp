@@ -20,7 +20,7 @@ class HomeFragmentViewModel(private val cardsRepository: CardsRepository) : Base
         cardsRepository.fetchCards()
                 .subscribe(
                         {
-                            cardsList.onNext(it.cards)
+                            cardsList.onNext(it)
                         },
                         { Timber.e(it) }
                 )

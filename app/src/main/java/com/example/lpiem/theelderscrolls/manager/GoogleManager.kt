@@ -9,7 +9,7 @@ import com.google.android.gms.common.Scopes
 
 class GoogleConnectionManager(val context : Context){
 
-    private lateinit var mGoogleSignInClient : GoogleSignInClient
+    private var mGoogleSignInClient : GoogleSignInClient
 
     init {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

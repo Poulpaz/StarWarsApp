@@ -4,6 +4,7 @@ import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
 import com.example.lpiem.theelderscrolls.datasource.TESService
 import com.example.lpiem.theelderscrolls.datasource.request.UserCardData
 import com.example.lpiem.theelderscrolls.datasource.response.GetCardResponse
+import com.example.lpiem.theelderscrolls.datasource.response.IdCardResponse
 import com.example.lpiem.theelderscrolls.model.Card
 import com.example.lpiem.theelderscrolls.model.RawCard
 import io.reactivex.Flowable
@@ -17,15 +18,19 @@ class CardsRepository(private val service: TESService){
 
     val userCardsList: BehaviorSubject<List<Card>> = BehaviorSubject.create()
 
-    fun fetchCards(): Flowable<RawCard> {
+    lateinit var cardsList: List<Card>
+
+    fun fetchCards(): Flowable<List<Card>> {
         val obs = service.getCards()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .map { it.cards }
                 .share()
 
         obs.subscribe(
                 {
-                    userCardsList.onNext(it.cards)
+                    userCardsList.onNext(it)
+                    cardsList = it
                 },
                 { Timber.e(it)}
         )
@@ -35,6 +40,13 @@ class CardsRepository(private val service: TESService){
 
     fun loadCard(idCard : String) : Observable<GetCardResponse> {
         return service.getCard(idCard)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .share()
+    }
+
+    fun getUserCards(idUser : Int) : Flowable<List<IdCardResponse>> {
+        return service.getAllUserCardsWithId(idUser)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .share()
