@@ -35,4 +35,6 @@ interface TESService {
     @POST("addNewUserCard")
     fun addUserCard(@Body userCard: UserCardData) : Observable<BaseResponse>
 
+    @POST("updateUserCard")
+    fun updateUserCard(@Header("oldIdUser") oldIdUser: Int, @Body userCard: UserCardData) : Observable<BaseResponse>
 }

@@ -65,4 +65,17 @@ class CardsRepository(private val service: TESService){
                 .startWith(NetworkEvent.InProgress)
                 .share()
     }
+
+    fun updateUserCard(oldIdUser: Int, idUser: Int, idCard: String) : Observable<NetworkEvent> {
+
+        val userCardData = UserCardData(idUser, idCard)
+
+        return service.updateUserCard(oldIdUser, userCardData)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map<NetworkEvent> { NetworkEvent.Success }
+                .onErrorReturn { NetworkEvent.Error(it) }
+                .startWith(NetworkEvent.InProgress)
+                .share()
+    }
 }

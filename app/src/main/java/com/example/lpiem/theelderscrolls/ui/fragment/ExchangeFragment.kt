@@ -65,6 +65,10 @@ class ExchangeFragment : BaseFragment() {
                         { Timber.e(it) }
                 )
 
+        adapterCards.indexClickPublisher
+
+        adapterPlayers.playersClickPublisher
+
         viewModel.getAllUsers()
         viewModel.getCardsForConnectedUser()
 

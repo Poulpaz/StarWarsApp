@@ -2,6 +2,7 @@ package com.example.lpiem.theelderscrolls.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.datasource.response.IdCardResponse
 import com.example.lpiem.theelderscrolls.model.Card
 import com.example.lpiem.theelderscrolls.model.User
@@ -55,6 +56,22 @@ class ExchangeFragmentViewModel(private val cardsRepository: CardsRepository, pr
                     ).disposedBy(disposeBag)
         } else {
 
+        }
+    }
+
+    fun sendCardToOtherUser() {
+        val idOldUser = userRepository.connectedUser.value?.toNullable()?.idUser
+        val idUser
+
+        if (idOldUser != null) {
+            cardsRepository.updateUserCard(idOldUser, ).subscribe(
+                    {
+                        buyCardState.onNext(it)
+                    },
+                    { Timber.e(it) }
+            ).disposedBy(disposeBag)
+        } else {
+            cardDetailsError.onNext(R.string.tv_error_buy_card)
         }
     }
 
