@@ -3,12 +3,15 @@ package com.example.lpiem.theelderscrolls.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.lpiem.theelderscrolls.R
+import com.example.lpiem.theelderscrolls.ui.fragment.DisconnectUserInterface
 import com.example.lpiem.theelderscrolls.utils.or
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -24,6 +27,8 @@ class MainActivity : AppCompatActivity() {
             )
         }
     }
+
+    private var disconnectProfileButtonMenu: MenuItem? = null
 
     private lateinit var currentController: NavController
     private lateinit var navControllerHome: NavController
@@ -51,6 +56,7 @@ class MainActivity : AppCompatActivity() {
                 chatWrapper.visibility = View.INVISIBLE
                 battleWrapper.visibility = View.INVISIBLE
                 app_bar.visibility = View.VISIBLE
+                displayDisconnectProfileButton(false)
                 supportActionBar?.setTitle(R.string.title_home)
 
                 returnValue = true
@@ -64,14 +70,15 @@ class MainActivity : AppCompatActivity() {
                 exchangeWrapper.visibility = View.INVISIBLE
                 chatWrapper.visibility = View.INVISIBLE
                 battleWrapper.visibility = View.INVISIBLE
-                app_bar.visibility = View.GONE
+                app_bar.visibility = View.VISIBLE
+                displayDisconnectProfileButton(true)
                 supportActionBar?.setTitle(R.string.title_profile)
 
                 returnValue = true
             }
             R.id.navigation_exchange -> {
 
-                currentController = navControllerProfile
+                currentController = navControllerExchange
 
                 homeWrapper.visibility = View.INVISIBLE
                 profileWrapper.visibility = View.INVISIBLE
@@ -79,13 +86,14 @@ class MainActivity : AppCompatActivity() {
                 chatWrapper.visibility = View.INVISIBLE
                 battleWrapper.visibility = View.INVISIBLE
                 app_bar.visibility = View.VISIBLE
+                displayDisconnectProfileButton(false)
                 supportActionBar?.setTitle(R.string.title_exchange)
 
                 returnValue = true
             }
             R.id.navigation_battle -> {
 
-                currentController = navControllerProfile
+                currentController = navControllerBattle
 
                 homeWrapper.visibility = View.INVISIBLE
                 profileWrapper.visibility = View.INVISIBLE
@@ -93,13 +101,14 @@ class MainActivity : AppCompatActivity() {
                 chatWrapper.visibility = View.INVISIBLE
                 battleWrapper.visibility = View.VISIBLE
                 app_bar.visibility = View.VISIBLE
+                displayDisconnectProfileButton(false)
                 supportActionBar?.setTitle(R.string.title_battle)
 
                 returnValue = true
             }
             R.id.navigation_chat -> {
 
-                currentController = navControllerProfile
+                currentController = navControllerChat
 
                 homeWrapper.visibility = View.INVISIBLE
                 profileWrapper.visibility = View.INVISIBLE
@@ -107,6 +116,7 @@ class MainActivity : AppCompatActivity() {
                 chatWrapper.visibility = View.VISIBLE
                 battleWrapper.visibility = View.INVISIBLE
                 app_bar.visibility = View.VISIBLE
+                displayDisconnectProfileButton(false)
                 supportActionBar?.setTitle(R.string.title_chat)
 
 
@@ -167,6 +177,31 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         currentController.navigateUp()
         return true
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_profile, menu)
+        disconnectProfileButtonMenu = menu?.findItem(R.id.b_logout_profile_fragment)
+        displayDisconnectProfileButton(false)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.b_logout_profile_fragment -> {
+                Log.d("test", "test")
+                val container = supportFragmentManager.findFragmentById(R.id.content_profile)
+                val frg = container?.childFragmentManager?.findFragmentById(R.id.content_profile)
+                if (frg is DisconnectUserInterface) {
+                    frg.disconnectUser()
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    fun displayDisconnectProfileButton(value: Boolean) {
+        disconnectProfileButtonMenu?.isVisible = value
     }
 
     override fun onBackPressed() {

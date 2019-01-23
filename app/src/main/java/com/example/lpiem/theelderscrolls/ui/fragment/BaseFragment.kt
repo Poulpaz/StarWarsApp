@@ -44,6 +44,10 @@ abstract class BaseFragment: Fragment(), KodeinAware{
         return rxDelegate.lifecycle(event)
     }
 
+    protected fun setDisplayDeconnexion(value : Boolean) {
+        (activity as MainActivity).displayDisconnectProfileButton(value)
+    }
+
     protected fun setDisplayHomeAsUpEnabled(value : Boolean) {
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(value)
     }

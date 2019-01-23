@@ -10,6 +10,7 @@ import com.example.lpiem.theelderscrolls.model.RawCard
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.toObservable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
