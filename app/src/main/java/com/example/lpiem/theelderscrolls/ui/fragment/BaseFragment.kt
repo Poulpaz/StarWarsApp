@@ -44,8 +44,16 @@ abstract class BaseFragment: Fragment(), KodeinAware{
         return rxDelegate.lifecycle(event)
     }
 
+    protected fun setTitleToolbar(title : String) {
+        (activity as MainActivity).supportActionBar?.title = title
+    }
+
     protected fun setDisplayDeconnexion(value : Boolean) {
         (activity as MainActivity).displayDisconnectProfileButton(value)
+    }
+
+    protected fun setDisplayListExchange(value : Boolean) {
+        (activity as MainActivity).displayListExchangeButton(value)
     }
 
     protected fun setDisplayHomeAsUpEnabled(value : Boolean) {

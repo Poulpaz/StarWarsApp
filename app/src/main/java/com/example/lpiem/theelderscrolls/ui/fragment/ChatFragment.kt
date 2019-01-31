@@ -28,6 +28,7 @@ class ChatFragment: BaseFragment() {
         setDisplayHomeAsUpEnabled(true)
         setDisplayBotomBarNavigation(false)
 
+
     }
 
 }

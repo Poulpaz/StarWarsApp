@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,7 +26,7 @@ import org.kodein.di.generic.instance
 import timber.log.Timber
 import java.util.*
 
-class ExchangeFragment : BaseFragment() {
+class ExchangeFragment : BaseFragment(), ExchangeInterface{
 
     private lateinit var viewModel: ExchangeFragmentViewModel
     private var valuesExchange : Pair<String, Int>? = null
@@ -42,9 +43,9 @@ class ExchangeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setDisplayHomeAsUpEnabled(false)
         setDisplayBotomBarNavigation(true)
+        setTitleToolbar(getString(R.string.title_exchange))
 
         viewModel = kodein.direct.instance(arg = this)
 
@@ -101,4 +102,12 @@ class ExchangeFragment : BaseFragment() {
 
     }
 
+    override fun displayListExchange() {
+        val action = ExchangeFragmentDirections.actionExchangeFragmentToListExchangeFragment()
+        NavHostFragment.findNavController(this).navigate(action)
+    }
+}
+
+interface ExchangeInterface {
+    fun displayListExchange()
 }

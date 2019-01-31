@@ -34,6 +34,7 @@ class AddChatFragment: BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         setDisplayHomeAsUpEnabled(true)
         setDisplayBotomBarNavigation(false)
+        setTitleToolbar(getString(R.string.title_add_chat))
 
         val adapter = ListPlayersAdapter(true)
         rv_players_fragment_add_chat.setItemAnimator(DefaultItemAnimator())
