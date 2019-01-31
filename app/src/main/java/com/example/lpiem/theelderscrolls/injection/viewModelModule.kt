@@ -42,4 +42,10 @@ val viewModelModule = Kodein.Module("ViewModelModule") {
                 .get(ExchangeFragmentViewModel::class.java)
     }
 
+    bind<AddChatFragmentViewModel.Factory>() with provider { AddChatFragmentViewModel.Factory(instance()) }
+    bind<AddChatFragmentViewModel>() with factory { fragment: Fragment ->
+        ViewModelProvider(fragment, instance<AddChatFragmentViewModel.Factory>())
+                .get(AddChatFragmentViewModel::class.java)
+    }
+
 }

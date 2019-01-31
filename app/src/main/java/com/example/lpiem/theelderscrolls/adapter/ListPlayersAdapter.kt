@@ -13,7 +13,7 @@ import com.squareup.picasso.Picasso
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.item_player.view.*
 
-class ListPlayersAdapter : ListAdapter<User, ListPlayersAdapter.UserViewHolder>(DiffCardCallback()) {
+class ListPlayersAdapter(private val selectItem : Boolean) : ListAdapter<User, ListPlayersAdapter.UserViewHolder>(DiffCardCallback()) {
 
     val playersClickPublisher: PublishSubject<Int> = PublishSubject.create()
     var idItemSelected : Int? = null
@@ -31,7 +31,7 @@ class ListPlayersAdapter : ListAdapter<User, ListPlayersAdapter.UserViewHolder>(
     inner class UserViewHolder(itemView: View, private val playersClickPublisher: PublishSubject<Int>) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(user: User, isSelected : Boolean) {
-            itemView.cl_item_player.isSelected = isSelected
+            itemView.cl_item_player.isSelected = if(selectItem) isSelected else false
             itemView.tv_firstname_item_player.text = user.firstname
             itemView.tv_lastname_item_player.text = user.lastname
             Picasso.get().load(user.imageUrlProfile)
@@ -45,8 +45,13 @@ class ListPlayersAdapter : ListAdapter<User, ListPlayersAdapter.UserViewHolder>(
 
         private fun bindPositionClick(idUser: Int) {
             itemView.setOnClickListener {
-                playersClickPublisher.onNext(idUser)
-                idItemSelected = idUser
+                if(idItemSelected == idUser){
+                    idItemSelected = -1
+                    playersClickPublisher.onNext(-1)
+                } else{
+                    playersClickPublisher.onNext(idUser)
+                    idItemSelected = idUser
+                }
                 notifyDataSetChanged()
             }
         }

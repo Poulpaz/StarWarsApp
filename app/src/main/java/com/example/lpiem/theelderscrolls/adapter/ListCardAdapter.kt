@@ -53,5 +53,4 @@ class ListCardAdapter : ListAdapter<Card, ListCardAdapter.CardViewHolder>(DiffCa
             return oldItem.idCard == newItem.idCard
         }
     }
-
 }

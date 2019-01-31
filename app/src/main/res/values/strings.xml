@@ -20,12 +20,13 @@
     <string name="tv_buy_card_success">Votre carte a bien été achetée</string>
     <string name="b_buy">Acheter    %d</string>
     <string name="b_sell">Vendre    %d</string>
-
-    <!-- Exchange Fragment -->
     <string name="detail_rarity">Rarity</string>
     <string name="detail_type">Type</string>
     <string name="detail_attributes">Attributes</string>
+
+    <!-- Exchange Fragment -->
     <string name="b_exchange">Exchange</string>
+    <string name="error_empty_selected_items">Vous devez sélectionner une carte et un joueur</string>
 
     <!-- Profile Fragment -->
     <string name="tv_title_dialog_logout">Deconnexion</string>
@@ -42,6 +43,9 @@
     <string name="tv_message_dialog_signup">Vous n\'avez pas de compte. Souhaitez-vous vous inscrire ?</string>
     <string name="b_cancel_dialog_signup">Non</string>
     <string name="b_validate_dialog_signup">Oui</string>
+
+    <!-- Add Chat Fragment -->
+    <string name="b_add_chat_fragment">Démarrer la conversation</string>
 
     <!-- Error -->
     <string name="tv_error_login">Une erreur a eu lieu lors de la connexion</string>

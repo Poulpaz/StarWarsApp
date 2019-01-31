@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.item_card.view.*
 class ListCardExchangeAdapter : ListAdapter<Card, ListCardExchangeAdapter.CardViewHolder>(DiffCardCallback()) {
 
     val indexClickPublisher: PublishSubject<String> = PublishSubject.create()
-    var idItemSelected : String? = null
+    var idItemSelected : String = ""
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_card, parent, false)
@@ -44,8 +44,13 @@ class ListCardExchangeAdapter : ListAdapter<Card, ListCardExchangeAdapter.CardVi
 
         private fun bindPositionClick(idCard: String) {
             itemView.setOnClickListener {
-                indexClickPublisher.onNext(idCard)
-                idItemSelected = idCard
+                if(idItemSelected == idCard) {
+                    indexClickPublisher.onNext("")
+                    idItemSelected = ""
+                } else {
+                    indexClickPublisher.onNext(idCard)
+                    idItemSelected = idCard
+                }
                 notifyDataSetChanged()
             }
         }
