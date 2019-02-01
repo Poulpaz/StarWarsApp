@@ -14,6 +14,7 @@ import com.example.lpiem.theelderscrolls.adapter.ListCardExchangeAdapter
 import com.example.lpiem.theelderscrolls.adapter.ListPlayersAdapter
 import com.example.lpiem.theelderscrolls.datasource.response.IdCardResponse
 import com.example.lpiem.theelderscrolls.model.Card
+import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
 import com.example.lpiem.theelderscrolls.utils.disposedBy
 import com.example.lpiem.theelderscrolls.viewmodel.ExchangeFragmentViewModel
 import com.jakewharton.rxbinding2.view.clicks
@@ -61,6 +62,7 @@ class ExchangeFragment : BaseFragment(), ExchangeInterface{
         rv_players_exchange_fragment.layoutManager = layoutManager
 
         viewModel.userCardsList
+                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
                 .subscribe(
                         {
                             adapterCards.submitList(it)
@@ -69,6 +71,7 @@ class ExchangeFragment : BaseFragment(), ExchangeInterface{
                 )
 
         viewModel.usersList
+                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
                 .subscribe(
                         {
                             adapterPlayers.submitList(it)

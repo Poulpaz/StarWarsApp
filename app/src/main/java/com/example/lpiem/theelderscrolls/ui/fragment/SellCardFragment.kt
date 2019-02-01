@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.adapter.ListCardAdapter
+import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
 import com.example.lpiem.theelderscrolls.viewmodel.HomeFragmentViewModel
 import kotlinx.android.synthetic.main.fragment_buy_card.*
 import kotlinx.android.synthetic.main.fragment_sell_card.*
@@ -38,6 +39,7 @@ class SellCardFragment : BaseFragment() {
         rv_cards_sell_fragment.adapter = adapter
 
         viewModel.userCardsList
+                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
                 .subscribe(
                         {
                             adapter.submitList(it)
@@ -46,6 +48,7 @@ class SellCardFragment : BaseFragment() {
                 )
 
         adapter.cardsClickPublisher
+                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
                 .subscribe(
                         {
                             val action = HomeFragmentDirections.actionMyHomeFragmentToCardDetailsFragment(it)

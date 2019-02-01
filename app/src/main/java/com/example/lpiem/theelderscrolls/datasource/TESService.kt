@@ -2,6 +2,7 @@ package com.example.lpiem.theelderscrolls.datasource
 
 import com.example.lpiem.theelderscrolls.datasource.request.RegisterData
 import com.example.lpiem.theelderscrolls.datasource.request.UserCardData
+import com.example.lpiem.theelderscrolls.datasource.request.UserData
 import com.example.lpiem.theelderscrolls.datasource.response.BaseResponse
 import com.example.lpiem.theelderscrolls.datasource.response.GetCardResponse
 import com.example.lpiem.theelderscrolls.datasource.response.IdCardResponse
@@ -35,4 +36,9 @@ interface TESService {
     @POST("addNewUserCard")
     fun addUserCard(@Body userCard: UserCardData) : Observable<BaseResponse>
 
+    @PUT("updateUser")
+    fun updateUser(@Header("token") token: String?, @Body user: UserData) : Observable<BaseResponse>
+
+    @DELETE("deleteUserCard")
+    fun deleteUserCard(@Path("idUser") idUser: Int, @Path("idCard") idCard: String) : Observable<BaseResponse>
 }

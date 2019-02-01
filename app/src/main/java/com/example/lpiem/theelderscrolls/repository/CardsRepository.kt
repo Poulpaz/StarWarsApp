@@ -65,4 +65,14 @@ class CardsRepository(private val service: TESService){
                 .startWith(NetworkEvent.InProgress)
                 .share()
     }
+
+    fun deleteUserCard(idUser : Int, idCard : String) : Observable<NetworkEvent>{
+        return service.deleteUserCard(idUser, idCard)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map<NetworkEvent> { NetworkEvent.Success }
+                .onErrorReturn { NetworkEvent.Error(it) }
+                .startWith(NetworkEvent.InProgress)
+                .share()
+    }
 }

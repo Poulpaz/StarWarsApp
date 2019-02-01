@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
 import com.example.lpiem.theelderscrolls.model.Card
+import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
 import com.example.lpiem.theelderscrolls.viewmodel.CardDetailsFragmentViewModel
 import com.google.android.material.chip.Chip
 import com.squareup.picasso.Picasso
@@ -38,6 +39,7 @@ class CardDetailsFragment : BaseFragment() {
         viewModel = kodein.direct.instance(arg = M(this, idCard))
 
         viewModel.card
+                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
                 .subscribe(
                         {
                             displayCard(it)
@@ -46,48 +48,57 @@ class CardDetailsFragment : BaseFragment() {
                 )
 
         b_buy_fragment_card_details.setOnClickListener {
-            viewModel.buyCard()
-        }
-
-        viewModel.cardDetailsError.subscribe(
-                {
-                    Toast.makeText(activity, getString(it), Toast.LENGTH_SHORT).show()
-                },
-                { Timber.e(it) }
-        )
-
-        viewModel.buyCardState.subscribe({
-            when (it) {
-                NetworkEvent.None -> {
-                    // Nothing
-                }
-                NetworkEvent.InProgress -> {
-
-                }
-                is NetworkEvent.Error -> {
-                    Toast.makeText(activity, getString(R.string.tv_error_buy_card), Toast.LENGTH_SHORT).show()
-                }
-                is NetworkEvent.Success -> {
-                    Toast.makeText(activity, getString(R.string.tv_buy_card_success), Toast.LENGTH_SHORT).show()
+            viewModel.setButtonBuyState.value?.let {
+                if(it.first){
+                    viewModel.sellCard()
+                } else {
+                    viewModel.buyCard()
                 }
             }
-        }, { Timber.e(it) }
-        )
+        }
 
-        viewModel.setButtonBuyState.subscribe(
-                {
-                    getStringButtonPay(it.first, it.second)
+        viewModel.cardDetailsError
+                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
+                .subscribe(
+                        {
+                            Toast.makeText(activity, getString(it), Toast.LENGTH_SHORT).show()
+                        },
+                        { Timber.e(it) }
+                )
+
+        viewModel.buyCardState
+                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
+                .subscribe({
+
+                    if (it.first is NetworkEvent.InProgress || it.second is NetworkEvent.InProgress) {
+
+                    } else if (it.first is NetworkEvent.Error || it.second is NetworkEvent.Error) {
+                        Toast.makeText(activity, getString(R.string.tv_error_buy_card), Toast.LENGTH_SHORT).show()
+                    } else if (it.first is NetworkEvent.Success || it.second is NetworkEvent.Success) {
+                        Toast.makeText(activity, getString(R.string.tv_buy_card_success), Toast.LENGTH_SHORT).show()
+                    }
+
                 }, { Timber.e(it) }
-        )
+                )
+
+        viewModel.setButtonBuyState
+                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
+                .subscribe(
+                        {
+                            getStringButtonPay(it.first, it.second)
+                        }, { Timber.e(it) }
+                )
+
+        viewModel.walletData
+                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
+                .subscribe(
+                        {
+                            tv_wallet_fragment_card_details.text = getString(R.string.tv_wallet_card_details, it)
+                        }, { Timber.e(it) }
+                )
     }
 
     private fun displayCard(card: Card) {
-        if (card.imageUrl != null) {
-            Picasso.get()
-                    .load(card.imageUrl)
-                    .placeholder(R.drawable.card_placeholder)
-                    .into(iv_card_fragment_card_details)
-        }
         tv_name_fragment_card_details.text = card.name
 
         //Display Chip
@@ -95,6 +106,13 @@ class CardDetailsFragment : BaseFragment() {
         chipGroup_type_fragment_card_details.addView(getChip(card.type))
         card.attributes?.forEach {
             chipGroup_attributes_fragment_card_details.addView(getChip(it))
+        }
+
+        if (card.imageUrl != null) {
+            Picasso.get()
+                    .load(card.imageUrl)
+                    .placeholder(R.drawable.card_placeholder)
+                    .into(iv_card_fragment_card_details)
         }
     }
 
@@ -110,9 +128,14 @@ class CardDetailsFragment : BaseFragment() {
 
     private fun getStringButtonPay(isBuy: Boolean, cost: Int) {
         if (isBuy) {
-            if(cost > 2){ b_buy_fragment_card_details.text = getString(R.string.b_sell, 2) }
-            else { b_buy_fragment_card_details.text = getString(R.string.b_sell, cost) }
-        } else { b_buy_fragment_card_details.text = getString(R.string.b_buy, cost) }
+            if (cost > 2) {
+                b_buy_fragment_card_details.text = getString(R.string.b_sell, 2)
+            } else {
+                b_buy_fragment_card_details.text = getString(R.string.b_sell, cost)
+            }
+        } else {
+            b_buy_fragment_card_details.text = getString(R.string.b_buy, cost)
+        }
     }
 
     override fun onResume() {

@@ -11,6 +11,7 @@ import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
 import com.example.lpiem.theelderscrolls.datasource.request.RegisterData
 import com.example.lpiem.theelderscrolls.manager.GoogleConnectionManager
+import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
 import com.example.lpiem.theelderscrolls.viewmodel.ConnectionActivityViewModel
 import com.facebook.*
 import com.jakewharton.rxbinding2.view.clicks
@@ -54,18 +55,22 @@ class ConnectionActivity : BaseActivity() {
         testUserConnected()
 
         b_login_google.clicks()
+                .takeUntil(lifecycle(RxLifecycleDelegate.ActivityEvent.DESTROY))
                 .subscribe(
                         { loginWithGoogle() },
                         { Timber.e(it) }
                 )
 
         b_login_facebook.clicks()
+                .takeUntil(lifecycle(RxLifecycleDelegate.ActivityEvent.DESTROY))
                 .subscribe(
                         { loginWithFacebook() },
                         { Timber.e(it) }
                 )
 
-        viewModel.signInState.subscribe(
+        viewModel.signInState
+                .takeUntil(lifecycle(RxLifecycleDelegate.ActivityEvent.DESTROY))
+                .subscribe(
                 {
                     when (it) {
                         NetworkEvent.None -> {

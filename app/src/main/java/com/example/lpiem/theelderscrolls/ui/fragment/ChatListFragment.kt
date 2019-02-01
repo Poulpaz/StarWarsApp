@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.adapter.ChatListAdapter
 import com.example.lpiem.theelderscrolls.adapter.ListCardAdapter
+import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
 import kotlinx.android.synthetic.main.fragment_buy_card.*
 import kotlinx.android.synthetic.main.fragment_chat_list.*
 import timber.log.Timber
@@ -36,7 +37,9 @@ class ChatListFragment : BaseFragment() {
         rv_cards_fragment_chat_list.setItemAnimator(DefaultItemAnimator())
         rv_cards_fragment_chat_list.adapter = adapter
 
-        adapter.chatClickPublisher.subscribe(
+        adapter.chatClickPublisher
+                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
+                .subscribe(
                 {
                     val action = ChatListFragmentDirections.actionChatListFragmentToChatFragment(it)
                     NavHostFragment.findNavController(this).navigate(action)

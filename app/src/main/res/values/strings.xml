@@ -25,6 +25,8 @@
     <string name="detail_rarity">Rareté</string>
     <string name="detail_type">Type</string>
     <string name="detail_attributes">Attributs</string>
+    <string name="tv_wallet_card_details">Porte Monnaie : %d</string>
+    <string name="tv_error_wallet">Vous n\'avez pas assez de pièces</string>
 
     <!-- Exchange Fragment -->
     <string name="b_exchange">Echanger</string>
@@ -57,6 +59,7 @@
     <string name="tv_error_login">Une erreur a eu lieu lors de la connexion</string>
     <string name="tv_error_signup">Une erreur a eu lieu lors de l\'inscription</string>
     <string name="tv_error_buy_card">Une erreur a eu lieu lors de l\'achat de la carte</string>
+    <string name="tv_error_sell_card">Une erreur a eu lieu lors de la vente de la carte</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
