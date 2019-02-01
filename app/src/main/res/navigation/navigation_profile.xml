@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_profile"
+    app:startDestination="@id/my_profile_fragment">
+
+    <fragment
+        android:id="@+id/my_profile_fragment"
+        android:name="com.example.lpiem.theelderscrolls.ui.fragment.ProfileFragment"
+        android:label="MyProfileFragment"
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_my_profile_fragment_to_card_details_fragment"
+            app:destination="@id/card_details_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/card_details_fragment"
+        android:name="com.example.lpiem.theelderscrolls.ui.fragment.CardDetailsFragment"
+        android:label="MyCardDetailsFragment"
+        tools:layout="@layout/fragment_card_details">
+        <argument
+            android:name="card"
+            app:argType="string" />
+    </fragment>
+
+</navigation>

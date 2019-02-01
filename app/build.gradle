@@ -4,14 +4,17 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'androidx.navigation.safeargs'
+
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.example.lpiem.starwars"
-        minSdkVersion 15
+        applicationId "com.example.lpiem.theelderscrolls"
+        minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -20,13 +23,68 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+
+    //Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin"
+
+    // AndroidX
+    implementation "androidx.appcompat:appcompat:$versions.androidx.appcompat"
+    implementation "com.google.android.material:material:$versions.material"
+    implementation "androidx.constraintlayout:constraintlayout:$versions.androidx.constraint_layout"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:2.0.0"
+
+    // Material Design
+    implementation "com.google.android.material:material:$versions.material"
+
+    // Rx
+    implementation "io.reactivex.rxjava2:rxjava:$versions.rxjava"
+    implementation "io.reactivex.rxjava2:rxkotlin:$versions.rxkotlin"
+    implementation "com.jakewharton.rxbinding2:rxbinding-kotlin:$versions.rxbinding"
+    implementation "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:$versions.rxbinding"
+    implementation "com.jakewharton.rxbinding2:rxbinding-design:$versions.rxbinding"
+    implementation "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:$versions.rxbinding"
+    implementation "com.jakewharton.rxrelay2:rxrelay:$versions.rxrelay"
+    implementation 'com.gojuno.koptional:koptional-rxjava2-extensions:1.6.0'
+
+    // Timber
+    implementation "com.jakewharton.timber:timber:$versions.timber"
+
+    //Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.4.0"
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
+
+    //Facebook & Google
+    implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
+    implementation 'com.google.android.gms:play-services-auth:16.0.1'
+
+    //Test
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation "androidx.test.espresso:espresso-core:$versions.androidx.espresso"
+    androidTestImplementation "androidx.test:runner:$versions.androidx.test_runner"
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.android.support:multidex:1.0.3'
+
+    // KodeIn
+    implementation "org.kodein.di:kodein-di-generic-jvm:$versions.kodein"
+    implementation "org.kodein.di:kodein-di-framework-android-x:$versions.kodein"
+
+    //Navigation component
+    implementation "android.arch.navigation:navigation-fragment:$versions.navigationVersion"
+    implementation "android.arch.navigation:navigation-ui:$versions.navigationVersion"
+
+    //Picasso
+    implementation "com.squareup.picasso:picasso:$versions.picasso"
 }

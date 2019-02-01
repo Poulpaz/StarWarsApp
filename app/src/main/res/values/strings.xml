@@ -1,3 +1,65 @@
 <resources>
-    <string name="app_name">Star Wars</string>
+    <string name="app_name">The Elder Scrolls</string>
+    <string name="client_server_id">736795650509-ce5mlgc6lcor31vuhhjcr3kr3264gkdv.apps.googleusercontent.com</string>
+
+    <!-- Title -->
+    <string name="title_connection">Connexion</string>
+    <string name="title_home">Boutique</string>
+    <string name="title_profile">Profil</string>
+    <string name="title_exchange">Echange</string>
+    <string name="title_chat">Conversation</string>
+    <string name="title_add_chat">Choisir un joueur</string>
+    <string name="title_battle">Combat</string>
+    <string name="title_list_exchange">Liste de vos échanges</string>
+
+    <!-- Home Fragment -->
+    <string name="ti_buy_home_fragment">Acheter</string>
+    <string name="ti_sell_home_fragment">Vendre</string>
+
+    <!-- Card Details Fragment -->
+    <string name="tv_pick_card">Choisir une carte</string>
+    <string name="tv_pick_player">Choisir un joueur</string>
+    <string name="tv_buy_card_success">Votre carte a bien été achetée</string>
+    <string name="b_buy">Acheter    %d</string>
+    <string name="b_sell">Vendre    %d</string>
+    <string name="detail_rarity">Rareté</string>
+    <string name="detail_type">Type</string>
+    <string name="detail_attributes">Attributs</string>
+
+    <!-- Exchange Fragment -->
+    <string name="b_exchange">Echanger</string>
+    <string name="error_empty_selected_items">Vous devez sélectionner une carte et un joueur</string>
+
+    <!-- Profile Fragment -->
+    <string name="tv_title_dialog_logout">Deconnexion</string>
+    <string name="tv_message_dialog_logout">Voulez-vous vraiment vous déconnecter ?</string>
+    <string name="b_cancel_dialog_logout">Non</string>
+    <string name="b_validate_dialog_logout">Oui</string>
+
+    <!-- Login Facebook -->
+    <string name="facebook_app_id">2343808665854934</string>
+    <string name="fb_login_protocol_scheme">fb2343808665854934</string>
+
+    <!-- Connectivity Activity -->
+    <string name="tv_title_dialog_signup">Inscription</string>
+    <string name="tv_message_dialog_signup">Vous n\'avez pas de compte. Souhaitez-vous vous inscrire ?</string>
+    <string name="b_cancel_dialog_signup">Non</string>
+    <string name="b_validate_dialog_signup">Oui</string>
+
+    <!-- Add Chat Fragment -->
+    <string name="b_add_chat_fragment">Démarrer la conversation</string>
+
+    <!-- List Exchange Fragment -->
+    <string name="tv_card1_fragment_list_exchange">Votre carte</string>
+    <string name="tv_card2_fragment_list_exchange">Carte de l\'adversaire</string>
+
+    <!-- Error -->
+    <string name="tv_error_login">Une erreur a eu lieu lors de la connexion</string>
+    <string name="tv_error_signup">Une erreur a eu lieu lors de l\'inscription</string>
+    <string name="tv_error_buy_card">Une erreur a eu lieu lors de l\'achat de la carte</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

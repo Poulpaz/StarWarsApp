@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_chat"
+    app:startDestination="@id/chat_list_fragment">
+
+    <fragment
+        android:id="@+id/chat_list_fragment"
+        android:name="com.example.lpiem.theelderscrolls.ui.fragment.ChatListFragment"
+        android:label="ChatListFragment"
+        tools:layout="@layout/fragment_chat_list" >
+        <action
+            android:id="@+id/action_chat_list_fragment_to_chat_fragment"
+            app:destination="@id/chat_fragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_chat_list_fragment_to_add_chat_fragment"
+            app:destination="@id/add_chat_fragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/add_chat_fragment"
+        android:name="com.example.lpiem.theelderscrolls.ui.fragment.AddChatFragment"
+        android:label="AddChatFragment"
+        tools:layout="@layout/fragment_add_chat" >
+        <action
+            android:id="@+id/action_add_chat_fragment_to_chat_fragment"
+            app:destination="@id/chat_fragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/chat_fragment"
+        android:name="com.example.lpiem.theelderscrolls.ui.fragment.ChatFragment"
+        android:label="ChatFragment"
+        tools:layout="@layout/fragment_chat">
+        <argument
+            android:name="chat"
+            app:argType="integer" />
+    </fragment>
+
+</navigation>
