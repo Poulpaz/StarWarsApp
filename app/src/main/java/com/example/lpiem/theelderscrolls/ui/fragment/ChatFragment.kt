@@ -4,9 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.NavHostFragment
+import androidx.recyclerview.widget.DefaultItemAnimator
 import com.example.lpiem.theelderscrolls.R
+import com.example.lpiem.theelderscrolls.adapter.ChatListAdapter
+import kotlinx.android.synthetic.main.fragment_chat_list.*
+import timber.log.Timber
 
-class ChatFragment : BaseFragment() {
+class ChatFragment: BaseFragment() {
 
     companion object {
         const val TAG = "CHATFRAGMENT"
@@ -20,9 +25,9 @@ class ChatFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setDisplayHomeAsUpEnabled(true)
+        setDisplayBotomBarNavigation(false)
 
-        setDisplayHomeAsUpEnabled(false)
-        setDisplayBotomBarNavigation(true)
 
     }
 

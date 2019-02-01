@@ -2,6 +2,7 @@ package com.example.lpiem.theelderscrolls.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
 import com.example.lpiem.theelderscrolls.datasource.response.IdCardResponse
 import com.example.lpiem.theelderscrolls.model.Card
 import com.example.lpiem.theelderscrolls.model.User
@@ -17,6 +18,7 @@ class ExchangeFragmentViewModel(private val cardsRepository: CardsRepository, pr
 
     val userCardsList: BehaviorSubject<List<Card>?> = BehaviorSubject.create()
     val usersList: BehaviorSubject<List<User>?> = BehaviorSubject.create()
+    val exchangeState: BehaviorSubject<NetworkEvent> = BehaviorSubject.createDefault(NetworkEvent.None)
 
     fun getAllUsers(){
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
@@ -58,11 +60,14 @@ class ExchangeFragmentViewModel(private val cardsRepository: CardsRepository, pr
         }
     }
 
+    fun exchangeCards(idCard : String, idOtherUser : Int){
+        //TODO
+    }
+
     class Factory(private val cardsRepository: CardsRepository, private val userRepository: UserRepository) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             @Suppress("UNCHECKED_CAST")
             return ExchangeFragmentViewModel(cardsRepository,userRepository ) as T
         }
     }
-
 }

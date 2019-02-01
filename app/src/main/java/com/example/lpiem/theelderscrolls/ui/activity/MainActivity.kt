@@ -12,6 +12,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.ui.fragment.DisconnectUserInterface
+import com.example.lpiem.theelderscrolls.ui.fragment.ExchangeInterface
 import com.example.lpiem.theelderscrolls.utils.or
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private var disconnectProfileButtonMenu: MenuItem? = null
+    private var listExchangeButtonMenu: MenuItem? = null
 
     private lateinit var currentController: NavController
     private lateinit var navControllerHome: NavController
@@ -57,6 +59,7 @@ class MainActivity : AppCompatActivity() {
                 battleWrapper.visibility = View.INVISIBLE
                 app_bar.visibility = View.VISIBLE
                 displayDisconnectProfileButton(false)
+                displayListExchangeButton(false)
                 supportActionBar?.setTitle(R.string.title_home)
 
                 returnValue = true
@@ -72,6 +75,7 @@ class MainActivity : AppCompatActivity() {
                 battleWrapper.visibility = View.INVISIBLE
                 app_bar.visibility = View.VISIBLE
                 displayDisconnectProfileButton(true)
+                displayListExchangeButton(false)
                 supportActionBar?.setTitle(R.string.title_profile)
 
                 returnValue = true
@@ -87,6 +91,7 @@ class MainActivity : AppCompatActivity() {
                 battleWrapper.visibility = View.INVISIBLE
                 app_bar.visibility = View.VISIBLE
                 displayDisconnectProfileButton(false)
+                displayListExchangeButton(true)
                 supportActionBar?.setTitle(R.string.title_exchange)
 
                 returnValue = true
@@ -102,6 +107,7 @@ class MainActivity : AppCompatActivity() {
                 battleWrapper.visibility = View.VISIBLE
                 app_bar.visibility = View.VISIBLE
                 displayDisconnectProfileButton(false)
+                displayListExchangeButton(false)
                 supportActionBar?.setTitle(R.string.title_battle)
 
                 returnValue = true
@@ -117,6 +123,7 @@ class MainActivity : AppCompatActivity() {
                 battleWrapper.visibility = View.INVISIBLE
                 app_bar.visibility = View.VISIBLE
                 displayDisconnectProfileButton(false)
+                displayListExchangeButton(false)
                 supportActionBar?.setTitle(R.string.title_chat)
 
 
@@ -181,19 +188,28 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_profile, menu)
+        menuInflater.inflate(R.menu.menu_exchange, menu)
         disconnectProfileButtonMenu = menu?.findItem(R.id.b_logout_profile_fragment)
+        listExchangeButtonMenu = menu?.findItem(R.id.b_list_exchange_fragment)
         displayDisconnectProfileButton(false)
+        displayListExchangeButton(false)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.b_logout_profile_fragment -> {
-                Log.d("test", "test")
                 val container = supportFragmentManager.findFragmentById(R.id.content_profile)
                 val frg = container?.childFragmentManager?.findFragmentById(R.id.content_profile)
                 if (frg is DisconnectUserInterface) {
                     frg.disconnectUser()
+                }
+            }
+            R.id.b_list_exchange_fragment -> {
+                val container = supportFragmentManager.findFragmentById(R.id.content_exchange)
+                val frg = container?.childFragmentManager?.findFragmentById(R.id.content_exchange)
+                if (frg is ExchangeInterface) {
+                    frg.displayListExchange()
                 }
             }
         }
@@ -202,6 +218,10 @@ class MainActivity : AppCompatActivity() {
 
     fun displayDisconnectProfileButton(value: Boolean) {
         disconnectProfileButtonMenu?.isVisible = value
+    }
+
+    fun displayListExchangeButton(value: Boolean) {
+        listExchangeButtonMenu?.isVisible = value
     }
 
     override fun onBackPressed() {

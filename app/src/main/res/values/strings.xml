@@ -3,29 +3,32 @@
     <string name="client_server_id">736795650509-ce5mlgc6lcor31vuhhjcr3kr3264gkdv.apps.googleusercontent.com</string>
 
     <!-- Title -->
-    <string name="title_connection">Connection</string>
-    <string name="title_home">Home</string>
-    <string name="title_profile">Profile</string>
-    <string name="title_exchange">Exchange</string>
-    <string name="title_chat">Chat</string>
-    <string name="title_battle">Battle</string>
+    <string name="title_connection">Connexion</string>
+    <string name="title_home">Boutique</string>
+    <string name="title_profile">Profil</string>
+    <string name="title_exchange">Echange</string>
+    <string name="title_chat">Conversation</string>
+    <string name="title_add_chat">Choisir un joueur</string>
+    <string name="title_battle">Combat</string>
+    <string name="title_list_exchange">Liste de vos échanges</string>
 
     <!-- Home Fragment -->
-    <string name="ti_buy_home_fragment">Buy</string>
-    <string name="ti_sell_home_fragment">Sell</string>
+    <string name="ti_buy_home_fragment">Acheter</string>
+    <string name="ti_sell_home_fragment">Vendre</string>
 
     <!-- Card Details Fragment -->
-    <string name="tv_pick_card">Pick a card</string>
-    <string name="tv_pick_player">Pick a player</string>
+    <string name="tv_pick_card">Choisir une carte</string>
+    <string name="tv_pick_player">Choisir un joueur</string>
     <string name="tv_buy_card_success">Votre carte a bien été achetée</string>
     <string name="b_buy">Acheter    %d</string>
     <string name="b_sell">Vendre    %d</string>
+    <string name="detail_rarity">Rareté</string>
+    <string name="detail_type">Type</string>
+    <string name="detail_attributes">Attributs</string>
 
     <!-- Exchange Fragment -->
-    <string name="detail_rarity">Rarity</string>
-    <string name="detail_type">Type</string>
-    <string name="detail_attributes">Attributes</string>
-    <string name="b_exchange">Exchange</string>
+    <string name="b_exchange">Echanger</string>
+    <string name="error_empty_selected_items">Vous devez sélectionner une carte et un joueur</string>
 
     <!-- Profile Fragment -->
     <string name="tv_title_dialog_logout">Deconnexion</string>
@@ -42,6 +45,13 @@
     <string name="tv_message_dialog_signup">Vous n\'avez pas de compte. Souhaitez-vous vous inscrire ?</string>
     <string name="b_cancel_dialog_signup">Non</string>
     <string name="b_validate_dialog_signup">Oui</string>
+
+    <!-- Add Chat Fragment -->
+    <string name="b_add_chat_fragment">Démarrer la conversation</string>
+
+    <!-- List Exchange Fragment -->
+    <string name="tv_card1_fragment_list_exchange">Votre carte</string>
+    <string name="tv_card2_fragment_list_exchange">Carte de l\'adversaire</string>
 
     <!-- Error -->
     <string name="tv_error_login">Une erreur a eu lieu lors de la connexion</string>
