@@ -80,6 +80,7 @@ class CardDetailsFragmentViewModel(private val cardsRepository: CardsRepository,
                                     {
                                         buyCardState.onNext(Pair(it.first, it.second))
                                         loadWallet()
+                                        getCardDetails()
                                     },
                                     { Timber.e(it) }
                             ).disposedBy(disposeBag)
@@ -102,7 +103,7 @@ class CardDetailsFragmentViewModel(private val cardsRepository: CardsRepository,
                     val userData = UserData(
                             userRepository.connectedUser.value?.toNullable()?.firstname!!,
                             userRepository.connectedUser.value?.toNullable()?.lastname!!,
-                            wallet - if(sellingPrice >= 2) 2 else sellingPrice ,
+                            wallet + if(sellingPrice >= 2) 2 else sellingPrice ,
                             userRepository.connectedUser.value?.toNullable()?.imageUrlProfile
                     )
                     Observable.combineLatest(
@@ -113,6 +114,7 @@ class CardDetailsFragmentViewModel(private val cardsRepository: CardsRepository,
                                     {
                                         buyCardState.onNext(Pair(it.first, it.second))
                                         loadWallet()
+                                        getCardDetails()
                                     },
                                     { Timber.e(it) }
                             ).disposedBy(disposeBag)

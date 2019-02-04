@@ -39,6 +39,6 @@ interface TESService {
     @PUT("updateUser")
     fun updateUser(@Header("token") token: String?, @Body user: UserData) : Observable<BaseResponse>
 
-    @DELETE("deleteUserCard")
+    @DELETE("deleteUserCard/{idUser}/{idCard}")
     fun deleteUserCard(@Path("idUser") idUser: Int, @Path("idCard") idCard: String) : Observable<BaseResponse>
 }
