@@ -67,7 +67,10 @@ class CardsRepository(private val service: TESService){
     }
 
     fun deleteUserCard(idUser : Int, idCard : String) : Observable<NetworkEvent>{
-        return service.deleteUserCard(idUser, idCard)
+
+        val userCardData = UserCardData(idUser, idCard)
+
+        return service.deleteUserCard(userCardData)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map<NetworkEvent> { NetworkEvent.Success }

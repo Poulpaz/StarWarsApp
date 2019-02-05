@@ -9,8 +9,15 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.adapter.ListCardAdapter
+import com.example.lpiem.theelderscrolls.adapter.ListCardBuyAdapter
+import com.example.lpiem.theelderscrolls.datasource.response.IdCardResponse
+import com.example.lpiem.theelderscrolls.model.Card
 import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
+import com.example.lpiem.theelderscrolls.utils.disposedBy
 import com.example.lpiem.theelderscrolls.viewmodel.HomeFragmentViewModel
+import io.reactivex.Flowable
+import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 import kotlinx.android.synthetic.main.fragment_buy_card.*
 import org.kodein.di.direct
 import org.kodein.di.generic.instance
@@ -34,29 +41,13 @@ class BuyCardFragment : BaseFragment() {
 
         viewModel = kodein.direct.instance(arg = this)
 
-        val adapter = ListCardAdapter()
-        val mLayoutManager = GridLayoutManager(this.context, 2)
-        rv_cards_buy_fragment.setLayoutManager(mLayoutManager)
-        rv_cards_buy_fragment.setItemAnimator(DefaultItemAnimator())
-        rv_cards_buy_fragment.adapter = adapter
-
-        viewModel.cardsList
-                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
+        Observable.combineLatest(
+                viewModel.cardsList,
+                viewModel.userCardsList,
+                BiFunction<List<Card>, List<Card>, Pair<List<Card>, List<Card>>> { t1, t2 -> Pair(t1, t2) })
                 .subscribe(
                         {
-                            adapter.submitList(it)
-                            swiperefrsh_fragment_buy.isRefreshing = false
-                        },
-                        { Timber.e(it) }
-                )
-
-        adapter.cardsClickPublisher
-                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
-                .subscribe(
-                        {
-                            val action = HomeFragmentDirections.actionMyHomeFragmentToCardDetailsFragment(it)
-
-                            NavHostFragment.findNavController(this).navigate(action)
+                            initAdapter(it.first, it.second)
                         },
                         { Timber.e(it) }
                 )
@@ -65,6 +56,27 @@ class BuyCardFragment : BaseFragment() {
 
         swiperefrsh_fragment_buy.setOnRefreshListener { viewModel.getCardsForConnectedUser() }
 
+    }
+
+    private fun initAdapter(shopCards: List<Card>, userCards: List<Card>) {
+
+        val adapter = ListCardBuyAdapter(userCards)
+        val mLayoutManager = GridLayoutManager(this.context, 2)
+        rv_cards_buy_fragment.setLayoutManager(mLayoutManager)
+        rv_cards_buy_fragment.setItemAnimator(DefaultItemAnimator())
+        rv_cards_buy_fragment.adapter = adapter
+        adapter.submitList(shopCards)
+        swiperefrsh_fragment_buy.isRefreshing = false
+
+        adapter.cardsClickPublisher
+                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
+                .subscribe(
+                        {
+                            val action = HomeFragmentDirections.actionMyHomeFragmentToCardDetailsFragment(it)
+                            NavHostFragment.findNavController(this).navigate(action)
+                        },
+                        { Timber.e(it) }
+                )
     }
 
 }

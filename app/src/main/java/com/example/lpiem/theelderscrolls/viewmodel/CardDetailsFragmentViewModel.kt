@@ -14,6 +14,7 @@ import com.example.lpiem.theelderscrolls.repository.CardsRepository
 import com.example.lpiem.theelderscrolls.repository.UserRepository
 import com.example.lpiem.theelderscrolls.utils.disposedBy
 import com.gojuno.koptional.toOptional
+import com.squareup.picasso.NetworkPolicy
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -25,27 +26,23 @@ class CardDetailsFragmentViewModel(private val cardsRepository: CardsRepository,
     val card: BehaviorSubject<Card> = BehaviorSubject.create()
     val walletData: BehaviorSubject<Int> = BehaviorSubject.create()
 
-    val buyCardState: BehaviorSubject<Pair<NetworkEvent, NetworkEvent>> = BehaviorSubject.createDefault(Pair(NetworkEvent.None, NetworkEvent.None))
+    val buyCardState: BehaviorSubject<NetworkEvent> = BehaviorSubject.createDefault(NetworkEvent.None)
+    val sellCardState: BehaviorSubject<NetworkEvent> = BehaviorSubject.createDefault(NetworkEvent.None)
+    val setButtonBuyState: BehaviorSubject<Pair<Boolean, Int>> = BehaviorSubject.create()
+    val walletState: BehaviorSubject<NetworkEvent> = BehaviorSubject.createDefault(NetworkEvent.None)
 
     val cardDetailsError: BehaviorSubject<Int> = BehaviorSubject.create()
 
-    val setButtonBuyState: BehaviorSubject<Pair<Boolean, Int>> = BehaviorSubject.create()
 
     init {
         getCardDetails()
         loadWallet()
     }
 
-    fun loadWallet(){
+    fun loadWallet() {
         userRepository.loadUser().subscribe(
                 {
                     when (it) {
-                        NetworkEvent.None -> {
-                            // Nothing
-                        }
-                        NetworkEvent.InProgress -> {
-
-                        }
                         is NetworkEvent.Error -> {
                             Log.d("Test", it.e.message)
                         }
@@ -66,21 +63,15 @@ class CardDetailsFragmentViewModel(private val cardsRepository: CardsRepository,
         if (wallet != null && setButtonBuyState.value != null) {
             if (!setButtonBuyState.value?.first!! && setButtonBuyState.value?.second!! <= wallet) {
                 if (idUser != null) {
-                    val userData = UserData(
-                            userRepository.connectedUser.value?.toNullable()?.firstname!!,
-                            userRepository.connectedUser.value?.toNullable()?.lastname!!,
-                            wallet - setButtonBuyState.value?.second!!,
-                            userRepository.connectedUser.value?.toNullable()?.imageUrlProfile
-                    )
-                    Observable.combineLatest(
-                            cardsRepository.addUserCard(idUser, idCard),
-                            userRepository.updateUser(userData),
-                            BiFunction<NetworkEvent, NetworkEvent, Pair<NetworkEvent, NetworkEvent>> { t1, t2 -> Pair(t1, t2) })
+                    val sellingPrice = setButtonBuyState.value?.second!!
+                    cardsRepository.addUserCard(idUser, idCard)
                             .subscribe(
                                     {
-                                        buyCardState.onNext(Pair(it.first, it.second))
-                                        loadWallet()
-                                        getCardDetails()
+                                        buyCardState.onNext(it)
+                                        if(it is NetworkEvent.Success) {
+                                            updateUser(wallet - setButtonBuyState.value?.second!!)
+                                            setButtonBuyState.onNext(Pair(true, sellingPrice))
+                                        }
                                     },
                                     { Timber.e(it) }
                             ).disposedBy(disposeBag)
@@ -100,28 +91,48 @@ class CardDetailsFragmentViewModel(private val cardsRepository: CardsRepository,
             if (setButtonBuyState.value?.first!!) {
                 if (idUser != null) {
                     val sellingPrice = setButtonBuyState.value?.second!!
-                    val userData = UserData(
-                            userRepository.connectedUser.value?.toNullable()?.firstname!!,
-                            userRepository.connectedUser.value?.toNullable()?.lastname!!,
-                            wallet + if(sellingPrice >= 2) 2 else sellingPrice ,
-                            userRepository.connectedUser.value?.toNullable()?.imageUrlProfile
-                    )
-                    Observable.combineLatest(
-                            cardsRepository.deleteUserCard(idUser, idCard),
-                            userRepository.updateUser(userData),
-                            BiFunction<NetworkEvent, NetworkEvent, Pair<NetworkEvent, NetworkEvent>> { t1, t2 -> Pair(t1, t2) })
+
+                    cardsRepository.deleteUserCard(idUser, idCard)
                             .subscribe(
                                     {
-                                        buyCardState.onNext(Pair(it.first, it.second))
-                                        loadWallet()
-                                        getCardDetails()
+                                        sellCardState.onNext(it)
+                                        if(it is NetworkEvent.Success) {
+                                            updateUser(wallet + if(sellingPrice >= 2) 2 else sellingPrice)
+                                            setButtonBuyState.onNext(Pair(false, sellingPrice))
+                                        }
                                     },
-                                    { Timber.e(it) }
+                                    {
+                                        Timber.e(it)
+                                    }
                             ).disposedBy(disposeBag)
                 } else {
                     cardDetailsError.onNext(R.string.tv_error_sell_card)
                 }
             }
+        }
+    }
+
+    fun updateUser(wallet: Int) {
+        userRepository.connectedUser.value?.toNullable()?.let {
+            val userData = UserData(
+                    userRepository.connectedUser.value?.toNullable()?.firstname!!,
+                    userRepository.connectedUser.value?.toNullable()?.lastname!!,
+                    wallet,
+                    userRepository.connectedUser.value?.toNullable()?.imageUrlProfile
+            )
+            userRepository.updateUser(userData).subscribe(
+                    {
+                        when (it) {
+                            is NetworkEvent.Error -> {
+                                Timber.e(it.e.message)
+                            }
+                            is NetworkEvent.Success -> {
+                                loadWallet()
+                            }
+                        }
+                    },
+                    { Timber.e(it) }
+            )
         }
     }
 

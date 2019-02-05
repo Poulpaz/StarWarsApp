@@ -18,4 +18,34 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_card_bought"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="view_item_card, tv_item_card"/>
+
+    <View
+        android:id="@+id/view_item_card"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/color_primary_transparent"
+        app:layout_constraintTop_toTopOf="@id/iv_item_card"
+        app:layout_constraintBottom_toBottomOf="@id/iv_item_card"
+        app:layout_constraintEnd_toEndOf="@id/iv_item_card"
+        app:layout_constraintStart_toStartOf="@id/iv_item_card"/>
+
+    <TextView
+        android:id="@+id/tv_item_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bought"
+        android:rotation="-50"
+        style="@style/TextItemCard"
+        app:layout_constraintTop_toTopOf="@id/iv_item_card"
+        app:layout_constraintBottom_toBottomOf="@id/iv_item_card"
+        app:layout_constraintEnd_toEndOf="@id/iv_item_card"
+        app:layout_constraintStart_toStartOf="@id/iv_item_card"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

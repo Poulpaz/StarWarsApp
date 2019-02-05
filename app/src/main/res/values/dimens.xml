@@ -6,4 +6,5 @@
     <dimen name="title">32sp</dimen>
     <dimen name="subtitle">20sp</dimen>
     <dimen name= "body">16sp</dimen>
+    <dimen name= "itemCard">30sp</dimen>
 </resources>

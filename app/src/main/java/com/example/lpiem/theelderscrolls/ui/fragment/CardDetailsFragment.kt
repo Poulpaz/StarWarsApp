@@ -1,6 +1,7 @@
 package com.example.lpiem.theelderscrolls.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,7 +50,7 @@ class CardDetailsFragment : BaseFragment() {
 
         b_buy_fragment_card_details.setOnClickListener {
             viewModel.setButtonBuyState.value?.let {
-                if(it.first){
+                if (it.first) {
                     viewModel.sellCard()
                 } else {
                     viewModel.buyCard()
@@ -70,12 +71,29 @@ class CardDetailsFragment : BaseFragment() {
                 .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
                 .subscribe({
 
-                    if (it.first is NetworkEvent.InProgress || it.second is NetworkEvent.InProgress) {
+                    when (it) {
+                        is NetworkEvent.Error -> {
+                            Toast.makeText(activity, getString(R.string.tv_error_buy_card), Toast.LENGTH_SHORT).show()
+                        }
+                        is NetworkEvent.Success -> {
+                            Toast.makeText(activity, getString(R.string.tv_buy_card_success), Toast.LENGTH_SHORT).show()
+                        }
+                    }
 
-                    } else if (it.first is NetworkEvent.Error || it.second is NetworkEvent.Error) {
-                        Toast.makeText(activity, getString(R.string.tv_error_buy_card), Toast.LENGTH_SHORT).show()
-                    } else if (it.first is NetworkEvent.Success || it.second is NetworkEvent.Success) {
-                        Toast.makeText(activity, getString(R.string.tv_buy_card_success), Toast.LENGTH_SHORT).show()
+                }, { Timber.e(it) }
+                )
+
+        viewModel.sellCardState
+                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
+                .subscribe({
+
+                    when (it) {
+                        is NetworkEvent.Error -> {
+                            Toast.makeText(activity, getString(R.string.tv_error_sell_card), Toast.LENGTH_SHORT).show()
+                        }
+                        is NetworkEvent.Success -> {
+                            Toast.makeText(activity, getString(R.string.tv_sell_card_success), Toast.LENGTH_SHORT).show()
+                        }
                     }
 
                 }, { Timber.e(it) }

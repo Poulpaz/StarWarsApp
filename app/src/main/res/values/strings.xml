@@ -20,6 +20,7 @@
     <string name="tv_pick_card">Choisir une carte</string>
     <string name="tv_pick_player">Choisir un joueur</string>
     <string name="tv_buy_card_success">Votre carte a bien été achetée</string>
+    <string name="tv_sell_card_success">Votre carte a bien été vendue</string>
     <string name="b_buy">Acheter    %d</string>
     <string name="b_sell">Vendre    %d</string>
     <string name="detail_rarity">Rareté</string>
