@@ -1,11 +1,10 @@
 package com.example.lpiem.theelderscrolls.datasource
 
+import com.example.lpiem.theelderscrolls.Model.Exchange
+import com.example.lpiem.theelderscrolls.datasource.request.ExchangesData
 import com.example.lpiem.theelderscrolls.datasource.request.RegisterData
 import com.example.lpiem.theelderscrolls.datasource.request.UserCardData
-import com.example.lpiem.theelderscrolls.datasource.response.BaseResponse
-import com.example.lpiem.theelderscrolls.datasource.response.GetCardResponse
-import com.example.lpiem.theelderscrolls.datasource.response.IdCardResponse
-import com.example.lpiem.theelderscrolls.datasource.response.LogInResponse
+import com.example.lpiem.theelderscrolls.datasource.response.*
 import com.example.lpiem.theelderscrolls.model.RawCard
 import com.example.lpiem.theelderscrolls.model.User
 import io.reactivex.Flowable
@@ -34,5 +33,8 @@ interface TESService {
 
     @POST("addNewUserCard")
     fun addUserCard(@Body userCard: UserCardData) : Observable<BaseResponse>
+
+    @GET("exchanges")
+    fun getExchanges(@Body exchangesData: ExchangesData) : Flowable<List<ExchangeResponse>>
 
 }

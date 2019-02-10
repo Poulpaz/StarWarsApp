@@ -43,7 +43,7 @@ class ListExchangeAdapter(private val isExchangeCreator : Boolean) : ListAdapter
                             .placeholder(R.drawable.card_placeholder)
                             .into(itemView.iv_card1_item_list_exchange)
                 }
-                itemView.tv_name_item_chat_list.text = exchange.firstnameOtherUser + " " + exchange.lastnameOtherUser
+                itemView.tv_name_item_chat_list.text = exchange.firstname + " " + exchange.lastname
             } else {
                 exchange.cardUser?.let {
                     Picasso.get()
@@ -57,7 +57,7 @@ class ListExchangeAdapter(private val isExchangeCreator : Boolean) : ListAdapter
                             .placeholder(R.drawable.card_placeholder)
                             .into(itemView.iv_card1_item_list_exchange)
                 }
-                itemView.tv_name_item_chat_list.text = exchange.firstnameOtherUser + " " + exchange.lastnameOtherUser
+                itemView.tv_name_item_chat_list.text = exchange.firstname + " " + exchange.lastname
                 itemView.b_accept_item_list_exchange.setOnClickListener {
                     acceptClickPublisher.onNext(exchange.idExchange)
                 }

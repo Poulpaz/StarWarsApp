@@ -1,8 +1,11 @@
 package com.example.lpiem.theelderscrolls.repository
 
+import com.example.lpiem.theelderscrolls.Model.Exchange
 import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
 import com.example.lpiem.theelderscrolls.datasource.TESService
+import com.example.lpiem.theelderscrolls.datasource.request.ExchangesData
 import com.example.lpiem.theelderscrolls.datasource.request.UserCardData
+import com.example.lpiem.theelderscrolls.datasource.response.ExchangeResponse
 import com.example.lpiem.theelderscrolls.datasource.response.GetCardResponse
 import com.example.lpiem.theelderscrolls.datasource.response.IdCardResponse
 import com.example.lpiem.theelderscrolls.model.Card
@@ -63,6 +66,13 @@ class CardsRepository(private val service: TESService){
                 .map<NetworkEvent> { NetworkEvent.Success }
                 .onErrorReturn { NetworkEvent.Error(it) }
                 .startWith(NetworkEvent.InProgress)
+                .share()
+    }
+
+    fun getExchanges(idUser: Int): Flowable<List<ExchangeResponse>>{
+        return service.getExchanges(ExchangesData(idUser))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .share()
     }
 }
