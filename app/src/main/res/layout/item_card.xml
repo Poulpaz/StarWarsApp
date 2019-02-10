@@ -22,6 +22,7 @@
         android:id="@+id/group_card_bought"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:constraint_referenced_ids="view_item_card, tv_item_card"/>
 
     <View

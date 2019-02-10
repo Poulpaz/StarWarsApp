@@ -6,9 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.lpiem.theelderscrolls.Model.Chat
+import com.example.lpiem.theelderscrolls.model.Chat
 import com.example.lpiem.theelderscrolls.R
-import com.example.lpiem.theelderscrolls.model.Card
 import com.squareup.picasso.Picasso
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.item_card.view.*

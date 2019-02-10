@@ -1,4 +1,4 @@
-package com.example.lpiem.theelderscrolls.Model
+package com.example.lpiem.theelderscrolls.model
 
 import com.google.gson.annotations.SerializedName
 

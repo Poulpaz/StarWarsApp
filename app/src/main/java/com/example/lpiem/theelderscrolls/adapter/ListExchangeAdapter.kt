@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.lpiem.theelderscrolls.Model.Exchange
+import com.example.lpiem.theelderscrolls.model.Exchange
 import com.example.lpiem.theelderscrolls.R
 import com.squareup.picasso.Picasso
 import io.reactivex.subjects.PublishSubject
@@ -43,7 +43,7 @@ class ListExchangeAdapter(private val isExchangeCreator : Boolean) : ListAdapter
                             .placeholder(R.drawable.card_placeholder)
                             .into(itemView.iv_card1_item_list_exchange)
                 }
-                itemView.tv_name_item_chat_list.text = exchange.firstnameOtherUser + " " + exchange.lastnameOtherUser
+                itemView.tv_name_item_chat_list.text = exchange.firstname + " " + exchange.lastname
             } else {
                 exchange.cardUser?.let {
                     Picasso.get()
@@ -57,7 +57,7 @@ class ListExchangeAdapter(private val isExchangeCreator : Boolean) : ListAdapter
                             .placeholder(R.drawable.card_placeholder)
                             .into(itemView.iv_card1_item_list_exchange)
                 }
-                itemView.tv_name_item_chat_list.text = exchange.firstnameOtherUser + " " + exchange.lastnameOtherUser
+                itemView.tv_name_item_chat_list.text = exchange.firstname + " " + exchange.lastname
                 itemView.b_accept_item_list_exchange.setOnClickListener {
                     acceptClickPublisher.onNext(exchange.idExchange)
                 }

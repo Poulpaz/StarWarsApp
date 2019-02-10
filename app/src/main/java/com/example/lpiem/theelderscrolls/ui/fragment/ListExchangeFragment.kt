@@ -8,9 +8,12 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.adapter.ListExchangeAdapter
 import com.example.lpiem.theelderscrolls.adapter.ListPlayersAdapter
+import com.example.lpiem.theelderscrolls.viewmodel.ExchangeFragmentViewModel
+import com.example.lpiem.theelderscrolls.viewmodel.ListExchangeFragmentViewModel
 import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
 import kotlinx.android.synthetic.main.fragment_add_chat.*
 import kotlinx.android.synthetic.main.fragment_list_exchange.*
+import org.kodein.di.generic.instance
 import timber.log.Timber
 
 class ListExchangeFragment: BaseFragment() {
@@ -35,18 +38,21 @@ class ListExchangeFragment: BaseFragment() {
         rv_list_fragment_list_exchange.setItemAnimator(DefaultItemAnimator())
         rv_list_fragment_list_exchange.adapter = adapter
 
-        adapter.acceptClickPublisher
-                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
-                .subscribe(
+        /*viewModel.listExchange.subscribe(
+                {
+                    adapter.submitList(it)
+                },
+                { Timber.e(it) }
+        )*/
+
+        adapter.acceptClickPublisher.subscribe(
                 {
                     //TODO
                 },
                 { Timber.e(it) }
         )
 
-        adapter.refuseClickPublisher
-                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
-                .subscribe(
+        adapter.refuseClickPublisher.subscribe(
                 {
                     //TODO
                 },
