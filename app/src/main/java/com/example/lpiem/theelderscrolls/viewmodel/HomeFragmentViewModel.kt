@@ -14,7 +14,7 @@ import timber.log.Timber
 
 class HomeFragmentViewModel(private val cardsRepository: CardsRepository, private val userRepository: UserRepository) : BaseViewModel() {
 
-    val cardsList: BehaviorSubject<List<Card>?> = BehaviorSubject.create()
+    val cardsList: BehaviorSubject<List<Card>> = BehaviorSubject.create()
     val userCardsList: BehaviorSubject<List<Card>> = BehaviorSubject.create()
 
     fun getCardsForConnectedUser() {

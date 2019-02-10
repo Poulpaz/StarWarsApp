@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.lpiem.theelderscrolls.Model.Exchange
+import com.example.lpiem.theelderscrolls.model.Exchange
 import com.example.lpiem.theelderscrolls.R
 import com.squareup.picasso.Picasso
 import io.reactivex.subjects.PublishSubject

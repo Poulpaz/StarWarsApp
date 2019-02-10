@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
 import com.example.lpiem.theelderscrolls.datasource.TESService
 import com.example.lpiem.theelderscrolls.datasource.request.RegisterData
+import com.example.lpiem.theelderscrolls.datasource.request.UserData
 import com.example.lpiem.theelderscrolls.datasource.response.LogInResponse
 import com.example.lpiem.theelderscrolls.manager.KeystoreManager
 import com.example.lpiem.theelderscrolls.model.User
@@ -79,6 +80,16 @@ class UserRepository(private val service: TESService,
     fun signUp(user: RegisterData): Observable<NetworkEvent> {
 
         return service.signUpUser(user)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map<NetworkEvent> { NetworkEvent.Success }
+                .onErrorReturn { NetworkEvent.Error(it) }
+                .startWith(NetworkEvent.InProgress)
+                .share()
+    }
+
+    fun updateUser(user: UserData): Observable<NetworkEvent> {
+        return service.updateUser(token, user)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map<NetworkEvent> { NetworkEvent.Success }

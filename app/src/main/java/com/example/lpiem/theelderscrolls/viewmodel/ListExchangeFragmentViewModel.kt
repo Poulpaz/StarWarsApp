@@ -2,11 +2,8 @@ package com.example.lpiem.theelderscrolls.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.lpiem.theelderscrolls.Model.Exchange
-import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
+import com.example.lpiem.theelderscrolls.model.Exchange
 import com.example.lpiem.theelderscrolls.datasource.response.ExchangeResponse
-import com.example.lpiem.theelderscrolls.datasource.response.IdCardResponse
-import com.example.lpiem.theelderscrolls.model.Card
 import com.example.lpiem.theelderscrolls.model.User
 import com.example.lpiem.theelderscrolls.repository.CardsRepository
 import com.example.lpiem.theelderscrolls.repository.UserRepository

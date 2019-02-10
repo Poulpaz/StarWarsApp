@@ -13,6 +13,7 @@ import com.example.lpiem.theelderscrolls.model.User
 import com.example.lpiem.theelderscrolls.ui.activity.ConnectionActivity
 import com.example.lpiem.theelderscrolls.ui.activity.MainActivity
 import com.example.lpiem.theelderscrolls.utils.CircleTransform
+import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
 import com.example.lpiem.theelderscrolls.viewmodel.ProfileFragmentViewModel
 import com.facebook.AccessToken
 import com.facebook.login.LoginManager
@@ -52,6 +53,7 @@ class ProfileFragment : BaseFragment(), DisconnectUserInterface {
         rv_cards_profile_fragment.adapter = adapter
 
         viewModel.connectedUser
+                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
                 .subscribe(
                         {
                             onConnectedUserChange(it.toNullable())
@@ -60,6 +62,7 @@ class ProfileFragment : BaseFragment(), DisconnectUserInterface {
                 )
 
         viewModel.userCardsList
+                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
                 .subscribe(
                         {
                             adapter.submitList(it)
@@ -68,6 +71,7 @@ class ProfileFragment : BaseFragment(), DisconnectUserInterface {
                 )
 
         adapter.cardsClickPublisher
+                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
                 .subscribe(
                         {
                             val action = ProfileFragmentDirections.actionMyProfileFragmentToCardDetailsFragment(it)

@@ -40,4 +40,10 @@
         <item name="android:textSize">@dimen/body</item>
     </style>
 
+    <style name="TextItemCard">
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textSize">@dimen/itemCard</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

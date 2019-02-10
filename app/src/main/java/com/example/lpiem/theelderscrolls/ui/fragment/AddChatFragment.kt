@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.adapter.ChatListAdapter
 import com.example.lpiem.theelderscrolls.adapter.ListPlayersAdapter
+import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
 import com.example.lpiem.theelderscrolls.viewmodel.AddChatFragmentViewModel
 import com.example.lpiem.theelderscrolls.viewmodel.ProfileFragmentViewModel
 import kotlinx.android.synthetic.main.fragment_add_chat.*
@@ -40,7 +41,9 @@ class AddChatFragment: BaseFragment() {
         rv_players_fragment_add_chat.setItemAnimator(DefaultItemAnimator())
         rv_players_fragment_add_chat.adapter = adapter
 
-        viewModel.usersList.subscribe(
+        viewModel.usersList
+                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
+                .subscribe(
                 {
                     adapter.submitList(it)
                 },

@@ -10,6 +10,7 @@ import com.example.lpiem.theelderscrolls.adapter.ListExchangeAdapter
 import com.example.lpiem.theelderscrolls.adapter.ListPlayersAdapter
 import com.example.lpiem.theelderscrolls.viewmodel.ExchangeFragmentViewModel
 import com.example.lpiem.theelderscrolls.viewmodel.ListExchangeFragmentViewModel
+import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
 import kotlinx.android.synthetic.main.fragment_add_chat.*
 import kotlinx.android.synthetic.main.fragment_list_exchange.*
 import org.kodein.di.generic.instance
