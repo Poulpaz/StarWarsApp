@@ -49,7 +49,7 @@
     <string name="b_cancel_dialog_signup">Non</string>
     <string name="b_validate_dialog_signup">Oui</string>
 
-    <!-- Add Chat Fragment -->
+    <!-- Add Conversation Fragment -->
     <string name="b_add_chat_fragment">Démarrer la conversation</string>
 
     <!-- List Exchange Fragment -->

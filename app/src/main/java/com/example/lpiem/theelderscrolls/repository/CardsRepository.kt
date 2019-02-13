@@ -12,31 +12,15 @@ import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.BehaviorSubject
-import timber.log.Timber
 
 class CardsRepository(private val service: TESService){
 
-    val userCardsList: BehaviorSubject<List<Card>> = BehaviorSubject.create()
-
-    lateinit var cardsList: List<Card>
-
     fun fetchCards(): Flowable<List<Card>> {
-        val obs = service.getCards()
+        return service.getCards()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map { it.cards }
                 .share()
-
-        obs.subscribe(
-                {
-                    userCardsList.onNext(it)
-                    cardsList = it
-                },
-                { Timber.e(it)}
-        )
-
-        return obs
     }
 
     fun loadCard(idCard : String) : Flowable<GetCardResponse> {

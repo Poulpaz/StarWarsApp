@@ -46,4 +46,7 @@ interface TESService {
 
     @POST("deleteUserCard")
     fun deleteUserCard(@Body userCard: UserCardData) : Observable<BaseResponse>
+
+    @GET("messenger/conversation/{idUser}")
+    fun getAllConversationWithIdUser(@Path("idUser") id : Int) : Flowable<List<GetConversationResponse>>
 }

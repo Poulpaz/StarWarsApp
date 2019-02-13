@@ -11,11 +11,16 @@ import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.adapter.ChatListAdapter
 import com.example.lpiem.theelderscrolls.adapter.ListCardAdapter
 import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
+import com.example.lpiem.theelderscrolls.viewmodel.ChatListFragmentViewModel
+import com.example.lpiem.theelderscrolls.viewmodel.ProfileFragmentViewModel
 import kotlinx.android.synthetic.main.fragment_buy_card.*
 import kotlinx.android.synthetic.main.fragment_chat_list.*
+import org.kodein.di.generic.instance
 import timber.log.Timber
 
 class ChatListFragment : BaseFragment() {
+
+    private val viewModel: ChatListFragmentViewModel by instance(arg = this)
 
     companion object {
         const val TAG = "CHATLISTFRAGMENT"
@@ -37,6 +42,14 @@ class ChatListFragment : BaseFragment() {
         rv_cards_fragment_chat_list.setItemAnimator(DefaultItemAnimator())
         rv_cards_fragment_chat_list.adapter = adapter
 
+        viewModel.conversationList
+                .subscribe(
+                        {
+                            adapter.submitList(it)
+                        },
+                        { Timber.e(it) }
+                )
+
         adapter.chatClickPublisher
                 .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
                 .subscribe(
@@ -47,6 +60,7 @@ class ChatListFragment : BaseFragment() {
                 { Timber.e(it) }
         )
 
+        swiperefrsh_fragment_chat_list.setOnRefreshListener { viewModel.getListConversation() }
 
         fab_fragment_chat_list.setOnClickListener {
             val action = ChatListFragmentDirections.actionChatListFragmentToAddChatFragment()
