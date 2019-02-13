@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_profile.*
 import org.kodein.di.generic.instance
 import timber.log.Timber
 import com.squareup.picasso.Picasso
+import io.reactivex.rxkotlin.addTo
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -53,33 +54,29 @@ class ProfileFragment : BaseFragment(), DisconnectUserInterface {
         rv_cards_profile_fragment.adapter = adapter
 
         viewModel.connectedUser
-                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
                 .subscribe(
                         {
                             onConnectedUserChange(it.toNullable())
                         },
                         { Timber.e(it) }
-                )
+                ).addTo(viewDisposable)
 
         viewModel.userCardsList
-                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
                 .subscribe(
                         {
                             adapter.submitList(it)
                         },
                         { Timber.e(it) }
-                )
+                ).addTo(viewDisposable)
 
         adapter.cardsClickPublisher
-                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
                 .subscribe(
                         {
                             val action = ProfileFragmentDirections.actionMyProfileFragmentToCardDetailsFragment(it)
-
                             NavHostFragment.findNavController(this).navigate(action)
                         },
                         { Timber.e(it) }
-                )
+                ).addTo(viewDisposable)
 
         viewModel.getCardsForConnectedUser()
 

@@ -14,6 +14,7 @@ import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
 import com.example.lpiem.theelderscrolls.viewmodel.CardDetailsFragmentViewModel
 import com.google.android.material.chip.Chip
 import com.squareup.picasso.Picasso
+import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_card_details.*
 import org.kodein.di.direct
 import org.kodein.di.generic.M
@@ -36,17 +37,18 @@ class CardDetailsFragment : BaseFragment() {
         setDisplayHomeAsUpEnabled(true)
         setDisplayBotomBarNavigation(false)
 
-        val idCard = CardDetailsFragmentArgs.fromBundle(arguments).card
+        val idCard = arguments?.let {
+            CardDetailsFragmentArgs.fromBundle(it).card
+        }
         viewModel = kodein.direct.instance(arg = M(this, idCard))
 
         viewModel.card
-                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
                 .subscribe(
                         {
                             displayCard(it)
                         },
                         { Timber.e(it) }
-                )
+                ).addTo(viewDisposable)
 
         b_buy_fragment_card_details.setOnClickListener {
             viewModel.setButtonBuyState.value?.let {
@@ -59,16 +61,14 @@ class CardDetailsFragment : BaseFragment() {
         }
 
         viewModel.cardDetailsError
-                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
                 .subscribe(
                         {
                             Toast.makeText(activity, getString(it), Toast.LENGTH_SHORT).show()
                         },
                         { Timber.e(it) }
-                )
+                ).addTo(viewDisposable)
 
         viewModel.buyCardState
-                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
                 .subscribe({
 
                     when (it) {
@@ -81,10 +81,9 @@ class CardDetailsFragment : BaseFragment() {
                     }
 
                 }, { Timber.e(it) }
-                )
+                ).addTo(viewDisposable)
 
         viewModel.sellCardState
-                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
                 .subscribe({
 
                     when (it) {
@@ -97,23 +96,21 @@ class CardDetailsFragment : BaseFragment() {
                     }
 
                 }, { Timber.e(it) }
-                )
+                ).addTo(viewDisposable)
 
         viewModel.setButtonBuyState
-                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
                 .subscribe(
                         {
                             getStringButtonPay(it.first, it.second)
                         }, { Timber.e(it) }
-                )
+                ).addTo(viewDisposable)
 
         viewModel.walletData
-                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
                 .subscribe(
                         {
                             tv_wallet_fragment_card_details.text = getString(R.string.tv_wallet_card_details, it)
                         }, { Timber.e(it) }
-                )
+                ).addTo(viewDisposable)
     }
 
     private fun displayCard(card: Card) {

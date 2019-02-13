@@ -18,6 +18,7 @@ import com.example.lpiem.theelderscrolls.viewmodel.HomeFragmentViewModel
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
+import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_buy_card.*
 import org.kodein.di.direct
 import org.kodein.di.generic.instance
@@ -50,7 +51,7 @@ class BuyCardFragment : BaseFragment() {
                             initAdapter(it.first, it.second)
                         },
                         { Timber.e(it) }
-                )
+                ).addTo(viewDisposable)
 
         viewModel.getCardsForConnectedUser()
 
@@ -69,14 +70,13 @@ class BuyCardFragment : BaseFragment() {
         swiperefrsh_fragment_buy.isRefreshing = false
 
         adapter.cardsClickPublisher
-                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
                 .subscribe(
                         {
                             val action = HomeFragmentDirections.actionMyHomeFragmentToCardDetailsFragment(it)
                             NavHostFragment.findNavController(this).navigate(action)
                         },
                         { Timber.e(it) }
-                )
+                ).addTo(viewDisposable)
     }
 
 }

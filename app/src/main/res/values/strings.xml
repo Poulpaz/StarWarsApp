@@ -32,6 +32,11 @@
     <!-- Exchange Fragment -->
     <string name="b_exchange">Echanger</string>
     <string name="error_empty_selected_items">Vous devez sélectionner une carte et un joueur</string>
+    <string name="tv_success_add_exchange">L\'échange a été crée, cliquez en haut à droite de l\'écran pour voir la liste</string>
+    <string name="dialog_title_delete_exchange">Suppression d\'échange</string>
+    <string name="dialog_message_delete_exchange">Voulez-vous vraiment supprimer cet échange ?</string>
+    <string name="dialog_validate_delete_exchange">Oui</string>
+    <string name="dialog_cancel_delete_exchange">Non</string>
 
     <!-- Profile Fragment -->
     <string name="tv_title_dialog_logout">Deconnexion</string>
@@ -55,12 +60,14 @@
     <!-- List Exchange Fragment -->
     <string name="tv_card1_fragment_list_exchange">Votre carte</string>
     <string name="tv_card2_fragment_list_exchange">Carte de l\'adversaire</string>
+    <string name="b_card_fragment_list_exchange">Choisir</string>
 
     <!-- Error -->
     <string name="tv_error_login">Une erreur a eu lieu lors de la connexion</string>
     <string name="tv_error_signup">Une erreur a eu lieu lors de l\'inscription</string>
     <string name="tv_error_buy_card">Une erreur a eu lieu lors de l\'achat de la carte</string>
     <string name="tv_error_sell_card">Une erreur a eu lieu lors de la vente de la carte</string>
+    <string name="tv_error_add_exchange">Une erreur a eu lieu lors de la création de l\'échange</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

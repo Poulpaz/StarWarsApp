@@ -1,14 +1,12 @@
 package com.example.lpiem.theelderscrolls.datasource
 
-import com.example.lpiem.theelderscrolls.datasource.request.ExchangesData
-import com.example.lpiem.theelderscrolls.datasource.request.RegisterData
-import com.example.lpiem.theelderscrolls.datasource.request.UserCardData
-import com.example.lpiem.theelderscrolls.datasource.request.UserData
+import com.example.lpiem.theelderscrolls.datasource.request.*
 import com.example.lpiem.theelderscrolls.datasource.response.BaseResponse
 import com.example.lpiem.theelderscrolls.datasource.response.GetCardResponse
 import com.example.lpiem.theelderscrolls.datasource.response.IdCardResponse
 import com.example.lpiem.theelderscrolls.datasource.response.LogInResponse
 import com.example.lpiem.theelderscrolls.datasource.response.*
+import com.example.lpiem.theelderscrolls.model.Exchange
 import com.example.lpiem.theelderscrolls.model.RawCard
 import com.example.lpiem.theelderscrolls.model.User
 import io.reactivex.Flowable
@@ -38,12 +36,24 @@ interface TESService {
     @POST("addNewUserCard")
     fun addUserCard(@Body userCard: UserCardData) : Observable<BaseResponse>
 
-    @GET("exchanges")
-    fun getExchanges(@Body exchangesData: ExchangesData) : Flowable<List<ExchangeResponse>>
-
     @PUT("updateUser")
     fun updateUser(@Header("token") token: String?, @Body user: UserData) : Observable<BaseResponse>
 
     @POST("deleteUserCard")
     fun deleteUserCard(@Body userCard: UserCardData) : Observable<BaseResponse>
+
+    @GET("exchanges/{id}")
+    fun getExchanges(@Path("id") idUser: Int) : Flowable<List<ExchangeResponse>>
+
+    @GET("exchange/{idExchange}")
+    fun getExchange(@Path("idExchange") idExchange: Int) : Observable<Exchange>
+
+    @PUT("updateExchange")
+    fun updateExchange(@Body exchange: Exchange) : Observable<BaseResponse>
+
+    @POST("addExchange")
+    fun addExchange(@Body exchangeData: ExchangeData) : Observable<BaseResponse>
+
+    @DELETE("deleteExchange/{idExchange}")
+    fun deleteExchange(@Path("idExchange") idExchange: Int) : Observable<BaseResponse>
 }

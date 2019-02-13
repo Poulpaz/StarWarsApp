@@ -20,9 +20,9 @@ class ExchangeFragmentViewModel(private val cardsRepository: CardsRepository, pr
     val usersList: BehaviorSubject<List<User>?> = BehaviorSubject.create()
     val exchangeState: BehaviorSubject<NetworkEvent> = BehaviorSubject.createDefault(NetworkEvent.None)
 
-    fun getAllUsers(){
+    fun getAllUsers() {
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
-        if(idUser != null) {
+        if (idUser != null) {
             userRepository.getAllUsers()
                     .subscribe(
                             {
@@ -39,13 +39,13 @@ class ExchangeFragmentViewModel(private val cardsRepository: CardsRepository, pr
 
     fun getCardsForConnectedUser() {
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
-        if(idUser != null) {
+        if (idUser != null) {
             Flowable.combineLatest(
                     cardsRepository.fetchCards(),
                     cardsRepository.getUserCards(idUser),
                     BiFunction<List<Card>, List<IdCardResponse>, Pair<List<Card>, List<IdCardResponse>>> { t1, t2 -> Pair(t1, t2) })
                     .subscribe(
-                            {response ->
+                            { response ->
                                 val listCard = response.second.map {
                                     response.first.find { card ->
                                         it.idCard == card.idCard
@@ -56,18 +56,34 @@ class ExchangeFragmentViewModel(private val cardsRepository: CardsRepository, pr
                             { Timber.e(it) }
                     ).disposedBy(disposeBag)
         } else {
-
+            //TODO
         }
     }
 
-    fun exchangeCards(idCard : String, idOtherUser : Int){
-        //TODO
+    fun exchangeCards(idCard: String, idOtherUser: Int) {
+        val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
+        if (idUser != null) {
+            cardsRepository.addExchange(idCard, idUser, idOtherUser)
+                    .subscribe(
+                            {
+                                exchangeState.onNext(it)
+                            },
+                            {
+                                exchangeState.onNext(NetworkEvent.Error(it))
+                                Timber.e(it)
+                            },{
+                        exchangeState.onNext(NetworkEvent.None)
+                    }
+                    ).disposedBy(disposeBag)
+        } else {
+            //TODO
+        }
     }
 
     class Factory(private val cardsRepository: CardsRepository, private val userRepository: UserRepository) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             @Suppress("UNCHECKED_CAST")
-            return ExchangeFragmentViewModel(cardsRepository,userRepository ) as T
+            return ExchangeFragmentViewModel(cardsRepository, userRepository) as T
         }
     }
 }

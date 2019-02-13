@@ -12,6 +12,7 @@ import com.example.lpiem.theelderscrolls.adapter.ListPlayersAdapter
 import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
 import com.example.lpiem.theelderscrolls.viewmodel.AddChatFragmentViewModel
 import com.example.lpiem.theelderscrolls.viewmodel.ProfileFragmentViewModel
+import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_add_chat.*
 import kotlinx.android.synthetic.main.fragment_chat_list.*
 import org.kodein.di.generic.instance
@@ -42,13 +43,12 @@ class AddChatFragment: BaseFragment() {
         rv_players_fragment_add_chat.adapter = adapter
 
         viewModel.usersList
-                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
                 .subscribe(
                 {
                     adapter.submitList(it)
                 },
                 { Timber.e(it) }
-        )
+        ).addTo(viewDisposable)
     }
 
 }
