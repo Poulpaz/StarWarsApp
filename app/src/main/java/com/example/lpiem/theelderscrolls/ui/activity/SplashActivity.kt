@@ -1,9 +1,11 @@
 package com.example.lpiem.theelderscrolls.ui.activity
 
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.os.Handler
 import android.view.Window
 import android.view.WindowManager
+import android.view.animation.LinearInterpolator
 import android.widget.Toast
 import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
@@ -13,6 +15,7 @@ import com.example.lpiem.theelderscrolls.viewmodel.ConnectionActivityViewModel
 import com.facebook.AccessToken
 import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import kotlinx.android.synthetic.main.activity_splash.*
 import org.kodein.di.generic.instance
 import timber.log.Timber
 
@@ -21,19 +24,20 @@ class SplashActivity : BaseActivity() {
     private val viewModel: ConnectionActivityViewModel by instance(arg = this)
     private val googleManager: GoogleConnectionManager by instance()
 
+    companion object {
+        val DEFAULT_ANIMATION_DURATION = 50000L
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         //Hiding title bar of SplashActivity
         window.requestFeature(Window.FEATURE_NO_TITLE)
         //Making the activity full screen
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_splash)
-
+        onStartRotation();
         Handler().postDelayed({
-
             testUserConnected()
-
             viewModel.signInState
                     .takeUntil(lifecycle(RxLifecycleDelegate.ActivityEvent.DESTROY))
                     .subscribe(
@@ -54,7 +58,7 @@ class SplashActivity : BaseActivity() {
                                 }
                             }, { Timber.e(it) }
                     )
-        }, 3000)
+        }, 2000)
     }
 
     //region Facebook & Google
@@ -68,7 +72,6 @@ class SplashActivity : BaseActivity() {
             LoginManager.getInstance().logOut()
         }
         googleManager.getGoogleSignInClient().signOut()
-        Toast.makeText(this, getString(R.string.tv_error_login), Toast.LENGTH_SHORT).show()
         ConnectionActivity.start(this@SplashActivity)
     }
 
@@ -84,6 +87,17 @@ class SplashActivity : BaseActivity() {
 
     private fun startHome() {
         MainActivity.start(this@SplashActivity)
+    }
+
+    private fun onStartRotation() {
+        val valueAnimator = ValueAnimator.ofFloat(0f, 360f)
+        valueAnimator.addUpdateListener {
+            val value = it.animatedValue as Float
+            iv_logo_activity_splash.rotation = value
+        }
+        valueAnimator.interpolator = LinearInterpolator()
+        valueAnimator.duration = DEFAULT_ANIMATION_DURATION
+        valueAnimator.start()
     }
 
     override fun onPause() {
