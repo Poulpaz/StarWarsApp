@@ -34,7 +34,7 @@ class ConnectionActivity : BaseActivity() {
     private val viewModel: ConnectionActivityViewModel by instance(arg = this)
 
     private val RC_SIGN_IN = 0
-    private var TAG = "ConectionActivity"
+    private var TAG = "ConnectionActivity"
     private var callbackManager: CallbackManager? = null
     private val googleManager: GoogleConnectionManager by instance()
 
@@ -51,8 +51,6 @@ class ConnectionActivity : BaseActivity() {
         setContentView(R.layout.connection_activity)
         FacebookSdk.sdkInitialize(applicationContext)
         AppEventsLogger.activateApp(this)
-
-        testUserConnected()
 
         b_login_google.clicks()
                 .takeUntil(lifecycle(RxLifecycleDelegate.ActivityEvent.DESTROY))
@@ -124,17 +122,6 @@ class ConnectionActivity : BaseActivity() {
         progress_bar_connection_activity.visibility = View.VISIBLE
     }
 
-    private fun testUserConnected() {
-        val accessToken = AccessToken.getCurrentAccessToken()
-        val googleAccount = GoogleSignIn.getLastSignedInAccount(this)
-        if (accessToken != null && !accessToken.isExpired) {
-            viewModel.loadUser()
-        }
-        googleAccount?.let {
-            viewModel.loadUser()
-        }
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         callbackManager?.onActivityResult(requestCode, resultCode, data)
         super.onActivityResult(requestCode, resultCode, data)
@@ -183,7 +170,7 @@ class ConnectionActivity : BaseActivity() {
                     val firstName = profile.firstName
                     val lastName = profile.lastName
                     val photoUri = Profile.getCurrentProfile().getProfilePictureUri(200, 200)
-                    val registerData = RegisterData(id, firstName, lastName, 10, photoUri.toString())
+                    val registerData = RegisterData(id, firstName, lastName, 30, photoUri.toString())
                     viewModel.accountExistState.subscribe(
                             {
                                 if (!it) {
@@ -254,7 +241,7 @@ class ConnectionActivity : BaseActivity() {
             if(id.isNullOrEmpty() || firstName.isNullOrEmpty() || lastName.isNullOrEmpty()){
                 Toast.makeText(this, getString(R.string.tv_error_login), Toast.LENGTH_SHORT).show()
             } else {
-                val registerData = RegisterData(id, firstName, lastName, 10, photoUri.toString())
+                val registerData = RegisterData(id, firstName, lastName, 30, photoUri.toString())
                 viewModel.accountExistState.subscribe(
                         {
                             if (!it) {
@@ -282,5 +269,4 @@ class ConnectionActivity : BaseActivity() {
         super.onStop()
         finish()
     }
-
 }
