@@ -11,6 +11,7 @@ import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.adapter.ChatListAdapter
 import com.example.lpiem.theelderscrolls.adapter.ListCardAdapter
 import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
+import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_buy_card.*
 import kotlinx.android.synthetic.main.fragment_chat_list.*
 import timber.log.Timber
@@ -38,14 +39,13 @@ class ChatListFragment : BaseFragment() {
         rv_cards_fragment_chat_list.adapter = adapter
 
         adapter.chatClickPublisher
-                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
                 .subscribe(
                 {
                     val action = ChatListFragmentDirections.actionChatListFragmentToChatFragment(it)
                     NavHostFragment.findNavController(this).navigate(action)
                 },
                 { Timber.e(it) }
-        )
+        ).addTo(viewDisposable)
 
 
         fab_fragment_chat_list.setOnClickListener {

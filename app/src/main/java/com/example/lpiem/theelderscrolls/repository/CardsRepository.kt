@@ -2,12 +2,13 @@ package com.example.lpiem.theelderscrolls.repository
 
 import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
 import com.example.lpiem.theelderscrolls.datasource.TESService
-import com.example.lpiem.theelderscrolls.datasource.request.ExchangesData
+import com.example.lpiem.theelderscrolls.datasource.request.ExchangeData
 import com.example.lpiem.theelderscrolls.datasource.request.UserCardData
 import com.example.lpiem.theelderscrolls.datasource.response.ExchangeResponse
 import com.example.lpiem.theelderscrolls.datasource.response.GetCardResponse
 import com.example.lpiem.theelderscrolls.datasource.response.IdCardResponse
 import com.example.lpiem.theelderscrolls.model.Card
+import com.example.lpiem.theelderscrolls.model.Exchange
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -66,18 +67,60 @@ class CardsRepository(private val service: TESService){
                 .share()
     }
 
-    fun getExchanges(idUser: Int): Flowable<List<ExchangeResponse>>{
-        return service.getExchanges(ExchangesData(idUser))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .share()
-    }
-
     fun deleteUserCard(idUser : Int, idCard : String) : Observable<NetworkEvent>{
 
         val userCardData = UserCardData(idUser, idCard)
 
         return service.deleteUserCard(userCardData)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map<NetworkEvent> { NetworkEvent.Success }
+                .onErrorReturn { NetworkEvent.Error(it) }
+                .startWith(NetworkEvent.InProgress)
+                .share()
+    }
+
+    fun getExchanges(idUser: Int): Flowable<List<ExchangeResponse>>{
+        return service.getExchanges(idUser)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .share()
+    }
+
+    fun addExchange(idCard : String, idUser: Int, idOtherUser : Int): Observable<NetworkEvent>{
+
+        val exchangeData = ExchangeData(idUser, idOtherUser, idCard, null, 0, 0)
+
+        return service.addExchange(exchangeData)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map<NetworkEvent> { NetworkEvent.Success }
+                .onErrorReturn { NetworkEvent.Error(it) }
+                .startWith(NetworkEvent.InProgress)
+                .share()
+    }
+
+    fun deleteExchange(idExchange: Int): Observable<NetworkEvent>{
+
+        return service.deleteExchange(idExchange)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map<NetworkEvent> { NetworkEvent.Success }
+                .onErrorReturn { NetworkEvent.Error(it) }
+                .startWith(NetworkEvent.InProgress)
+                .share()
+    }
+
+    fun getExchange(idExchange: Int): Observable<Exchange>{
+
+        return service.getExchange(idExchange)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .share()
+    }
+
+    fun updateExchange(exchange: Exchange): Observable<NetworkEvent>{
+        return service.updateExchange(exchange)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map<NetworkEvent> { NetworkEvent.Success }

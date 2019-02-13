@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.item_card.view.*
 class ListCardAdapter : ListAdapter<Card, ListCardAdapter.CardViewHolder>(DiffCardCallback()) {
 
     val cardsClickPublisher: PublishSubject<String> = PublishSubject.create()
+    val cardImageClickPublisher: PublishSubject<String> = PublishSubject.create()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_card, parent, false)
@@ -34,12 +35,15 @@ class ListCardAdapter : ListAdapter<Card, ListCardAdapter.CardViewHolder>(DiffCa
                         .placeholder(R.drawable.card_placeholder)
                         .into(itemView.iv_item_card)
             }
-            bindPositionClick(card.idCard)
+            bindPositionClick(card.idCard, card.imageUrl)
         }
 
-        private fun bindPositionClick(idCard: String) {
+        private fun bindPositionClick(idCard: String, imageUrl : String?) {
             itemView.setOnClickListener {
                 cardsClickPublisher.onNext(idCard)
+                imageUrl?.let {
+                    cardImageClickPublisher.onNext(it)
+                } ?: cardImageClickPublisher.onNext("")
             }
         }
     }

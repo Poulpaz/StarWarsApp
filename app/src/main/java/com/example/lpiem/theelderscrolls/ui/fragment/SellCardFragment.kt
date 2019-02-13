@@ -11,6 +11,7 @@ import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.adapter.ListCardAdapter
 import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
 import com.example.lpiem.theelderscrolls.viewmodel.HomeFragmentViewModel
+import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_buy_card.*
 import kotlinx.android.synthetic.main.fragment_sell_card.*
 import org.kodein.di.generic.instance
@@ -39,16 +40,14 @@ class SellCardFragment : BaseFragment() {
         rv_cards_sell_fragment.adapter = adapter
 
         viewModel.userCardsList
-                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
                 .subscribe(
                         {
                             adapter.submitList(it)
                         },
                         { Timber.e(it) }
-                )
+                ).addTo(viewDisposable)
 
         adapter.cardsClickPublisher
-                .takeUntil(lifecycle(RxLifecycleDelegate.FragmentEvent.DESTROY_VIEW))
                 .subscribe(
                         {
                             val action = HomeFragmentDirections.actionMyHomeFragmentToCardDetailsFragment(it)
@@ -56,7 +55,7 @@ class SellCardFragment : BaseFragment() {
                             NavHostFragment.findNavController(this).navigate(action)
                         },
                         { Timber.e(it) }
-                )
+                ).addTo(viewDisposable)
 
         viewModel.getCardsForConnectedUser()
     }
