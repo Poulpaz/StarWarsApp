@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import com.facebook.AccessToken
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     companion object {
         fun start(fromActivity: AppCompatActivity) {
