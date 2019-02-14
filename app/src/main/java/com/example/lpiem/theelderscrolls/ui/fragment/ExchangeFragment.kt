@@ -131,6 +131,7 @@ class ExchangeFragment : BaseFragment(), ExchangeInterface{
 
     override fun onResume() {
         super.onResume()
+        setDisplayListExchange(true)
         viewModel.getAllUsers()
         viewModel.getCardsForConnectedUser()
     }

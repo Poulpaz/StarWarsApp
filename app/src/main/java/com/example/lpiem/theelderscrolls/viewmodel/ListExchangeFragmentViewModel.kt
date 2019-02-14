@@ -3,6 +3,7 @@ package com.example.lpiem.theelderscrolls.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
+import com.example.lpiem.theelderscrolls.datasource.request.ExchangeData
 import com.example.lpiem.theelderscrolls.model.Exchange
 import com.example.lpiem.theelderscrolls.datasource.response.ExchangeResponse
 import com.example.lpiem.theelderscrolls.datasource.response.IdCardResponse
@@ -24,10 +25,6 @@ class ListExchangeFragmentViewModel(private val cardsRepository: CardsRepository
 
     val deleteExchangeState: BehaviorSubject<NetworkEvent> = BehaviorSubject.createDefault(NetworkEvent.None)
     val addCardExchangeState: BehaviorSubject<NetworkEvent> = BehaviorSubject.createDefault(NetworkEvent.None)
-
-    init {
-        getListExchanges()
-    }
 
     fun getListExchanges(){
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
@@ -109,12 +106,14 @@ class ListExchangeFragmentViewModel(private val cardsRepository: CardsRepository
                         {
                             updateExchange(it, imageUrl)
                         },
-                        { Timber.e(it) }
+                        {
+                            Timber.e(it)
+                        }
                 )
                 .disposedBy(disposeBag)
     }
 
-    private fun updateExchange(exchange: Exchange, imageUrl: String?) {
+    private fun updateExchange(exchange: ExchangeData, imageUrl: String?) {
 
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
         if(idUser != null) {

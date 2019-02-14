@@ -38,8 +38,8 @@ class HomeFragment : BaseFragment() {
 
     private fun setupViewPager() {
         val adapter = HomeViewPagerAdapter(childFragmentManager)
-        adapter.addFragment(BuyCardFragment.newInstance(), getString(R.string.ti_buy_home_fragment))
-        adapter.addFragment(SellCardFragment.newInstance(), getString(R.string.ti_sell_home_fragment))
+        adapter.addFragment(BuyCardFragment.newInstance(), getString(R.string.ti_shop_home_fragment))
+        adapter.addFragment(SellCardFragment.newInstance(), getString(R.string.ti_user_card_home_fragment))
         vp_saved_searches_history.adapter = adapter
         tl_buy_sell_home_fragment.setupWithViewPager(vp_saved_searches_history)
     }

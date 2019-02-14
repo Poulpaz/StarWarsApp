@@ -89,7 +89,7 @@ class CardsRepository(private val service: TESService){
 
     fun addExchange(idCard : String, idUser: Int, idOtherUser : Int): Observable<NetworkEvent>{
 
-        val exchangeData = ExchangeData(idUser, idOtherUser, idCard, null, 0, 0)
+        val exchangeData = ExchangeData(-1, idUser, idOtherUser, idCard, null, 0, 0)
 
         return service.addExchange(exchangeData)
                 .subscribeOn(Schedulers.io())
@@ -111,7 +111,7 @@ class CardsRepository(private val service: TESService){
                 .share()
     }
 
-    fun getExchange(idExchange: Int): Observable<Exchange>{
+    fun getExchange(idExchange: Int): Observable<ExchangeData>{
 
         return service.getExchange(idExchange)
                 .subscribeOn(Schedulers.io())
@@ -119,7 +119,7 @@ class CardsRepository(private val service: TESService){
                 .share()
     }
 
-    fun updateExchange(exchange: Exchange): Observable<NetworkEvent>{
+    fun updateExchange(exchange: ExchangeData): Observable<NetworkEvent>{
         return service.updateExchange(exchange)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

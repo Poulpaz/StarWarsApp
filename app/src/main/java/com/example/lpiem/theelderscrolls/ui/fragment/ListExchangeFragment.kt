@@ -65,15 +65,15 @@ class ListExchangeFragment: BaseFragment() {
                     NavHostFragment.findNavController(this).navigate(action)
                 },
                 { Timber.e(it) }
-        )
+        ).addTo(viewDisposable)
 
         adapter.refuseClickPublisher.subscribe(
                 {
                     val dialog = AlertDialog.Builder(requireContext())
                     dialog.setTitle(R.string.dialog_title_delete_exchange)
                             .setMessage(R.string.dialog_message_delete_exchange)
-                            .setNegativeButton(R.string.dialog_cancel_delete_exchange, { dialoginterface, i -> })
-                            .setPositiveButton(R.string.dialog_validate_delete_exchange) { dialoginterface, i ->
+                            .setNegativeButton(R.string.dialog_cancel_delete_exchange) { _, _ -> }
+                            .setPositiveButton(R.string.dialog_validate_delete_exchange) { _, _ ->
                                 viewModel.deleteExchange(it)
                             }.show()
                 },
@@ -84,11 +84,7 @@ class ListExchangeFragment: BaseFragment() {
     override fun onResume() {
         super.onResume()
         setDisplayListExchange(false)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        setDisplayListExchange(true)
+        viewModel.getListExchanges()
     }
 
 }

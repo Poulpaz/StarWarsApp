@@ -177,8 +177,8 @@ class ConnectionActivity : BaseActivity() {
                                     val dialog = AlertDialog.Builder(this)
                                     dialog.setTitle(R.string.tv_title_dialog_signup)
                                             .setMessage(R.string.tv_message_dialog_signup)
-                                            .setNegativeButton(R.string.b_cancel_dialog_signup, { dialoginterface, i -> })
-                                            .setPositiveButton(R.string.b_validate_dialog_signup) { dialoginterface, i ->
+                                            .setNegativeButton(R.string.b_cancel_dialog_signup) { _, _ -> }
+                                            .setPositiveButton(R.string.b_validate_dialog_signup) { _, _ ->
                                                 signUpWithFacebook(registerData)
                                             }.show()
                                 }

@@ -105,8 +105,8 @@ class ProfileFragment : BaseFragment(), DisconnectUserInterface {
         val dialog = AlertDialog.Builder(requireContext())
         dialog.setTitle(R.string.tv_title_dialog_logout)
                 .setMessage(R.string.tv_message_dialog_logout)
-                .setNegativeButton(R.string.b_cancel_dialog_logout) { _, i -> }
-                .setPositiveButton(R.string.b_validate_dialog_logout) { _, i ->
+                .setNegativeButton(R.string.b_cancel_dialog_logout) { _, _ -> }
+                .setPositiveButton(R.string.b_validate_dialog_logout) { _, _ ->
                     AccessToken.getCurrentAccessToken()?.let {
                         LoginManager.getInstance().logOut()
                         ConnectionActivity.start(activity as MainActivity)
