@@ -46,10 +46,10 @@ interface TESService {
     fun getExchanges(@Path("id") idUser: Int) : Flowable<List<ExchangeResponse>>
 
     @GET("exchange/{idExchange}")
-    fun getExchange(@Path("idExchange") idExchange: Int) : Observable<Exchange>
+    fun getExchange(@Path("idExchange") idExchange: Int) : Observable<ExchangeData>
 
     @PUT("updateExchange")
-    fun updateExchange(@Body exchange: Exchange) : Observable<BaseResponse>
+    fun updateExchange(@Body exchange: ExchangeData) : Observable<BaseResponse>
 
     @POST("addExchange")
     fun addExchange(@Body exchangeData: ExchangeData) : Observable<BaseResponse>

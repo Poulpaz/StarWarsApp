@@ -46,7 +46,7 @@ class SplashActivity : BaseActivity() {
                                         // Nothing
                                     }
                                     is NetworkEvent.Error -> {
-                                        onSignInStateError(it)
+                                        onSignInStateError()
                                     }
                                     is NetworkEvent.Success -> {
                                         onSignInStateSuccess()
@@ -63,7 +63,7 @@ class SplashActivity : BaseActivity() {
         startHome()
     }
 
-    private fun onSignInStateError(error: NetworkEvent.Error) {
+    private fun onSignInStateError() {
         AccessToken.getCurrentAccessToken()?.let {
             LoginManager.getInstance().logOut()
         }

@@ -6,14 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.adapter.ListCardAdapter
+import com.example.lpiem.theelderscrolls.adapter.ListCardBuyAdapter
 import com.example.lpiem.theelderscrolls.adapter.ListPlayersAdapter
 import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
 import com.example.lpiem.theelderscrolls.viewmodel.AddChatFragmentViewModel
 import com.example.lpiem.theelderscrolls.viewmodel.ListExchangeFragmentViewModel
 import io.reactivex.rxkotlin.addTo
+import kotlinx.android.synthetic.main.fragment_add_card_exchange.*
 import kotlinx.android.synthetic.main.fragment_add_chat.*
+import kotlinx.android.synthetic.main.fragment_buy_card.*
+import kotlinx.android.synthetic.main.fragment_exchange.*
 import org.kodein.di.generic.instance
 import timber.log.Timber
 
@@ -28,22 +33,24 @@ class AddCardExchangeFragment: BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_add_chat, container, false)
+        return inflater.inflate(R.layout.fragment_add_card_exchange, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setDisplayHomeAsUpEnabled(true)
         setDisplayBotomBarNavigation(false)
-        setTitleToolbar(getString(R.string.title_add_chat))
+        setTitleToolbar(getString(R.string.title_add_card_exchange))
 
         val idExchange = arguments?.let {
             AddCardExchangeFragmentArgs.fromBundle(it).exchange
         }
 
         val adapter = ListCardAdapter()
-        rv_players_fragment_add_chat.setItemAnimator(DefaultItemAnimator())
-        rv_players_fragment_add_chat.adapter = adapter
+        val mLayoutManager = GridLayoutManager(this.context, 2)
+        rv_cards_fragment_add_card_exchange.setLayoutManager(mLayoutManager)
+        rv_cards_fragment_add_card_exchange.setItemAnimator(DefaultItemAnimator())
+        rv_cards_fragment_add_card_exchange.adapter = adapter
 
         viewModel.userCardsList
                 .subscribe(
@@ -75,7 +82,7 @@ class AddCardExchangeFragment: BaseFragment() {
         adapter.cardsClickPublisher.subscribe(
                 {imageCard ->
                     idExchange?.let {
-                        if(imageCard.isNullOrEmpty()){
+                        if(!imageCard.isNullOrEmpty()){
                             viewModel.getExchange(it, imageCard)
                         } else {
                             viewModel.getExchange(it, null)
@@ -86,6 +93,11 @@ class AddCardExchangeFragment: BaseFragment() {
         ).addTo(viewDisposable)
 
         viewModel.getAllUsers()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setDisplayListExchange(false)
     }
 
 }
