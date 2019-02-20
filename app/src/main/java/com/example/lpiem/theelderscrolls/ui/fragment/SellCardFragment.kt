@@ -39,10 +39,13 @@ class SellCardFragment : BaseFragment() {
         rv_cards_sell_fragment.setItemAnimator(DefaultItemAnimator())
         rv_cards_sell_fragment.adapter = adapter
 
+        swiperefresh_fragment_sell.setOnRefreshListener { viewModel.getCardsForConnectedUser() }
+
         viewModel.userCardsList
                 .subscribe(
                         {
                             adapter.submitList(it)
+                            swiperefresh_fragment_sell.isRefreshing = false
                         },
                         { Timber.e(it) }
                 ).addTo(viewDisposable)

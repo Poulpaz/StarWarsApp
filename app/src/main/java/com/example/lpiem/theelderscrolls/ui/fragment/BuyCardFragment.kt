@@ -8,14 +8,9 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.lpiem.theelderscrolls.R
-import com.example.lpiem.theelderscrolls.adapter.ListCardAdapter
 import com.example.lpiem.theelderscrolls.adapter.ListCardBuyAdapter
-import com.example.lpiem.theelderscrolls.datasource.response.IdCardResponse
 import com.example.lpiem.theelderscrolls.model.Card
-import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
-import com.example.lpiem.theelderscrolls.utils.disposedBy
 import com.example.lpiem.theelderscrolls.viewmodel.HomeFragmentViewModel
-import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.addTo
@@ -55,7 +50,7 @@ class BuyCardFragment : BaseFragment() {
 
         viewModel.getCardsForConnectedUser()
 
-        swiperefrsh_fragment_buy.setOnRefreshListener { viewModel.getCardsForConnectedUser() }
+        swiperefresh_fragment_buy.setOnRefreshListener { viewModel.getCardsForConnectedUser() }
 
     }
 
@@ -67,7 +62,7 @@ class BuyCardFragment : BaseFragment() {
         rv_cards_buy_fragment.setItemAnimator(DefaultItemAnimator())
         rv_cards_buy_fragment.adapter = adapter
         adapter.submitList(shopCards)
-        swiperefrsh_fragment_buy.isRefreshing = false
+        swiperefresh_fragment_buy.isRefreshing = false
 
         adapter.cardsClickPublisher
                 .subscribe(
