@@ -24,7 +24,7 @@ class SplashActivity : BaseActivity() {
 
     companion object {
         const val TAG = "SPLASHACTIVITY"
-        const val DEFAULT_ANIMATION_DURATION = 5000
+        const val DEFAULT_ANIMATION_DURATION = 20000
         fun newInstance(): SplashActivity = SplashActivity()
     }
 
