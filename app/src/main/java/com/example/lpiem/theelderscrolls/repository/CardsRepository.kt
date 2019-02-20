@@ -2,6 +2,7 @@ package com.example.lpiem.theelderscrolls.repository
 
 import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
 import com.example.lpiem.theelderscrolls.datasource.TESService
+import com.example.lpiem.theelderscrolls.datasource.request.ExchangeActionData
 import com.example.lpiem.theelderscrolls.datasource.request.ExchangeData
 import com.example.lpiem.theelderscrolls.datasource.request.UserCardData
 import com.example.lpiem.theelderscrolls.datasource.response.ExchangeResponse
@@ -12,6 +13,7 @@ import com.example.lpiem.theelderscrolls.model.Exchange
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function4
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
@@ -63,6 +65,19 @@ class CardsRepository(private val service: TESService){
         val userCardData = UserCardData(idUser, idCard)
 
         return service.addUserCard(userCardData)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map<NetworkEvent> { NetworkEvent.Success }
+                .onErrorReturn { NetworkEvent.Error(it) }
+                .startWith(NetworkEvent.InProgress)
+                .share()
+    }
+
+    fun updateUserCard(idUser : Int, idNewCard : String?, idOldCard: String?) : Observable<NetworkEvent>{
+
+        val exchangeActionData = ExchangeActionData(idUser, idNewCard, idOldCard)
+
+        return service.updateUserCard(exchangeActionData)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map<NetworkEvent> { NetworkEvent.Success }
@@ -135,24 +150,10 @@ class CardsRepository(private val service: TESService){
 
     fun exchangeCards(exchange: ExchangeData): Observable<NetworkEvent>{
 
-        /*Observable.combineLatest(
-                deleteUserCard(exchange.idUser, exchange.cardUser),
-                deleteUserCard(exchange.idOtherUser, exchange.cardOtherUser),
-                addUserCard(exchange.idUser, exchange.cardOtherUser),
-                addUserCard(exchange.idOtherUser, exchange.cardUser),
-                Function4<NetworkEvent, NetworkEvent, NetworkEvent, NetworkEvent, <String, Int>> { t1, t2 -> Pair(t1, t2) })
-                .subscribe(
-                        { response ->
-                            if(response.first.isEmpty() || response.second == -1){
-                                valuesExchange = null
-                            } else {
-                                valuesExchange = Pair(response.first, response.second)
-                            }
-                        },
-                        { Timber.e(it) }
-                ).addTo(viewDisposable)*/
-
-        return service.updateExchange(exchange)
+        return Observable.combineLatest(
+                updateUserCard(exchange.idUser, exchange.cardOtherUser, exchange.cardUser),
+                updateUserCard(exchange.idOtherUser, exchange.cardUser, exchange.cardOtherUser),
+                BiFunction<NetworkEvent, NetworkEvent, Pair<NetworkEvent, NetworkEvent>> { t1, t2 -> Pair(t1, t2) })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map<NetworkEvent> { NetworkEvent.Success }

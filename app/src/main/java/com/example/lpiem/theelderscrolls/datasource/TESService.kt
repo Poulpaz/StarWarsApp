@@ -37,6 +37,9 @@ interface TESService {
     @POST("addNewUserCard")
     fun addUserCard(@Body userCard: UserCardData) : Observable<BaseResponse>
 
+    @PUT("updateUserCard")
+    fun updateUserCard(@Body exchangeActionData: ExchangeActionData) : Observable<NetworkEvent>
+
     @PUT("updateUser")
     fun updateUser(@Header("token") token: String?, @Body user: UserData) : Observable<BaseResponse>
 

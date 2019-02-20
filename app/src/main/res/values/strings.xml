@@ -39,6 +39,8 @@
     <string name="dialog_validate_delete_exchange">Oui</string>
     <string name="dialog_cancel_delete_exchange">Non</string>
     <string name="error_accept_exchange_empty_cards">Il manque au moins une carte pour l\'échange</string>
+    <string name="error_exchange_cards">Une erreur à eu lieu lors de l\'échange</string>
+    <string name="success_exchange_cards">Votre carte a été échangée avec succès</string>
 
     <!-- Battle Fragment -->
     <string name="b_batlle">Commencer le duel</string>

@@ -229,4 +229,10 @@ class MainActivity : BaseActivity() {
                 .let { if (it.popBackStack().not()) finish() }
                 .or { finish ()}
     }
+
+    override fun onResume() {
+        super.onResume()
+        displayDisconnectProfileButton(false)
+        displayListExchangeButton(false)
+    }
 }

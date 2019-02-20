@@ -119,6 +119,7 @@ class ProfileFragment : BaseFragment(), DisconnectUserInterface {
 
     override fun onResume() {
         super.onResume()
+        setDisplayDeconnexion(true)
         viewModel.getCardsForConnectedUser()
         viewModel.getConnectedUser()
     }

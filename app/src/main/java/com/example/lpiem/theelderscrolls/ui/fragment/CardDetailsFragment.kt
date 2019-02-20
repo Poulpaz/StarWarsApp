@@ -157,9 +157,4 @@ class CardDetailsFragment : BaseFragment() {
         super.onResume()
         setDisplayDeconnexion(false)
     }
-
-    override fun onPause() {
-        super.onPause()
-        setDisplayDeconnexion(true)
-    }
 }
