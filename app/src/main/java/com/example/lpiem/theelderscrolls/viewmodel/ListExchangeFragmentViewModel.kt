@@ -119,7 +119,7 @@ class ListExchangeFragmentViewModel(private val cardsRepository: CardsRepository
         cardsRepository.getExchange(idExchange)
                 .subscribe(
                         {
-                            if(it.cardUser.isNullOrEmpty() || it.cardOtherUser.isNullOrEmpty()){
+                            if(it.cardUser.isNullOrEmpty()|| it.cardOtherUser.isNullOrEmpty()){
                                 acceptExchangeState.onNext(R.string.error_accept_exchange_empty_cards)
                             } else {
                                 updateExchange(it, null, 1)

@@ -93,7 +93,7 @@ class CardsRepository(private val service: TESService){
 
     fun addExchange(idCard : String, idUser: Int, idOtherUser : Int): Observable<NetworkEvent>{
 
-        val exchangeData = ExchangeData(-1, idUser, idOtherUser, idCard, "null", 0, 0)
+        val exchangeData = ExchangeData(-1, idUser, idOtherUser, idCard, null, 0, 0)
 
         return service.addExchange(exchangeData)
                 .subscribeOn(Schedulers.io())
