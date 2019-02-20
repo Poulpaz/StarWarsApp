@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -24,6 +25,7 @@ import timber.log.Timber
 class ListExchangeFragment: BaseFragment() {
 
     private val viewModel: ListExchangeFragmentViewModel by instance(arg = this)
+    lateinit var adapter : ListExchangeAdapter
 
     companion object {
         const val TAG = "LISTEXCHANGEFRAGMENT"
@@ -41,20 +43,30 @@ class ListExchangeFragment: BaseFragment() {
         setDisplayBotomBarNavigation(false)
         setTitleToolbar(getString(R.string.title_list_exchange))
 
-        val adapter = ListExchangeAdapter(true)
+        adapter = ListExchangeAdapter(true)
         rv_list_fragment_list_exchange.setItemAnimator(DefaultItemAnimator())
         rv_list_fragment_list_exchange.adapter = adapter
+
+        swiperefresh_fragment_list_exchange.setOnRefreshListener { viewModel.getListExchanges() }
 
         viewModel.listExchange.subscribe(
                 {
                     adapter.submitList(it)
+                    swiperefresh_fragment_list_exchange.isRefreshing = false
+                },
+                { Timber.e(it) }
+        ).addTo(viewDisposable)
+
+        viewModel.acceptExchangeState.subscribe(
+                {
+                    Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
                 },
                 { Timber.e(it) }
         ).addTo(viewDisposable)
 
         adapter.acceptClickPublisher.subscribe(
                 {
-                    //TODO
+                   viewModel.acceptExchange(it)
                 },
                 { Timber.e(it) }
         ).addTo(viewDisposable)

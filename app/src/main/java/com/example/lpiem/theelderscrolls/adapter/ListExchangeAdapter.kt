@@ -40,7 +40,9 @@ class ListExchangeAdapter(private val isExchangeCreator : Boolean) : ListAdapter
                             .load(exchange.cardUser)
                             .placeholder(R.drawable.card_placeholder)
                             .into(itemView.iv_card1_item_list_exchange)
-                } else { itemView.b_card1_item_list_exchange.visibility = View.VISIBLE }
+                } else {
+                    itemView.b_card1_item_list_exchange.visibility = View.VISIBLE
+                }
                 exchange.cardOtherUser?.let {
                     Picasso.get()
                             .load(exchange.cardOtherUser)
@@ -54,6 +56,9 @@ class ListExchangeAdapter(private val isExchangeCreator : Boolean) : ListAdapter
                 }
                 itemView.b_card1_item_list_exchange.setOnClickListener {
                     addCardClickPublisher.onNext(exchange.idExchange)
+                }
+                itemView.b_accept_item_list_exchange.setOnClickListener {
+                    if(exchange.validUser == 0) acceptClickPublisher.onNext(exchange.idExchange)
                 }
             } else {
                 exchange.cardUser?.let {
@@ -73,12 +78,12 @@ class ListExchangeAdapter(private val isExchangeCreator : Boolean) : ListAdapter
                 } else{
                     itemView.b_accept_item_list_exchange.setImageResource(R.drawable.ic_accept)
                 }
+                itemView.b_accept_item_list_exchange.setOnClickListener {
+                    if(exchange.validOtherUser == 0) acceptClickPublisher.onNext(exchange.idExchange)
+                }
             }
 
             itemView.tv_name_player_item_list_exchange.text = exchange.firstname + " " + exchange.lastname
-            itemView.b_accept_item_list_exchange.setOnClickListener {
-                acceptClickPublisher.onNext(exchange.idExchange)
-            }
             itemView.b_refuse_item_list_exchange.setOnClickListener {
                 refuseClickPublisher.onNext(exchange.idExchange)
             }
@@ -90,18 +95,16 @@ class ListExchangeAdapter(private val isExchangeCreator : Boolean) : ListAdapter
                         .placeholder(R.drawable.ic_profile)
                         .into(itemView.iv_player_item_list_exchange)
             }
-
-            itemView.b_accept_item_list_exchange.isEnabled = !(exchange.cardUser.isNullOrEmpty() || exchange.cardOtherUser.isNullOrEmpty())
         }
     }
 
     class DiffCardCallback : DiffUtil.ItemCallback<Exchange>() {
         override fun areItemsTheSame(oldItem: Exchange, newItem: Exchange): Boolean {
-            return oldItem.idExchange == newItem.idExchange
+            return oldItem == newItem
         }
 
         override fun areContentsTheSame(oldItem: Exchange, newItem: Exchange): Boolean {
-            return oldItem.idExchange == newItem.idExchange
+            return oldItem == newItem
         }
     }
 }
