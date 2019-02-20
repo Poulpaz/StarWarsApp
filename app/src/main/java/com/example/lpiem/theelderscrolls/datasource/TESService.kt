@@ -60,4 +60,10 @@ interface TESService {
 
     @GET("messenger/conversation/{idUser}")
     fun getConversations(@Path("idUser") idUser: Int) : Flowable<List<ConversationResponse>>
+
+    @POST("messenger/newConversation")
+    fun createChat(@Body conversationData: ConversationData) : Observable<BaseResponse>
+
+    @DELETE("messenger/deleteConversation/{idConversation}")
+    fun deleteChat(@Path("idConversation") idConversation: Int) : Observable<BaseResponse>
 }
