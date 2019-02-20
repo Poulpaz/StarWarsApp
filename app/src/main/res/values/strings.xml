@@ -63,6 +63,12 @@
 
     <!-- Add Chat Fragment -->
     <string name="b_add_chat_fragment">Démarrer la conversation</string>
+    <string name="tv_add_chat">La conversation a été créée avec succès</string>
+
+    <!-- Chat List Fragment -->
+    <string name="tv_title_dialog_delete_chat">Suppression</string>
+    <string name="tv_message_dialog_delete_chat">Voulez-vous vraiment supprimer la conversation ?</string>
+    <string name="tv_delete_chat">La conversation a été supprimée avec succès</string>
 
     <!-- List Exchange Fragment -->
     <string name="tv_card1_fragment_list_exchange">Votre carte</string>
@@ -75,6 +81,8 @@
     <string name="tv_error_buy_card">Une erreur a eu lieu lors de l\'achat de la carte</string>
     <string name="tv_error_sell_card">Une erreur a eu lieu lors de la vente de la carte</string>
     <string name="tv_error_add_exchange">Une erreur a eu lieu lors de la création de l\'échange</string>
+    <string name="tv_error_add_chat">Une erreur a eu lieu lors de la création de la conversation</string>
+    <string name="tv_error_delete_chat">Une erreur a eu lieu lors de la suppression de la conversation</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
