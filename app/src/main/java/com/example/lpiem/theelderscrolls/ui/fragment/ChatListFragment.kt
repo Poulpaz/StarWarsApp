@@ -11,12 +11,17 @@ import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.adapter.ChatListAdapter
 import com.example.lpiem.theelderscrolls.adapter.ListCardAdapter
 import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
+import com.example.lpiem.theelderscrolls.viewmodel.ChatListFragmentViewModel
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_buy_card.*
 import kotlinx.android.synthetic.main.fragment_chat_list.*
+import org.kodein.di.direct
+import org.kodein.di.generic.instance
 import timber.log.Timber
 
 class ChatListFragment : BaseFragment() {
+
+    private val viewModel: ChatListFragmentViewModel by instance(arg = this)
 
     companion object {
         const val TAG = "CHATLISTFRAGMENT"
@@ -35,10 +40,17 @@ class ChatListFragment : BaseFragment() {
         setDisplayBotomBarNavigation(true)
 
         val adapter = ChatListAdapter()
-        rv_cards_fragment_chat_list.setItemAnimator(DefaultItemAnimator())
+        rv_cards_fragment_chat_list.itemAnimator = DefaultItemAnimator()
         rv_cards_fragment_chat_list.adapter = adapter
 
-        adapter.chatClickPublisher
+        viewModel.conversationList.subscribe(
+                {
+                    adapter.submitList(it)
+                },
+                { Timber.e(it) }
+        )
+
+        adapter.conversationClickPublisher
                 .subscribe(
                 {
                     val action = ChatListFragmentDirections.actionChatListFragmentToChatFragment(it)
@@ -47,11 +59,14 @@ class ChatListFragment : BaseFragment() {
                 { Timber.e(it) }
         ).addTo(viewDisposable)
 
-
         fab_fragment_chat_list.setOnClickListener {
             val action = ChatListFragmentDirections.actionChatListFragmentToAddChatFragment()
             NavHostFragment.findNavController(this).navigate(action)
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getConversationForConnectedUser()
+    }
 }
