@@ -9,6 +9,8 @@ import com.example.lpiem.theelderscrolls.viewmodel.HomeFragmentViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
 import org.kodein.di.generic.instance
 import com.example.lpiem.theelderscrolls.adapter.HomeViewPagerAdapter
+import com.example.lpiem.theelderscrolls.ui.activity.MainActivity
+import com.example.lpiem.theelderscrolls.ui.activity.ScannerQrCodeActivity
 
 
 class HomeFragment : BaseFragment() {
@@ -28,12 +30,13 @@ class HomeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupViewPager()
-
         setDisplayHomeAsUpEnabled(false)
         setDisplayBotomBarNavigation(true)
 
+        fab_fragment_home.setOnClickListener {
+            ScannerQrCodeActivity.start(activity as MainActivity)
+        }
     }
 
     private fun setupViewPager() {

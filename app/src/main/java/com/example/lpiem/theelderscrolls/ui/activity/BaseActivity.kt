@@ -26,6 +26,14 @@ abstract class BaseActivity : AppCompatActivity(), KodeinAware {
         rxDelegate.onActivityDestroy()
     }
 
+    protected fun setDisplayDeconnexion(value : Boolean) {
+        (this as MainActivity).displayDisconnectProfileButton(value)
+    }
+
+    protected fun setDisplayListExchange(value : Boolean) {
+        (this as MainActivity).displayListExchangeButton(value)
+    }
+
     protected fun lifecycle(event: RxLifecycleDelegate.ActivityEvent): Observable<RxLifecycleDelegate.ActivityEvent> {
         return rxDelegate.lifecycle(event)
     }

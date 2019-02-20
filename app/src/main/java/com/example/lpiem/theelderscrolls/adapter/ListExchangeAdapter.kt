@@ -36,12 +36,14 @@ class ListExchangeAdapter(private val isExchangeCreator : Boolean) : ListAdapter
             if(isExchangeCreator){
                 if(exchange.cardUser != null) {
                     itemView.b_card1_item_list_exchange.visibility = View.GONE
+                    itemView.iv_card1_item_list_exchange.visibility = View.VISIBLE
                     Picasso.get()
                             .load(exchange.cardUser)
                             .placeholder(R.drawable.card_placeholder)
                             .into(itemView.iv_card1_item_list_exchange)
                 } else {
                     itemView.b_card1_item_list_exchange.visibility = View.VISIBLE
+                    itemView.iv_card1_item_list_exchange.visibility = View.INVISIBLE
                 }
                 exchange.cardOtherUser?.let {
                     Picasso.get()

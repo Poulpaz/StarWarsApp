@@ -17,6 +17,7 @@ import io.reactivex.Flowable
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
 import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 
 class ListExchangeFragmentViewModel(private val cardsRepository: CardsRepository, private val userRepository: UserRepository) : BaseViewModel() {
@@ -26,7 +27,8 @@ class ListExchangeFragmentViewModel(private val cardsRepository: CardsRepository
 
     val deleteExchangeState: BehaviorSubject<NetworkEvent> = BehaviorSubject.createDefault(NetworkEvent.None)
     val addCardExchangeState: BehaviorSubject<NetworkEvent> = BehaviorSubject.createDefault(NetworkEvent.None)
-    val acceptExchangeState: BehaviorSubject<Int> = BehaviorSubject.create()
+    val exchangeState: PublishSubject<NetworkEvent> = PublishSubject.create()
+    val acceptExchangeState: PublishSubject<Int> = PublishSubject.create()
 
     fun getListExchanges(){
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
@@ -171,14 +173,21 @@ class ListExchangeFragmentViewModel(private val cardsRepository: CardsRepository
     }
 
     private fun exchangeCards(updateExchange: ExchangeData) {
-
+        cardsRepository.exchangeCards(updateExchange)
+                .subscribe(
+                        {
+                            exchangeState.onNext(it)
+                        },
+                        { Timber.e(it) },
+                        { deleteExchange(updateExchange.idExchange) }
+                ).disposedBy(disposeBag)
     }
 
     fun deleteExchange(idExchange : Int){
         cardsRepository.deleteExchange(idExchange)
                 .subscribe(
                         {
-                            deleteExchangeState.onNext(it)
+                            exchangeState.onNext(it)
                         },
                         { Timber.e(it) },
                         { getListExchanges() }

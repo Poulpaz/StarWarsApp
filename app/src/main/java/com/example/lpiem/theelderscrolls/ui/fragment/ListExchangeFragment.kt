@@ -1,6 +1,7 @@
 package com.example.lpiem.theelderscrolls.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.adapter.ListExchangeAdapter
 import com.example.lpiem.theelderscrolls.adapter.ListPlayersAdapter
+import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
 import com.example.lpiem.theelderscrolls.viewmodel.ExchangeFragmentViewModel
 import com.example.lpiem.theelderscrolls.viewmodel.ListExchangeFragmentViewModel
 import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
@@ -54,7 +56,10 @@ class ListExchangeFragment: BaseFragment() {
                     adapter.submitList(it)
                     swiperefresh_fragment_list_exchange.isRefreshing = false
                 },
-                { Timber.e(it) }
+                {
+                    Timber.e(it)
+                    swiperefresh_fragment_list_exchange.isRefreshing = false
+                }
         ).addTo(viewDisposable)
 
         viewModel.acceptExchangeState.subscribe(
@@ -88,6 +93,20 @@ class ListExchangeFragment: BaseFragment() {
                             .setPositiveButton(R.string.dialog_validate_delete_exchange) { _, _ ->
                                 viewModel.deleteExchange(it)
                             }.show()
+                },
+                { Timber.e(it) }
+        ).addTo(viewDisposable)
+
+        viewModel.exchangeState.subscribe(
+                {
+                    when (it) {
+                        is NetworkEvent.Error -> {
+                            Toast.makeText(context, getString(R.string.error_exchange_cards), Toast.LENGTH_LONG).show()
+                        }
+                        is NetworkEvent.Success -> {
+                            Toast.makeText(context, getString(R.string.success_exchange_cards), Toast.LENGTH_LONG).show()
+                        }
+                    }
                 },
                 { Timber.e(it) }
         ).addTo(viewDisposable)
