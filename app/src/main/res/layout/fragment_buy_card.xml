@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swiperefrsh_fragment_buy"
+        android:id="@+id/swiperefresh_fragment_buy"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
