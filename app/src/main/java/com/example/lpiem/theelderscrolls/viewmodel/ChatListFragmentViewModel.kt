@@ -2,6 +2,7 @@ package com.example.lpiem.theelderscrolls.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
 import com.example.lpiem.theelderscrolls.datasource.response.ConversationResponse
 import com.example.lpiem.theelderscrolls.model.Conversation
 import com.example.lpiem.theelderscrolls.model.User
@@ -16,6 +17,7 @@ import timber.log.Timber
 class ChatListFragmentViewModel(private val userRepository: UserRepository, private val conversationRepository: ConversationRepository) : BaseViewModel() {
 
     val conversationList: BehaviorSubject<List<Conversation>> = BehaviorSubject.create()
+    val deleteConversationState: BehaviorSubject<NetworkEvent> = BehaviorSubject.createDefault(NetworkEvent.None)
 
     fun getConversationForConnectedUser() {
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
@@ -57,6 +59,18 @@ class ChatListFragmentViewModel(private val userRepository: UserRepository, priv
         } else {
 
         }
+    }
+
+    fun deleteConversationItem(idConversation: Int) {
+        conversationRepository.deleteConversation(idConversation)
+                .subscribe(
+                        {
+                            deleteConversationState.onNext(it)
+                        },
+                        { Timber.e(it)},
+                        { getConversationForConnectedUser() }
+                )
+                .disposedBy(disposeBag)
     }
 
     class Factory(private val userRepository: UserRepository, private val conversationRepository: ConversationRepository) : ViewModelProvider.Factory {

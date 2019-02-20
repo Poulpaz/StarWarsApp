@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.item_chat_list.view.*
 class ChatListAdapter : ListAdapter<Conversation, ChatListAdapter.ChatViewHolder>(DiffCardCallback()) {
 
     val conversationClickPublisher: PublishSubject<Int> = PublishSubject.create()
+    val conversationLongClickPublisher: PublishSubject<Int> = PublishSubject.create()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_chat_list, parent, false)
@@ -42,6 +43,10 @@ class ChatListAdapter : ListAdapter<Conversation, ChatListAdapter.ChatViewHolder
         }
 
         private fun bindPositionClick(idConversation: Int) {
+            itemView.setOnLongClickListener {
+                conversationLongClickPublisher.onNext(idConversation)
+                true
+            }
             itemView.setOnClickListener {
                 conversationClickPublisher.onNext(idConversation)
             }
