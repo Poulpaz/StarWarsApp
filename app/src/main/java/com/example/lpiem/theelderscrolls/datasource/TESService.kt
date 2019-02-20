@@ -6,6 +6,7 @@ import com.example.lpiem.theelderscrolls.datasource.response.GetCardResponse
 import com.example.lpiem.theelderscrolls.datasource.response.IdCardResponse
 import com.example.lpiem.theelderscrolls.datasource.response.LogInResponse
 import com.example.lpiem.theelderscrolls.datasource.response.*
+import com.example.lpiem.theelderscrolls.model.Conversation
 import com.example.lpiem.theelderscrolls.model.Exchange
 import com.example.lpiem.theelderscrolls.model.RawCard
 import com.example.lpiem.theelderscrolls.model.User
@@ -56,4 +57,7 @@ interface TESService {
 
     @DELETE("deleteExchange/{idExchange}")
     fun deleteExchange(@Path("idExchange") idExchange: Int) : Observable<BaseResponse>
+
+    @GET("messenger/conversation/{idUser}")
+    fun getConversations(@Path("idUser") idUser: Int) : Flowable<List<ConversationResponse>>
 }
