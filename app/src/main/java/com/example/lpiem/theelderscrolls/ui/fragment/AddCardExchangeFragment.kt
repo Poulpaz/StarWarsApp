@@ -4,21 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.adapter.ListCardAdapter
-import com.example.lpiem.theelderscrolls.adapter.ListCardBuyAdapter
-import com.example.lpiem.theelderscrolls.adapter.ListPlayersAdapter
 import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
-import com.example.lpiem.theelderscrolls.viewmodel.AddChatFragmentViewModel
 import com.example.lpiem.theelderscrolls.viewmodel.ListExchangeFragmentViewModel
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_add_card_exchange.*
-import kotlinx.android.synthetic.main.fragment_add_chat.*
-import kotlinx.android.synthetic.main.fragment_buy_card.*
-import kotlinx.android.synthetic.main.fragment_exchange.*
 import org.kodein.di.generic.instance
 import timber.log.Timber
 
@@ -83,9 +76,9 @@ class AddCardExchangeFragment: BaseFragment() {
                 {imageCard ->
                     idExchange?.let {
                         if(!imageCard.isNullOrEmpty()){
-                            viewModel.getExchange(it, imageCard)
+                            viewModel.updatePicture(it, imageCard)
                         } else {
-                            viewModel.getExchange(it, null)
+                            viewModel.updatePicture(it, null)
                         }
                     }
                 },

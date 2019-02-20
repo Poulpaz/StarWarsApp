@@ -2,6 +2,7 @@ package com.example.lpiem.theelderscrolls.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
 import com.example.lpiem.theelderscrolls.datasource.request.ExchangeData
 import com.example.lpiem.theelderscrolls.model.Exchange
@@ -25,6 +26,7 @@ class ListExchangeFragmentViewModel(private val cardsRepository: CardsRepository
 
     val deleteExchangeState: BehaviorSubject<NetworkEvent> = BehaviorSubject.createDefault(NetworkEvent.None)
     val addCardExchangeState: BehaviorSubject<NetworkEvent> = BehaviorSubject.createDefault(NetworkEvent.None)
+    val acceptExchangeState: BehaviorSubject<Int> = BehaviorSubject.create()
 
     fun getListExchanges(){
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
@@ -100,11 +102,11 @@ class ListExchangeFragmentViewModel(private val cardsRepository: CardsRepository
         }
     }
 
-    fun getExchange(idExchange: Int, imageUrl: String?){
+    fun updatePicture(idExchange: Int, imageUrl: String?){
         cardsRepository.getExchange(idExchange)
                 .subscribe(
                         {
-                            updateExchange(it, imageUrl)
+                            updateExchange(it, imageUrl, null)
                         },
                         {
                             Timber.e(it)
@@ -113,27 +115,63 @@ class ListExchangeFragmentViewModel(private val cardsRepository: CardsRepository
                 .disposedBy(disposeBag)
     }
 
-    private fun updateExchange(exchange: ExchangeData, imageUrl: String?) {
+    fun acceptExchange(idExchange : Int){
+        cardsRepository.getExchange(idExchange)
+                .subscribe(
+                        {
+                            if(it.cardUser.isNullOrEmpty() || it.cardOtherUser.isNullOrEmpty()){
+                                acceptExchangeState.onNext(R.string.error_accept_exchange_empty_cards)
+                            } else {
+                                updateExchange(it, null, 1)
+                            }
+                        },
+                        {
+                            Timber.e(it)
+                        }
+                )
+                .disposedBy(disposeBag)
+    }
+
+    private fun updateExchange(exchange: ExchangeData, imageUrl: String?, validExchange: Int?) {
 
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
         if(idUser != null) {
             val updateExchange = exchange
-            if(updateExchange.idUser == idUser){
-                updateExchange.cardUser = imageUrl
-            } else {
-                updateExchange.cardOtherUser = imageUrl
+            imageUrl?.let {
+                if(updateExchange.idUser == idUser){
+                    updateExchange.cardUser = imageUrl
+                } else {
+                    updateExchange.cardOtherUser = imageUrl
+                }
+            }
+            validExchange?.let {
+                if(updateExchange.idUser == idUser){
+                    updateExchange.validUser = validExchange
+                } else {
+                    updateExchange.validOtherUser = validExchange
+                }
             }
             cardsRepository.updateExchange(updateExchange)
                     .subscribe(
                             {
                                 addCardExchangeState.onNext(it)
                             },
-                            { Timber.e(it) }
+                            { Timber.e(it) },
+                            { getListExchanges() }
                     )
                     .disposedBy(disposeBag)
+
+            if(updateExchange.validUser == 1 && updateExchange.validOtherUser == 1){
+                exchangeCards(updateExchange)
+            }
+
         } else {
 
         }
+    }
+
+    private fun exchangeCards(updateExchange: ExchangeData) {
+
     }
 
     fun deleteExchange(idExchange : Int){

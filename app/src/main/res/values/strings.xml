@@ -38,6 +38,10 @@
     <string name="dialog_message_delete_exchange">Voulez-vous vraiment supprimer cet échange ?</string>
     <string name="dialog_validate_delete_exchange">Oui</string>
     <string name="dialog_cancel_delete_exchange">Non</string>
+    <string name="error_accept_exchange_empty_cards">Il manque au moins une carte pour l\'échange</string>
+
+    <!-- Battle Fragment -->
+    <string name="b_batlle">Commencer le duel</string>
 
     <!-- Profile Fragment -->
     <string name="tv_title_dialog_logout">Deconnexion</string>

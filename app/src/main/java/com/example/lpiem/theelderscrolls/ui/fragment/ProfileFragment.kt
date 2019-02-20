@@ -78,8 +78,6 @@ class ProfileFragment : BaseFragment(), DisconnectUserInterface {
                         { Timber.e(it) }
                 ).addTo(viewDisposable)
 
-        viewModel.getCardsForConnectedUser()
-
     }
 
     private fun onConnectedUserChange(user: User?) {
@@ -117,6 +115,12 @@ class ProfileFragment : BaseFragment(), DisconnectUserInterface {
                         closeMainActivity()
                     }
                 }.show()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getCardsForConnectedUser()
+        viewModel.getConnectedUser()
     }
 }
 
