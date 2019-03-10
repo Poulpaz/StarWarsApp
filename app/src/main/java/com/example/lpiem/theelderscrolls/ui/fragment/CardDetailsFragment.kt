@@ -10,6 +10,8 @@ import androidx.core.content.ContextCompat
 import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
 import com.example.lpiem.theelderscrolls.model.Card
+import com.example.lpiem.theelderscrolls.ui.activity.GenerationQrCodeActivity
+import com.example.lpiem.theelderscrolls.ui.activity.MainActivity
 import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
 import com.example.lpiem.theelderscrolls.viewmodel.CardDetailsFragmentViewModel
 import com.google.android.material.chip.Chip
@@ -57,6 +59,12 @@ class CardDetailsFragment : BaseFragment() {
                 } else {
                     viewModel.buyCard()
                 }
+            }
+        }
+
+        fab_fragment_card_details.setOnClickListener {
+            idCard?.let {
+                GenerationQrCodeActivity.start(activity as MainActivity, it)
             }
         }
 

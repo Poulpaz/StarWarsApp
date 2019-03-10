@@ -19,7 +19,7 @@ buildscript {
             "picasso": "2.71828",
             "rxkotlin": "2.3.0",
             "rxandroid": "2.1.0",
-            "navigationVersion" : "1.0.0-beta02",
+            "navigationVersion" : "1.0.0-rc02",
             "rxrelay": "2.1.0",
             "timber": "4.7.1"
 
