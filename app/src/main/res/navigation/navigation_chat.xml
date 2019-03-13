@@ -46,7 +46,7 @@
         android:label="ChatFragment"
         tools:layout="@layout/fragment_chat">
         <argument
-            android:name="chat"
+            android:name="conversation"
             app:argType="integer" />
     </fragment>
 

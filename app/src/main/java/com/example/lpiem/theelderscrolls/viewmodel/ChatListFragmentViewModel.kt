@@ -12,12 +12,13 @@ import com.example.lpiem.theelderscrolls.utils.disposedBy
 import io.reactivex.Flowable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 
 class ChatListFragmentViewModel(private val userRepository: UserRepository, private val conversationRepository: ConversationRepository) : BaseViewModel() {
 
     val conversationList: BehaviorSubject<List<Conversation>> = BehaviorSubject.create()
-    val deleteConversationState: BehaviorSubject<NetworkEvent> = BehaviorSubject.createDefault(NetworkEvent.None)
+    val deleteConversationState: PublishSubject<NetworkEvent> = PublishSubject.create()
 
     fun getConversationForConnectedUser() {
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
