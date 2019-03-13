@@ -22,7 +22,7 @@ class BattleFragmentViewModel(private val cardsRepository: CardsRepository, priv
 
     fun getAllUsers() {
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
-        if (idUser != null) {
+        idUser?.let {
             userRepository.getAllUsers()
                     .subscribe(
                             {
@@ -32,14 +32,12 @@ class BattleFragmentViewModel(private val cardsRepository: CardsRepository, priv
                             { Timber.e(it) }
                     )
                     .disposedBy(disposeBag)
-        } else {
-
         }
     }
 
     fun getCardsForConnectedUser() {
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
-        if (idUser != null) {
+        idUser?.let {
             Flowable.combineLatest(
                     cardsRepository.fetchCards(),
                     cardsRepository.getUserCards(idUser),
@@ -55,8 +53,6 @@ class BattleFragmentViewModel(private val cardsRepository: CardsRepository, priv
                             },
                             { Timber.e(it) }
                     ).disposedBy(disposeBag)
-        } else {
-            //TODO
         }
     }
 

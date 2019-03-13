@@ -24,4 +24,15 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <TextView
+        android:id="@+id/tv_empty_list_exchange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Subtitle"
+        android:text="@string/empty_list_exchange"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

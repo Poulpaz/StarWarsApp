@@ -38,9 +38,7 @@ class ListPlayersAdapter(private val selectItem : Boolean) : ListAdapter<User, L
                     .transform(CircleTransform())
                     .placeholder(R.drawable.ic_profile)
                     .into(itemView.iv_item_player)
-            user.idUser?.let {
-                bindPositionClick(it)
-            }
+                bindPositionClick(user.idUser)
         }
 
         private fun bindPositionClick(idUser: Int) {

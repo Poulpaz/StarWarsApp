@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.NavHostFragment
 import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.viewmodel.HomeFragmentViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -13,7 +14,7 @@ import com.example.lpiem.theelderscrolls.ui.activity.MainActivity
 import com.example.lpiem.theelderscrolls.ui.activity.ScannerQrCodeActivity
 
 
-class HomeFragment : BaseFragment() {
+class HomeFragment : BaseFragment(), HomeInterface {
 
     private val viewModel: HomeFragmentViewModel by instance(arg = this)
 
@@ -35,7 +36,7 @@ class HomeFragment : BaseFragment() {
         setDisplayBotomBarNavigation(true)
 
         fab_fragment_home.setOnClickListener {
-            ScannerQrCodeActivity.start(activity as MainActivity)
+            (activity as MainActivity).requestCameraPermission()
         }
     }
 
@@ -47,4 +48,17 @@ class HomeFragment : BaseFragment() {
         tl_buy_sell_home_fragment.setupWithViewPager(vp_saved_searches_history)
     }
 
+    override fun onResume() {
+        super.onResume()
+        setTitleToolbar(getString(R.string.title_home))
+    }
+
+    override fun openCardDetails(idCard: String) {
+        val action = HomeFragmentDirections.actionMyHomeFragmentToCardDetailsFragment(idCard, 0)
+        NavHostFragment.findNavController(this).navigate(action)
+    }
+}
+
+interface HomeInterface{
+    fun openCardDetails(idCard: String)
 }

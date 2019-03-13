@@ -22,7 +22,7 @@ class ChatListFragmentViewModel(private val userRepository: UserRepository, priv
 
     fun getConversationForConnectedUser() {
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
-        if(idUser != null) {
+        idUser?.let {
             Flowable.combineLatest(
                     userRepository.getAllUsers(),
                     conversationRepository.fetchConversation(idUser),
@@ -57,8 +57,6 @@ class ChatListFragmentViewModel(private val userRepository: UserRepository, priv
                                 Timber.e(it)
                             }
                     ).disposedBy(disposeBag)
-        } else {
-
         }
     }
 

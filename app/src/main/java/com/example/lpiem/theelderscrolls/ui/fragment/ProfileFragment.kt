@@ -72,7 +72,7 @@ class ProfileFragment : BaseFragment(), DisconnectUserInterface {
         adapter.cardsClickPublisher
                 .subscribe(
                         {
-                            val action = ProfileFragmentDirections.actionMyProfileFragmentToCardDetailsFragment(it)
+                            val action = ProfileFragmentDirections.actionMyProfileFragmentToCardDetailsFragment(it, 1)
                             NavHostFragment.findNavController(this).navigate(action)
                         },
                         { Timber.e(it) }
@@ -119,7 +119,6 @@ class ProfileFragment : BaseFragment(), DisconnectUserInterface {
 
     override fun onResume() {
         super.onResume()
-        setDisplayDeconnexion(true)
         viewModel.getCardsForConnectedUser()
         viewModel.getConnectedUser()
     }

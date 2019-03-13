@@ -25,14 +25,13 @@ class ListExchangeFragmentViewModel(private val cardsRepository: CardsRepository
     val listExchange: BehaviorSubject<List<Exchange>> = BehaviorSubject.create()
     val userCardsList: BehaviorSubject<List<Card>> = BehaviorSubject.create()
 
-    val deleteExchangeState: BehaviorSubject<NetworkEvent> = BehaviorSubject.createDefault(NetworkEvent.None)
     val addCardExchangeState: BehaviorSubject<NetworkEvent> = BehaviorSubject.createDefault(NetworkEvent.None)
     val exchangeState: PublishSubject<NetworkEvent> = PublishSubject.create()
     val acceptExchangeState: PublishSubject<Int> = PublishSubject.create()
 
     fun getListExchanges(){
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
-        if(idUser != null) {
+        idUser?.let {
             Flowable.combineLatest(
                     userRepository.getAllUsers(),
                     cardsRepository.getExchanges(idUser),
@@ -76,14 +75,12 @@ class ListExchangeFragmentViewModel(private val cardsRepository: CardsRepository
                             },
                             { Timber.e(it) }
                     ).disposedBy(disposeBag)
-        } else {
-
         }
     }
 
     fun getAllUsers(){
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
-        if(idUser != null) {
+        idUser?.let {
             Flowable.combineLatest(
                     cardsRepository.fetchCards(),
                     cardsRepository.getUserCards(idUser),
@@ -99,8 +96,6 @@ class ListExchangeFragmentViewModel(private val cardsRepository: CardsRepository
                             },
                             { Timber.e(it) }
                     ).disposedBy(disposeBag)
-        } else {
-
         }
     }
 
@@ -137,7 +132,7 @@ class ListExchangeFragmentViewModel(private val cardsRepository: CardsRepository
     private fun updateExchange(exchange: ExchangeData, imageUrl: String?, validExchange: Int?) {
 
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
-        if(idUser != null) {
+        idUser?.let {
             val updateExchange = exchange
             imageUrl?.let {
                 if(updateExchange.idUser == idUser){
@@ -166,9 +161,6 @@ class ListExchangeFragmentViewModel(private val cardsRepository: CardsRepository
             if(updateExchange.validUser == 1 && updateExchange.validOtherUser == 1){
                 exchangeCards(updateExchange)
             }
-
-        } else {
-
         }
     }
 

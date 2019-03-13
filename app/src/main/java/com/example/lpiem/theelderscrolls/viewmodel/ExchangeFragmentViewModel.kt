@@ -20,9 +20,20 @@ class ExchangeFragmentViewModel(private val cardsRepository: CardsRepository, pr
     val usersList: BehaviorSubject<List<User>?> = BehaviorSubject.create()
     val exchangeState: BehaviorSubject<NetworkEvent> = BehaviorSubject.createDefault(NetworkEvent.None)
 
+    init {
+        userRepository.connectedUser.subscribe(
+                {
+                    getCardsForConnectedUser()
+                },
+                {
+                    Timber.e(it)
+                }
+        ).disposedBy(disposeBag)
+    }
+
     fun getAllUsers() {
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
-        if (idUser != null) {
+        idUser?.let {
             userRepository.getAllUsers()
                     .subscribe(
                             {
@@ -32,14 +43,12 @@ class ExchangeFragmentViewModel(private val cardsRepository: CardsRepository, pr
                             { Timber.e(it) }
                     )
                     .disposedBy(disposeBag)
-        } else {
-
         }
     }
 
     fun getCardsForConnectedUser() {
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
-        if (idUser != null) {
+        idUser?.let {
             Flowable.combineLatest(
                     cardsRepository.fetchCards(),
                     cardsRepository.getUserCards(idUser),
@@ -55,14 +64,12 @@ class ExchangeFragmentViewModel(private val cardsRepository: CardsRepository, pr
                             },
                             { Timber.e(it) }
                     ).disposedBy(disposeBag)
-        } else {
-            //TODO
         }
     }
 
     fun exchangeCards(idCard: String, idOtherUser: Int) {
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
-        if (idUser != null) {
+        idUser?.let {
             cardsRepository.addExchange(idCard, idUser, idOtherUser)
                     .subscribe(
                             {
@@ -75,8 +82,6 @@ class ExchangeFragmentViewModel(private val cardsRepository: CardsRepository, pr
                         exchangeState.onNext(NetworkEvent.None)
                     }
                     ).disposedBy(disposeBag)
-        } else {
-            //TODO
         }
     }
 

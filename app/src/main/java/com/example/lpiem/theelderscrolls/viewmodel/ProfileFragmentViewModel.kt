@@ -35,7 +35,7 @@ class ProfileFragmentViewModel(private val cardsRepository: CardsRepository, pri
 
     fun getCardsForConnectedUser() {
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
-        if(idUser != null) {
+        idUser?.let {
             Flowable.combineLatest(
                     cardsRepository.fetchCards(),
                     cardsRepository.getUserCards(idUser),
@@ -51,8 +51,6 @@ class ProfileFragmentViewModel(private val cardsRepository: CardsRepository, pri
                             },
                             { Timber.e(it) }
                     ).disposedBy(disposeBag)
-        } else {
-
         }
     }
 

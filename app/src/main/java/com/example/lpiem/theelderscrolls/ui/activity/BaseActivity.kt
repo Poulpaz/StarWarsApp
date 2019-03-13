@@ -1,15 +1,20 @@
 package com.example.lpiem.theelderscrolls.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
+import com.example.lpiem.theelderscrolls.manager.PermissionManager
 import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
 import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.closestKodein
+import org.kodein.di.generic.instance
 
 abstract class BaseActivity : AppCompatActivity(), KodeinAware {
 
     private val rxDelegate = RxLifecycleDelegate()
+    protected val viewDisposable: CompositeDisposable = CompositeDisposable()
     override val kodein by closestKodein()
+    protected val permissionManager: PermissionManager by instance()
 
     override fun onPause() {
         super.onPause()

@@ -68,7 +68,7 @@ class CardDetailsFragmentViewModel(private val cardsRepository: CardsRepository,
                             .subscribe(
                                     {
                                         buyCardState.onNext(it)
-                                        if(it is NetworkEvent.Success) {
+                                        if (it is NetworkEvent.Success) {
                                             updateUser(wallet - setButtonBuyState.value?.second!!)
                                             setButtonBuyState.onNext(Pair(true, sellingPrice))
                                         }
@@ -87,29 +87,31 @@ class CardDetailsFragmentViewModel(private val cardsRepository: CardsRepository,
     fun sellCard() {
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
         val wallet = userRepository.connectedUser.value?.toNullable()?.wallet
-        if (wallet != null && setButtonBuyState.value != null) {
-            if (setButtonBuyState.value?.first!!) {
-                if (idUser != null) {
-                    val sellingPrice = setButtonBuyState.value?.second!!
-
-                    cardsRepository.deleteUserCard(idUser, idCard)
-                            .subscribe(
-                                    {
-                                        sellCardState.onNext(it)
-                                        if(it is NetworkEvent.Success) {
-                                            updateUser(wallet + if(sellingPrice >= 2) 2 else sellingPrice)
-                                            setButtonBuyState.onNext(Pair(false, sellingPrice))
-                                        }
-                                    },
-                                    {
-                                        Timber.e(it)
-                                    }
-                            ).disposedBy(disposeBag)
-                } else {
-                    cardDetailsError.onNext(R.string.tv_error_sell_card)
-                }
+        if (wallet != null && setButtonBuyState.value != null && setButtonBuyState.value?.first!!) {
+            if (idUser != null) {
+                val sellingPrice = setButtonBuyState.value?.second!!
+                deleteUserCard(idUser, wallet, sellingPrice)
+            } else {
+                cardDetailsError.onNext(R.string.tv_error_sell_card)
             }
+
         }
+    }
+
+    private fun deleteUserCard(idUser: Int, wallet: Int, sellingPrice: Int) {
+        cardsRepository.deleteUserCard(idUser, idCard)
+                .subscribe(
+                        {
+                            sellCardState.onNext(it)
+                            if (it is NetworkEvent.Success) {
+                                updateUser(wallet + if (sellingPrice >= 2) 2 else sellingPrice)
+                                setButtonBuyState.onNext(Pair(false, sellingPrice))
+                            }
+                        },
+                        {
+                            Timber.e(it)
+                        }
+                ).disposedBy(disposeBag)
     }
 
     fun updateUser(wallet: Int) {
@@ -138,7 +140,7 @@ class CardDetailsFragmentViewModel(private val cardsRepository: CardsRepository,
 
     fun getCardDetails() {
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
-        if (idUser != null) {
+        idUser?.let {
             Flowable.combineLatest(
                     cardsRepository.loadCard(idCard),
                     cardsRepository.getUserCards(idUser),
@@ -154,8 +156,6 @@ class CardDetailsFragmentViewModel(private val cardsRepository: CardsRepository,
                             },
                             { Timber.e(it) }
                     ).disposedBy(disposeBag)
-        } else {
-
         }
     }
 

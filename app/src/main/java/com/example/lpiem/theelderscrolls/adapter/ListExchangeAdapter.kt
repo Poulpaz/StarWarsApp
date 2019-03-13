@@ -33,57 +33,7 @@ class ListExchangeAdapter(private val isExchangeCreator : Boolean) : ListAdapter
     inner class ExchangeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(exchange: Exchange) {
-            if(isExchangeCreator){
-                if(exchange.cardUser != null) {
-                    itemView.b_card1_item_list_exchange.visibility = View.GONE
-                    itemView.iv_card1_item_list_exchange.visibility = View.VISIBLE
-                    Picasso.get()
-                            .load(exchange.cardUser)
-                            .placeholder(R.drawable.card_placeholder)
-                            .into(itemView.iv_card1_item_list_exchange)
-                } else {
-                    itemView.b_card1_item_list_exchange.visibility = View.VISIBLE
-                    itemView.iv_card1_item_list_exchange.visibility = View.INVISIBLE
-                }
-                exchange.cardOtherUser?.let {
-                    Picasso.get()
-                            .load(exchange.cardOtherUser)
-                            .placeholder(R.drawable.card_placeholder)
-                            .into(itemView.iv_card2_item_list_exchange)
-                }
-                if(exchange.validUser == 1){
-                    itemView.b_accept_item_list_exchange.setImageResource(R.drawable.ic_accept_checked)
-                } else{
-                    itemView.b_accept_item_list_exchange.setImageResource(R.drawable.ic_accept)
-                }
-                itemView.b_card1_item_list_exchange.setOnClickListener {
-                    addCardClickPublisher.onNext(exchange.idExchange)
-                }
-                itemView.b_accept_item_list_exchange.setOnClickListener {
-                    if(exchange.validUser == 0) acceptClickPublisher.onNext(exchange.idExchange)
-                }
-            } else {
-                exchange.cardUser?.let {
-                    Picasso.get()
-                            .load(exchange.cardOtherUser)
-                            .placeholder(R.drawable.card_placeholder)
-                            .into(itemView.iv_card2_item_list_exchange)
-                }
-                exchange.cardOtherUser?.let {
-                    Picasso.get()
-                            .load(exchange.cardUser)
-                            .placeholder(R.drawable.card_placeholder)
-                            .into(itemView.iv_card1_item_list_exchange)
-                }
-                if(exchange.validOtherUser == 1){
-                    itemView.b_accept_item_list_exchange.setImageResource(R.drawable.ic_accept_checked)
-                } else{
-                    itemView.b_accept_item_list_exchange.setImageResource(R.drawable.ic_accept)
-                }
-                itemView.b_accept_item_list_exchange.setOnClickListener {
-                    if(exchange.validOtherUser == 0) acceptClickPublisher.onNext(exchange.idExchange)
-                }
-            }
+            if(isExchangeCreator)createCreatorExchange(exchange) else createOtherExchange(exchange)
 
             itemView.tv_name_player_item_list_exchange.text = exchange.firstname + " " + exchange.lastname
             itemView.b_refuse_item_list_exchange.setOnClickListener {
@@ -96,6 +46,60 @@ class ListExchangeAdapter(private val isExchangeCreator : Boolean) : ListAdapter
                         .transform(CircleTransform())
                         .placeholder(R.drawable.ic_profile)
                         .into(itemView.iv_player_item_list_exchange)
+            }
+        }
+
+        private fun createOtherExchange(exchange: Exchange) {
+            exchange.cardUser?.let {
+                Picasso.get()
+                        .load(exchange.cardOtherUser)
+                        .placeholder(R.drawable.card_placeholder)
+                        .into(itemView.iv_card2_item_list_exchange)
+            }
+            exchange.cardOtherUser?.let {
+                Picasso.get()
+                        .load(exchange.cardUser)
+                        .placeholder(R.drawable.card_placeholder)
+                        .into(itemView.iv_card1_item_list_exchange)
+            }
+            if (exchange.validOtherUser == 1) {
+                itemView.b_accept_item_list_exchange.setImageResource(R.drawable.ic_accept_checked)
+            } else {
+                itemView.b_accept_item_list_exchange.setImageResource(R.drawable.ic_accept)
+            }
+            itemView.b_accept_item_list_exchange.setOnClickListener {
+                if (exchange.validOtherUser == 0) acceptClickPublisher.onNext(exchange.idExchange)
+            }
+        }
+
+        private fun createCreatorExchange(exchange: Exchange) {
+            if (exchange.cardUser != null) {
+                itemView.b_card1_item_list_exchange.visibility = View.GONE
+                itemView.iv_card1_item_list_exchange.visibility = View.VISIBLE
+                Picasso.get()
+                        .load(exchange.cardUser)
+                        .placeholder(R.drawable.card_placeholder)
+                        .into(itemView.iv_card1_item_list_exchange)
+            } else {
+                itemView.b_card1_item_list_exchange.visibility = View.VISIBLE
+                itemView.iv_card1_item_list_exchange.visibility = View.INVISIBLE
+            }
+            exchange.cardOtherUser?.let {
+                Picasso.get()
+                        .load(exchange.cardOtherUser)
+                        .placeholder(R.drawable.card_placeholder)
+                        .into(itemView.iv_card2_item_list_exchange)
+            }
+            if (exchange.validUser == 1) {
+                itemView.b_accept_item_list_exchange.setImageResource(R.drawable.ic_accept_checked)
+            } else {
+                itemView.b_accept_item_list_exchange.setImageResource(R.drawable.ic_accept)
+            }
+            itemView.b_card1_item_list_exchange.setOnClickListener {
+                addCardClickPublisher.onNext(exchange.idExchange)
+            }
+            itemView.b_accept_item_list_exchange.setOnClickListener {
+                if (exchange.validUser == 0) acceptClickPublisher.onNext(exchange.idExchange)
             }
         }
     }
