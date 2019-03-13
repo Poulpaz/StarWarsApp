@@ -98,9 +98,6 @@ class ExchangeFragment : BaseFragment(), ExchangeInterface{
                 }, { Timber.e(it) }
                 ).addTo(viewDisposable)
 
-        viewModel.getAllUsers()
-        viewModel.getCardsForConnectedUser()
-
         PublishSubject.combineLatest(
                 adapterCards.indexClickPublisher,
                 adapterPlayers.playersClickPublisher,
@@ -131,7 +128,6 @@ class ExchangeFragment : BaseFragment(), ExchangeInterface{
 
     override fun onResume() {
         super.onResume()
-        setDisplayListExchange(true)
         viewModel.getAllUsers()
         viewModel.getCardsForConnectedUser()
     }

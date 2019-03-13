@@ -12,6 +12,8 @@
     <string name="title_add_card_exchange">Choisir une carte</string>
     <string name="title_battle">Combat</string>
     <string name="title_list_exchange">Liste de vos échanges</string>
+    <string name="title_qr_code">CODE QR</string>
+    <string name="title_details_card">Détails d\'une carte</string>
 
     <!-- Home Fragment -->
     <string name="ti_shop_home_fragment">Boutique</string>
@@ -74,6 +76,7 @@
     <string name="tv_card1_fragment_list_exchange">Votre carte</string>
     <string name="tv_card2_fragment_list_exchange">Carte de l\'adversaire</string>
     <string name="b_card_fragment_list_exchange">Choisir</string>
+    <string name="empty_list_exchange">Vous n\'avez pas d\'échanges</string>
 
     <!-- Error -->
     <string name="tv_error_login">Une erreur a eu lieu lors de la connexion</string>
@@ -83,6 +86,7 @@
     <string name="tv_error_add_exchange">Une erreur a eu lieu lors de la création de l\'échange</string>
     <string name="tv_error_add_chat">Une erreur a eu lieu lors de la création de la conversation</string>
     <string name="tv_error_delete_chat">Une erreur a eu lieu lors de la suppression de la conversation</string>
+    <string name="tv_error_add_card_exchange">Une erreur a eu lieu lors du choix de la carte</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

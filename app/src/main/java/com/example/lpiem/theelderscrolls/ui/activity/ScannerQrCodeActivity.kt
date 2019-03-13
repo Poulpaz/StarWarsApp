@@ -7,15 +7,21 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.Result
 import me.dm7.barcodescanner.core.BarcodeScannerView
 import me.dm7.barcodescanner.zxing.ZXingScannerView
+import android.app.Activity
+
+
 
 class ScannerQrCodeActivity: BaseActivity(), ZXingScannerView.ResultHandler {
 
     private lateinit var mScannerView: ZXingScannerView
 
     companion object {
+        val QrCodeRequestCode = 10
+        val QrCodeKey = "QrCodeResponse"
+
         fun start(fromActivity: AppCompatActivity) {
-            fromActivity.startActivity(
-                    Intent(fromActivity, ScannerQrCodeActivity::class.java)
+            fromActivity.startActivityForResult(
+                    Intent(fromActivity, ScannerQrCodeActivity::class.java), QrCodeRequestCode
             )
         }
     }
@@ -24,17 +30,19 @@ class ScannerQrCodeActivity: BaseActivity(), ZXingScannerView.ResultHandler {
         super.onCreate(savedInstanceState)
         mScannerView = ZXingScannerView(this)
         setContentView(mScannerView)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun handleResult(result: Result?) {
-        Toast.makeText(this, result?.text, Toast.LENGTH_SHORT).show()
-        //Camera will stop after scanning result, so we need to resume the
-        //preview in order scan more codes
-        mScannerView.resumeCameraPreview(this)
+        val resultIntent = Intent()
+        resultIntent.putExtra(QrCodeKey, result?.text)
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish()
     }
 
     override fun onResume() {
         super.onResume()
+        mScannerView.setResultHandler(this)
         mScannerView.startCamera()
     }
 

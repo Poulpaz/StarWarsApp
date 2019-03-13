@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.adapter.ListCardBuyAdapter
+import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
 import com.example.lpiem.theelderscrolls.model.Card
 import com.example.lpiem.theelderscrolls.viewmodel.HomeFragmentViewModel
 import io.reactivex.Observable
@@ -52,6 +53,19 @@ class BuyCardFragment : BaseFragment() {
 
         swiperefresh_fragment_buy.setOnRefreshListener { viewModel.getCardsForConnectedUser() }
 
+        viewModel.shopState.subscribe(
+                {
+                    when(it){
+                        NetworkEvent.InProgress -> progress_bar_buy_fragment.visibility = View.VISIBLE
+                        NetworkEvent.Success -> progress_bar_buy_fragment.visibility = View.INVISIBLE
+                        is NetworkEvent.Error -> progress_bar_buy_fragment.visibility = View.INVISIBLE
+                    }
+                },
+                {
+                    Timber.e(it)
+                }
+        ).addTo(viewDisposable)
+
     }
 
     private fun initAdapter(shopCards: List<Card>, userCards: List<Card>) {
@@ -67,7 +81,7 @@ class BuyCardFragment : BaseFragment() {
         adapter.cardsClickPublisher
                 .subscribe(
                         {
-                            val action = HomeFragmentDirections.actionMyHomeFragmentToCardDetailsFragment(it)
+                            val action = HomeFragmentDirections.actionMyHomeFragmentToCardDetailsFragment(it, 0)
                             NavHostFragment.findNavController(this).navigate(action)
                         },
                         { Timber.e(it) }

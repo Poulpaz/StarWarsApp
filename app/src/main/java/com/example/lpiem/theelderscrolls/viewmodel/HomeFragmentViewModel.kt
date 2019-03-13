@@ -2,6 +2,7 @@ package com.example.lpiem.theelderscrolls.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
 import com.example.lpiem.theelderscrolls.datasource.response.IdCardResponse
 import com.example.lpiem.theelderscrolls.model.Card
 import com.example.lpiem.theelderscrolls.repository.CardsRepository
@@ -16,10 +17,12 @@ class HomeFragmentViewModel(private val cardsRepository: CardsRepository, privat
 
     val cardsList: BehaviorSubject<List<Card>> = BehaviorSubject.create()
     val userCardsList: BehaviorSubject<List<Card>> = BehaviorSubject.create()
+    val shopState: BehaviorSubject<NetworkEvent> = BehaviorSubject.createDefault(NetworkEvent.None)
 
     fun getCardsForConnectedUser() {
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
-        if(idUser != null) {
+        idUser?.let {
+            shopState.onNext(NetworkEvent.InProgress)
             Flowable.combineLatest(
                     cardsRepository.fetchCards(),
                     cardsRepository.getUserCards(idUser),
@@ -33,11 +36,11 @@ class HomeFragmentViewModel(private val cardsRepository: CardsRepository, privat
                                 }.filterNotNull()
                                 cardsList.onNext(response.first)
                                 userCardsList.onNext(listCard)
+                                shopState.onNext(NetworkEvent.Success)
                             },
-                            { Timber.e(it) }
+                            { Timber.e(it)
+                            shopState.onNext(NetworkEvent.Error(it))}
                     ).disposedBy(disposeBag)
-        } else {
-
         }
     }
 

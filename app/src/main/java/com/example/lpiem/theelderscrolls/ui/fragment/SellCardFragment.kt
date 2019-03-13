@@ -53,7 +53,7 @@ class SellCardFragment : BaseFragment() {
         adapter.cardsClickPublisher
                 .subscribe(
                         {
-                            val action = HomeFragmentDirections.actionMyHomeFragmentToCardDetailsFragment(it)
+                            val action = HomeFragmentDirections.actionMyHomeFragmentToCardDetailsFragment(it, 0)
 
                             NavHostFragment.findNavController(this).navigate(action)
                         },

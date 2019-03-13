@@ -53,7 +53,14 @@ class ListExchangeFragment: BaseFragment() {
 
         viewModel.listExchange.subscribe(
                 {
-                    adapter.submitList(it)
+                    if(it.isEmpty()){
+                        rv_list_fragment_list_exchange.visibility = View.GONE
+                        tv_empty_list_exchange.visibility = View.VISIBLE
+                    } else {
+                        adapter.submitList(it)
+                        rv_list_fragment_list_exchange.visibility = View.VISIBLE
+                        tv_empty_list_exchange.visibility = View.GONE
+                    }
                     swiperefresh_fragment_list_exchange.isRefreshing = false
                 },
                 {
@@ -116,6 +123,11 @@ class ListExchangeFragment: BaseFragment() {
         super.onResume()
         setDisplayListExchange(false)
         viewModel.getListExchanges()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        setDisplayListExchange(true)
     }
 
 }

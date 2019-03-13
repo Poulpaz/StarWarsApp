@@ -27,8 +27,8 @@ class ChatFragment: BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         setDisplayHomeAsUpEnabled(true)
         setDisplayBotomBarNavigation(false)
-
-
     }
+
+
 
 }

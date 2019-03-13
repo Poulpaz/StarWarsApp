@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.lpiem.theelderscrolls.R
@@ -60,10 +61,7 @@ class AddCardExchangeFragment: BaseFragment() {
                             fragmentManager?.popBackStack()
                         }
                         is NetworkEvent.Error -> {
-
-                        }
-                        is NetworkEvent.InProgress -> {
-
+                            Toast.makeText(activity, getString(R.string.tv_error_add_card_exchange), Toast.LENGTH_SHORT).show()
                         }
                     }
                 },

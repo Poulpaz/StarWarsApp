@@ -24,9 +24,7 @@ import java.util.*
 
 class CardsRepository(private val service: TESService){
 
-    val userCardsList: BehaviorSubject<List<Card>> = BehaviorSubject.create()
-
-    lateinit var cardsList: List<Card>
+    val shopList: BehaviorSubject<List<Card>> = BehaviorSubject.create()
 
     fun fetchCards(): Flowable<List<Card>> {
         val obs = service.getCards()
@@ -37,11 +35,10 @@ class CardsRepository(private val service: TESService){
 
         obs.subscribe(
                 {
-                    userCardsList.onNext(it)
-                    cardsList = it
+                    shopList.onNext(it)
                 },
                 { Timber.e(it)}
-        )
+        ).dispose()
 
         return obs
     }

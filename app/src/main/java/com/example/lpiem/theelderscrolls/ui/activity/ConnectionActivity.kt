@@ -12,6 +12,7 @@ import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
 import com.example.lpiem.theelderscrolls.datasource.request.RegisterData
 import com.example.lpiem.theelderscrolls.manager.GoogleConnectionManager
 import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
+import com.example.lpiem.theelderscrolls.utils.disposedBy
 import com.example.lpiem.theelderscrolls.viewmodel.ConnectionActivityViewModel
 import com.facebook.*
 import com.jakewharton.rxbinding2.view.clicks
@@ -52,19 +53,13 @@ class ConnectionActivity : BaseActivity() {
         FacebookSdk.sdkInitialize(applicationContext)
         AppEventsLogger.activateApp(this)
 
-        b_login_google.clicks()
-                .takeUntil(lifecycle(RxLifecycleDelegate.ActivityEvent.DESTROY))
-                .subscribe(
-                        { loginWithGoogle() },
-                        { Timber.e(it) }
-                )
+        b_login_google.setOnClickListener {
+            loginWithGoogle()
+        }
 
-        b_login_facebook.clicks()
-                .takeUntil(lifecycle(RxLifecycleDelegate.ActivityEvent.DESTROY))
-                .subscribe(
-                        { loginWithFacebook() },
-                        { Timber.e(it) }
-                )
+        b_login_facebook.setOnClickListener {
+            loginWithFacebook()
+        }
 
         viewModel.signInState
                 .takeUntil(lifecycle(RxLifecycleDelegate.ActivityEvent.DESTROY))
@@ -78,14 +73,14 @@ class ConnectionActivity : BaseActivity() {
                             onSignInStateInProgress()
                         }
                         is NetworkEvent.Error -> {
-                            onSignInStateError(it)
+                            onSignInStateError()
                         }
                         is NetworkEvent.Success -> {
                             onSignInStateSuccess()
                         }
                     }
                 }, { Timber.e(it) }
-        )
+        ).disposedBy(viewDisposable)
     }
 
     //region Facebook & Google
@@ -95,7 +90,7 @@ class ConnectionActivity : BaseActivity() {
         progress_bar_connection_activity.visibility = View.GONE
     }
 
-    private fun onSignInStateError(error: NetworkEvent.Error) {
+    private fun onSignInStateError() {
         AccessToken.getCurrentAccessToken()?.let {
             LoginManager.getInstance().logOut()
         }
@@ -113,7 +108,7 @@ class ConnectionActivity : BaseActivity() {
         progress_bar_connection_activity.visibility = View.GONE
     }
 
-    private fun onSignUpStateError(it: NetworkEvent.Error) {
+    private fun onSignUpStateError() {
         Toast.makeText(this, getString(R.string.tv_error_signup), Toast.LENGTH_SHORT).show()
         progress_bar_connection_activity.visibility = View.GONE
     }
@@ -140,28 +135,27 @@ class ConnectionActivity : BaseActivity() {
         LoginManager.getInstance().registerCallback(callbackManager,
                 object : FacebookCallback<LoginResult> {
                     override fun onSuccess(loginResult: LoginResult) {
-                        val token = loginResult.accessToken.token
-                        Log.d(TAG, "Facebook token: " + token)
                         signInUserWithFacebook(loginResult)
                     }
 
-                    override fun onCancel() {
-                        Log.d(TAG, "Facebook onCancel.")
-                    }
+                    override fun onCancel() {}
 
                     override fun onError(error: FacebookException) {
-                        Log.d(TAG, "Facebook onError.")
+                        displayErrorFacebook()
                     }
                 })
+    }
+
+    private fun displayErrorFacebook(){
+        Toast.makeText(this, getString(R.string.tv_error_signup), Toast.LENGTH_SHORT).show()
     }
 
     private fun signInUserWithFacebook(loginResult: LoginResult) {
         val request = GraphRequest.newMeRequest(
                 loginResult.accessToken
-        ) { `object`, response ->
+        ) { _, _ ->
 
             try {
-                Log.i("Response", response.toString())
 
                 val profile = Profile.getCurrentProfile()
 
@@ -184,7 +178,7 @@ class ConnectionActivity : BaseActivity() {
                                 }
                             },
                             { Timber.e(it) }
-                    )
+                    ).disposedBy(viewDisposable)
                     viewModel.signIn(id)
                 }
             } catch (e: JSONException) {
@@ -205,14 +199,14 @@ class ConnectionActivity : BaseActivity() {
                             onSignUpStateInProgress()
                         }
                         is NetworkEvent.Error -> {
-                            onSignUpStateError(it)
+                            onSignUpStateError()
                         }
                         is NetworkEvent.Success -> {
                             onSignUpStateSuccess(registerData.id)
                         }
                     }
                 }, { Timber.e(it) }
-        )
+        ).disposedBy(viewDisposable)
     }
 
     //region Google
@@ -248,14 +242,14 @@ class ConnectionActivity : BaseActivity() {
                                 val dialog = AlertDialog.Builder(this)
                                 dialog.setTitle(R.string.tv_title_dialog_signup)
                                         .setMessage(R.string.tv_message_dialog_signup)
-                                        .setNegativeButton(R.string.b_cancel_dialog_signup, { dialoginterface, i -> })
-                                        .setPositiveButton(R.string.b_validate_dialog_signup) { dialoginterface, i ->
+                                        .setNegativeButton(R.string.b_cancel_dialog_signup, { _, _ -> })
+                                        .setPositiveButton(R.string.b_validate_dialog_signup) { _, _ ->
                                             signUpWithFacebook(registerData)
                                         }.show()
                             }
                         },
                         { Timber.e(it) }
-                )
+                ).disposedBy(viewDisposable)
                 viewModel.signIn(id)
             }
         }

@@ -1,6 +1,8 @@
 package com.example.lpiem.theelderscrolls.ui.activity
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import me.dm7.barcodescanner.zxing.ZXingScannerView
@@ -23,9 +25,11 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.util.*
 import android.widget.Toast
-import android.R.attr.bitmap
+import androidx.core.content.ContextCompat
 import com.example.lpiem.theelderscrolls.R
+import com.example.lpiem.theelderscrolls.manager.PermissionManager
 import kotlinx.android.synthetic.main.activity_generation_qrcode.*
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class GenerationQrCodeActivity: BaseActivity() {
@@ -44,88 +48,47 @@ class GenerationQrCodeActivity: BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_generation_qrcode)
+        setSupportActionBar(toolbar_qrcode)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val idCard = intent.getStringExtra(ExtraCardId)
 
         try {
-            bitmap = TextToImageEncode(idCard)
+            bitmap = encodeAsBitmap(idCard)
             iv_qr_code.setImageBitmap(bitmap)
-            Toast.makeText(this, "QRCode saved", Toast.LENGTH_SHORT).show()
         } catch (e: WriterException) {
             e.printStackTrace()
         }
 
     }
 
-    fun saveImage(myBitmap: Bitmap): String {
-        val bytes = ByteArrayOutputStream()
-        myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
-        val wallpaperDirectory = File(
-                Environment.getExternalStorageDirectory(), IMAGE_DIRECTORY)
-        // have the object build the directory structure, if needed.
-
-        if (!wallpaperDirectory.exists()) {
-            Log.d("dirrrrrr", "" + wallpaperDirectory.mkdirs())
-            wallpaperDirectory.mkdirs()
-        }
-
+    fun encodeAsBitmap(str: String): Bitmap? {
+        val result: BitMatrix
         try {
-            val f = File(wallpaperDirectory, Calendar.getInstance()
-                    .getTimeInMillis().toString() + ".jpg")
-            f.createNewFile()   //give read write permission
-            val fo = FileOutputStream(f)
-            fo.write(bytes.toByteArray())
-            MediaScannerConnection.scanFile(this,
-                    arrayOf(f.getPath()),
-                    arrayOf("image/jpeg"), null)
-            fo.close()
-            Log.d("TAG", "File Saved::--->" + f.getAbsolutePath())
-
-            return f.getAbsolutePath()
-        } catch (e1: IOException) {
-            e1.printStackTrace()
-        }
-
-        return ""
-
-    }
-
-    @Throws(WriterException::class)
-    private fun TextToImageEncode(Value: String): Bitmap? {
-        val bitMatrix: BitMatrix
-        try {
-            bitMatrix = MultiFormatWriter().encode(
-                    Value,
-                    BarcodeFormat.DATA_MATRIX,
-                    QRcodeWidth, QRcodeWidth, null
-            )
-
-        } catch (Illegalargumentexception: IllegalArgumentException) {
-
+            result = MultiFormatWriter().encode(str,
+                    BarcodeFormat.QR_CODE, QRcodeWidth, QRcodeWidth, null)
+        } catch (iae: IllegalArgumentException) {
+            // Unsupported format
             return null
         }
 
-        val bitMatrixWidth = bitMatrix.width
-
-        val bitMatrixHeight = bitMatrix.height
-
-        val pixels = IntArray(bitMatrixWidth * bitMatrixHeight)
-
-        for (y in 0 until bitMatrixHeight) {
-            val offset = y * bitMatrixWidth
-
-            for (x in 0 until bitMatrixWidth) {
-
-                pixels[offset + x] = if (bitMatrix.get(x, y))
-                    resources.getColor(R.color.black)
-                else
-                    resources.getColor(R.color.white)
+        val w = result.width
+        val h = result.height
+        val pixels = IntArray(w * h)
+        for (y in 0 until h) {
+            val offset = y * w
+            for (x in 0 until w) {
+                pixels[offset + x] = if (result.get(x, y)) ContextCompat.getColor(this, R.color.black) else ContextCompat.getColor(this, R.color.white)
             }
         }
-        val bitmap = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_4444)
-
-        bitmap.setPixels(pixels, 0, 500, 0, 0, bitMatrixWidth, bitMatrixHeight)
+        val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+        bitmap.setPixels(pixels, 0, QRcodeWidth, 0, 0, w, h)
         return bitmap
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
 }

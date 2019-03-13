@@ -1,7 +1,6 @@
 package com.example.lpiem.theelderscrolls.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,6 @@ import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
 import com.example.lpiem.theelderscrolls.model.Card
 import com.example.lpiem.theelderscrolls.ui.activity.GenerationQrCodeActivity
 import com.example.lpiem.theelderscrolls.ui.activity.MainActivity
-import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
 import com.example.lpiem.theelderscrolls.viewmodel.CardDetailsFragmentViewModel
 import com.google.android.material.chip.Chip
 import com.squareup.picasso.Picasso
@@ -22,11 +20,11 @@ import org.kodein.di.direct
 import org.kodein.di.generic.M
 import org.kodein.di.generic.instance
 import timber.log.Timber
-import kotlin.math.cos
 
 class CardDetailsFragment : BaseFragment() {
 
     private lateinit var viewModel: CardDetailsFragmentViewModel
+    private var displayDeconnexion: Int? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -42,6 +40,11 @@ class CardDetailsFragment : BaseFragment() {
         val idCard = arguments?.let {
             CardDetailsFragmentArgs.fromBundle(it).card
         }
+
+        displayDeconnexion = arguments?.let {
+            CardDetailsFragmentArgs.fromBundle(it).displayDeconnexion
+        }
+
         viewModel = kodein.direct.instance(arg = M(this, idCard))
 
         viewModel.card
@@ -164,5 +167,14 @@ class CardDetailsFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         setDisplayDeconnexion(false)
+        setDisplayListExchange(false)
+        setTitleToolbar(getString(R.string.title_details_card))
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if(displayDeconnexion == 1){
+            setDisplayDeconnexion(true)
+        }
     }
 }

@@ -25,7 +25,7 @@ class AddChatFragmentViewModel(private val userRepository: UserRepository, priva
 
     fun getAllUsers(){
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
-        if(idUser != null) {
+        idUser?.let {
             userRepository.getAllUsers()
                     .subscribe(
                             {
@@ -35,8 +35,6 @@ class AddChatFragmentViewModel(private val userRepository: UserRepository, priva
                             { Timber.e(it) }
                     )
                     .disposedBy(disposeBag)
-        } else {
-
         }
     }
 
