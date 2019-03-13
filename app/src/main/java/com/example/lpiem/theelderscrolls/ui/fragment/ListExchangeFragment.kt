@@ -45,7 +45,7 @@ class ListExchangeFragment: BaseFragment() {
         setDisplayBotomBarNavigation(false)
         setTitleToolbar(getString(R.string.title_list_exchange))
 
-        adapter = ListExchangeAdapter(true)
+        adapter = ListExchangeAdapter()
         rv_list_fragment_list_exchange.setItemAnimator(DefaultItemAnimator())
         rv_list_fragment_list_exchange.adapter = adapter
 

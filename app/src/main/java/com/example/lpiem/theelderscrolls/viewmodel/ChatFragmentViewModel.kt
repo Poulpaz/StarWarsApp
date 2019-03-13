@@ -18,11 +18,17 @@ import timber.log.Timber
 class ChatFragmentViewModel(private val userRepository: UserRepository, private val conversationRepository: ConversationRepository, private val idConversation: Int) : BaseViewModel() {
 
     val messagesList: BehaviorSubject<List<Message>> = BehaviorSubject.create()
-    val sendedMessageState: PublishSubject<NetworkEvent> = PublishSubject.create()
+    val idUser: BehaviorSubject<Int> = BehaviorSubject.create()
+
+    init {
+        userRepository.connectedUser.value?.toNullable()?.idUser?.let {
+            idUser.onNext(it)
+        }
+    }
 
     fun getMessagesForCurrentConversation() {
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
-        if(idUser != null) {
+        idUser?.let {
             Flowable.combineLatest(
                     userRepository.getAllUsers(),
                     conversationRepository.fetchMessagesFromConversation(idConversation),
@@ -31,6 +37,7 @@ class ChatFragmentViewModel(private val userRepository: UserRepository, private 
                         response.second.map {message ->
                                 Message(
                                         message.idMessage,
+                                        message.idUserMessage,
                                         message.messageContent,
                                         message.sendDate,
                                         response.first.find { it.idUser == message.idUserMessage }?.firstname,
@@ -47,8 +54,6 @@ class ChatFragmentViewModel(private val userRepository: UserRepository, private 
                                 Timber.e(it)
                             }
                     ).disposedBy(disposeBag)
-        } else {
-
         }
     }
 

@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DefaultItemAnimator
 import com.example.lpiem.theelderscrolls.R
-import com.example.lpiem.theelderscrolls.adapter.ItemChatListAdapter
+import com.example.lpiem.theelderscrolls.adapter.ChatAdapter
 import com.example.lpiem.theelderscrolls.viewmodel.ChatFragmentViewModel
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_chat.*
@@ -34,14 +34,26 @@ class ChatFragment: BaseFragment() {
         setDisplayHomeAsUpEnabled(true)
         setDisplayBotomBarNavigation(false)
 
-        val adapter = ItemChatListAdapter()
-        rv_chat_fragment.itemAnimator = DefaultItemAnimator()
-        rv_chat_fragment.adapter = adapter
-
         val idConversation = arguments?.let {
             ChatFragmentArgs.fromBundle(it).conversation
         }
         viewModel = kodein.direct.instance(arg = M(this, idConversation))
+
+        viewModel.idUser.subscribe(
+                {
+                    initAdapter(it)
+                },
+                {
+                    Timber.e(it)
+                }
+        ).addTo(viewDisposable)
+
+    }
+
+    private fun initAdapter(idUser: Int){
+        val adapter = ChatAdapter(idUser, context!!)
+        rv_chat_fragment.itemAnimator = DefaultItemAnimator()
+        rv_chat_fragment.adapter = adapter
 
         viewModel.messagesList.subscribe(
                 {
@@ -52,16 +64,6 @@ class ChatFragment: BaseFragment() {
                     Timber.e(it)
                 }
         ).addTo(viewDisposable)
-
-        adapter.messageClickPublisher
-                .subscribe(
-                        {
-
-                        },
-                        {
-                            Timber.e(it)
-                        }
-                ).addTo(viewDisposable)
     }
 
     override fun onResume() {

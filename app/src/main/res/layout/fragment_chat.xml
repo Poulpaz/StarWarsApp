@@ -9,11 +9,12 @@
         android:id="@+id/rv_chat_fragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/view_chat_fragment"
-        tools:listitem="@layout/item_chat"/>
+        tools:listitem="@layout/item_chat_user"/>
 
     <View
         android:id="@+id/view_chat_fragment"
