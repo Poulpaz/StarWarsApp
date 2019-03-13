@@ -50,8 +50,6 @@ class HomeFragment : BaseFragment(), HomeInterface {
 
     override fun onResume() {
         super.onResume()
-        setDisplayDeconnexion(false)
-        setDisplayListExchange(false)
         setTitleToolbar(getString(R.string.title_home))
     }
 

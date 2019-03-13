@@ -166,8 +166,6 @@ class CardDetailsFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        setDisplayDeconnexion(false)
-        setDisplayListExchange(false)
         setTitleToolbar(getString(R.string.title_details_card))
     }
 
