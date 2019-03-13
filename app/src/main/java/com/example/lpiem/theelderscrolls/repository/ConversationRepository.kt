@@ -4,6 +4,7 @@ import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
 import com.example.lpiem.theelderscrolls.datasource.TESService
 import com.example.lpiem.theelderscrolls.datasource.request.ConversationData
 import com.example.lpiem.theelderscrolls.datasource.response.ConversationResponse
+import com.example.lpiem.theelderscrolls.datasource.response.MessageResponse
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -37,6 +38,13 @@ class ConversationRepository(private val service: TESService) {
                 .map<NetworkEvent> { NetworkEvent.Success }
                 .onErrorReturn { NetworkEvent.Error(it) }
                 .startWith(NetworkEvent.InProgress)
+                .share()
+    }
+
+    fun fetchMessagesFromConversation(idConversation: Int): Flowable<List<MessageResponse>> {
+        return service.getMessagesFromConversation(idConversation)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .share()
     }
 }

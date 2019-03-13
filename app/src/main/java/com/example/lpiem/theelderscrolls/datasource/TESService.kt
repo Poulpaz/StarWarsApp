@@ -64,6 +64,9 @@ interface TESService {
     @GET("messenger/conversation/{idUser}")
     fun getConversations(@Path("idUser") idUser: Int) : Flowable<List<ConversationResponse>>
 
+    @GET("messenger/messages/{idConversation}")
+    fun getMessagesFromConversation(@Path("idConversation") idConversation: Int) : Flowable<List<MessageResponse>>
+
     @POST("messenger/newConversation")
     fun createChat(@Body conversationData: ConversationData) : Observable<BaseResponse>
 
