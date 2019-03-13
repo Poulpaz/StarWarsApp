@@ -45,6 +45,7 @@ class ChatListFragment : BaseFragment() {
 
         setDisplayHomeAsUpEnabled(false)
         setDisplayBotomBarNavigation(true)
+        setTitleToolbar(getString(R.string.title_chat))
 
         val adapter = ChatListAdapter()
         rv_cards_fragment_chat_list.itemAnimator = DefaultItemAnimator()

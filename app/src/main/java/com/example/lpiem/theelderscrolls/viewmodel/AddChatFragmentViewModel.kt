@@ -12,12 +12,13 @@ import com.example.lpiem.theelderscrolls.repository.UserRepository
 import com.example.lpiem.theelderscrolls.utils.disposedBy
 import io.reactivex.Flowable
 import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 
 class AddChatFragmentViewModel(private val userRepository: UserRepository, private val conversationRepository: ConversationRepository) : BaseViewModel() {
 
     val usersList: BehaviorSubject<List<User>?> = BehaviorSubject.create()
-    val createConversationState: BehaviorSubject<NetworkEvent> = BehaviorSubject.createDefault(NetworkEvent.None)
+    val createConversationState: PublishSubject<NetworkEvent> = PublishSubject.create()
 
     init {
         getAllUsers()
