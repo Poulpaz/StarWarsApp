@@ -61,11 +61,17 @@ interface TESService {
     @DELETE("deleteExchange/{idExchange}")
     fun deleteExchange(@Path("idExchange") idExchange: Int) : Observable<BaseResponse>
 
-    @GET("messenger/conversation/{idUser}")
-    fun getConversations(@Path("idUser") idUser: Int) : Flowable<List<ConversationResponse>>
-
     @GET("messenger/messages/{idConversation}")
     fun getMessagesFromConversation(@Path("idConversation") idConversation: Int) : Flowable<List<MessageResponse>>
+
+    @POST("messenger/messages/newMessage")
+    fun createMessage(@Body messageData: MessageData) : Observable<BaseResponse>
+
+    @DELETE("messenger/messages/deleteMessage/{idMessage}")
+    fun deleteMessage(@Path("idMessage") idMessage: Int) : Observable<BaseResponse>
+
+    @GET("messenger/conversation/{idUser}")
+    fun getConversations(@Path("idUser") idUser: Int) : Flowable<List<ConversationResponse>>
 
     @POST("messenger/newConversation")
     fun createChat(@Body conversationData: ConversationData) : Observable<BaseResponse>
