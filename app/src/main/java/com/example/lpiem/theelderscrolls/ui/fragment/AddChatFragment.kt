@@ -63,7 +63,7 @@ class AddChatFragment: BaseFragment() {
                 ).addTo(viewDisposable)
 
         b_valid_user_for_chat.setOnClickListener {
-            viewModel.createChatWithUser(idOtherUser)
+            if(idOtherUser != -1) { viewModel.createChatWithUser(idOtherUser) }
         }
 
         viewModel.createConversationState

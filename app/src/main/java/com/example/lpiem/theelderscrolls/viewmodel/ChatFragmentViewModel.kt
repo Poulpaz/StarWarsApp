@@ -19,6 +19,7 @@ class ChatFragmentViewModel(private val userRepository: UserRepository, private 
 
     val messagesList: BehaviorSubject<List<Message>> = BehaviorSubject.create()
     val idUser: BehaviorSubject<Int> = BehaviorSubject.create()
+    val sendMessageState: PublishSubject<NetworkEvent> = PublishSubject.create()
 
     init {
         userRepository.connectedUser.value?.toNullable()?.idUser?.let {
@@ -27,7 +28,6 @@ class ChatFragmentViewModel(private val userRepository: UserRepository, private 
     }
 
     fun getMessagesForCurrentConversation() {
-        val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
         idUser?.let {
             Flowable.combineLatest(
                     userRepository.getAllUsers(),
@@ -55,6 +55,21 @@ class ChatFragmentViewModel(private val userRepository: UserRepository, private 
                             }
                     ).disposedBy(disposeBag)
         }
+    }
+
+    fun sendMessage(idConversation: Int?, messageContent: String, sendDate: String) {
+        val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
+        if(idUser != null) {
+            conversationRepository.createMessage(idConversation, idUser, messageContent, sendDate)
+                    .subscribe(
+                            {
+                                sendMessageState.onNext(it)
+                            },
+                            { Timber.e(it)}
+                    )
+                    .disposedBy(disposeBag)
+        }
+
     }
 
     class Factory(private val userRepository: UserRepository, private val conversationRepository: ConversationRepository, private val idConversation: Int) : ViewModelProvider.Factory {

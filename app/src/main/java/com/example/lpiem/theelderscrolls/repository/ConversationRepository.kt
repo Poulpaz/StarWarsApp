@@ -49,7 +49,7 @@ class ConversationRepository(private val service: TESService) {
                 .share()
     }
 
-    fun createMessage(idConversation: Int, idUserMessage: Int, messageContent: String, sendDate: String) : Observable<NetworkEvent> {
+    fun createMessage(idConversation: Int?, idUserMessage: Int, messageContent: String, sendDate: String) : Observable<NetworkEvent> {
         val messageData = MessageData(idConversation, idUserMessage, messageContent, sendDate)
 
         return service.createMessage(messageData)
@@ -61,6 +61,7 @@ class ConversationRepository(private val service: TESService) {
                 .share()
     }
 
+    /*
     fun deleteMessage(idMessage: Int): Observable<NetworkEvent> {
         return service.deleteMessage(idMessage)
                 .subscribeOn(Schedulers.io())
@@ -70,4 +71,5 @@ class ConversationRepository(private val service: TESService) {
                 .startWith(NetworkEvent.InProgress)
                 .share()
     }
+    */
 }
