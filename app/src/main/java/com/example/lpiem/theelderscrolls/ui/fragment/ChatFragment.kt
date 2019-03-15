@@ -112,4 +112,9 @@ class ChatFragment: BaseFragment() {
         super.onResume()
         viewModel.getMessagesForCurrentConversation()
     }
+
+    override fun onStop() {
+        super.onStop()
+        view?.hideKeyboard()
+    }
 }
