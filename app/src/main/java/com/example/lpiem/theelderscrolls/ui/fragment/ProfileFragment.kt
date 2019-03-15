@@ -64,7 +64,14 @@ class ProfileFragment : BaseFragment(), DisconnectUserInterface {
         viewModel.userCardsList
                 .subscribe(
                         {
-                            adapter.submitList(it)
+                            if(it.isEmpty()){
+                                rv_cards_profile_fragment.visibility = View.INVISIBLE
+                                tv_no_user_cards_profile.visibility = View.VISIBLE
+                            } else {
+                                rv_cards_profile_fragment.visibility = View.VISIBLE
+                                tv_no_user_cards_profile.visibility = View.INVISIBLE
+                                adapter.submitList(it)
+                            }
                         },
                         { Timber.e(it) }
                 ).addTo(viewDisposable)

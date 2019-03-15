@@ -24,6 +24,7 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_exchange.*
+import kotlinx.android.synthetic.main.fragment_sell_card.*
 import org.kodein.di.direct
 import org.kodein.di.generic.instance
 import timber.log.Timber
@@ -66,7 +67,14 @@ class ExchangeFragment : BaseFragment(), ExchangeInterface{
         viewModel.userCardsList
                 .subscribe(
                         {
-                            adapterCards.submitList(it)
+                            if(it.isEmpty()){
+                                rv_cards_exchange_fragment.visibility = View.INVISIBLE
+                                tv_no_user_cards_exchange.visibility = View.VISIBLE
+                            } else {
+                                rv_cards_exchange_fragment.visibility = View.VISIBLE
+                                tv_no_user_cards_exchange.visibility = View.INVISIBLE
+                                adapterCards.submitList(it)
+                            }
                         },
                         { Timber.e(it) }
                 ).addTo(viewDisposable)

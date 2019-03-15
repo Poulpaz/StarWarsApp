@@ -22,6 +22,17 @@
             tools:listitem="@layout/item_card" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-    |
+
+    <TextView
+        android:id="@+id/tv_no_user_cards_sell_fragment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_no_user_cards"
+        android:layout_margin="16dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

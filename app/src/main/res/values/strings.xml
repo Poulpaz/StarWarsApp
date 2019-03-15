@@ -91,6 +91,7 @@
     <string name="tv_error_send_message">Une erreur a eu lieu lors de l\'envoie du message</string>
     <string name="tv_error_delete_chat">Une erreur a eu lieu lors de la suppression de la conversation</string>
     <string name="tv_error_add_card_exchange">Une erreur a eu lieu lors du choix de la carte</string>
+    <string name="tv_no_user_cards">Vous n\'avez pas de cartes. Achetez-en dans la boutique.</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

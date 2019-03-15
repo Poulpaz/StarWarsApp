@@ -16,7 +16,7 @@ import timber.log.Timber
 
 class ExchangeFragmentViewModel(private val cardsRepository: CardsRepository, private val userRepository: UserRepository) : BaseViewModel() {
 
-    val userCardsList: BehaviorSubject<List<Card>?> = BehaviorSubject.create()
+    val userCardsList: BehaviorSubject<List<Card>> = BehaviorSubject.create()
     val usersList: BehaviorSubject<List<User>?> = BehaviorSubject.create()
     val exchangeState: BehaviorSubject<NetworkEvent> = BehaviorSubject.createDefault(NetworkEvent.None)
 
