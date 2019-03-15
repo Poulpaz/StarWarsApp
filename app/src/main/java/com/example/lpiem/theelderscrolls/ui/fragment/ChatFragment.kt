@@ -18,6 +18,7 @@ import org.kodein.di.direct
 import org.kodein.di.generic.M
 import org.kodein.di.generic.instance
 import timber.log.Timber
+import java.net.URLEncoder
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -56,7 +57,7 @@ class ChatFragment: BaseFragment() {
         ).addTo(viewDisposable)
 
         iv_send_chat_fragment.setOnClickListener {
-            viewModel.sendMessage(idConversation, et_chat_fragment.text.toString(), getDateTime())
+            viewModel.sendMessage(idConversation, URLEncoder.encode(et_chat_fragment.text.toString(), "utf-8"), getDateTime())
             view.hideKeyboard()
         }
 
