@@ -53,7 +53,6 @@ class ChatAdapter(private val idUser: Int, private val context: Context): ListAd
             itemView.tv_name_chat_fragment.text = message.firstname + " " + message.lastname
             itemView.tv_date_user_chat_fragment.text = message.sendDate
             itemView.tv_date_other_user_chat_fragment.text = message.sendDate
-            //itemView.tv_message_chat_fragment.text = message.messageContent
             itemView.tv_message_chat_fragment.text = URLDecoder.decode(message.messageContent, "utf-8")
         }
     }
