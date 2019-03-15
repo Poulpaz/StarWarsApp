@@ -73,7 +73,6 @@ class ChatFragment: BaseFragment() {
                             Toast.makeText(activity, getString(R.string.tv_send_message), Toast.LENGTH_SHORT).show()
                             viewModel.getMessagesForCurrentConversation()
                             et_chat_fragment.text.clear()
-                            rv_chat_fragment.
                         }
                     }
 
