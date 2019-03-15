@@ -60,6 +60,8 @@ class ChatFragment: BaseFragment() {
             view.hideKeyboard()
         }
 
+        swiperefresh_fragment_chat.setOnRefreshListener { viewModel.getMessagesForCurrentConversation() }
+
         viewModel.sendMessageState
                 .subscribe({
 
@@ -69,7 +71,9 @@ class ChatFragment: BaseFragment() {
                         }
                         is NetworkEvent.Success -> {
                             Toast.makeText(activity, getString(R.string.tv_send_message), Toast.LENGTH_SHORT).show()
-                            fragmentManager?.popBackStack()
+                            viewModel.getMessagesForCurrentConversation()
+                            et_chat_fragment.text.clear()
+                            rv_chat_fragment.
                         }
                     }
 
@@ -85,7 +89,7 @@ class ChatFragment: BaseFragment() {
         viewModel.messagesList.subscribe(
                 {
                     adapter.submitList(it)
-                    Timber.d(it.toString())
+                    swiperefresh_fragment_chat.isRefreshing = false
                 },
                 {
                     Timber.e(it)
