@@ -93,6 +93,10 @@
     <string name="tv_error_add_card_exchange">Une erreur a eu lieu lors du choix de la carte</string>
     <string name="tv_no_user_cards">Vous n\'avez pas de cartes. Achetez-en dans la boutique.</string>
 
+    <!-- Firebase -->
+    <string name="default_notification_channel_id">Channel ID</string>
+    <string name="channelName">News</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

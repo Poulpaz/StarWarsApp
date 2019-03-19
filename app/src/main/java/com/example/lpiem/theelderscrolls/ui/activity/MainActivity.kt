@@ -20,9 +20,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 import com.facebook.AccessToken
 import android.app.Activity
 import android.view.*
+import com.google.firebase.FirebaseApp
+import com.google.firebase.messaging.FirebaseMessaging
 
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), onNotification {
 
     companion object {
         fun start(fromActivity: AppCompatActivity) {
@@ -272,4 +274,17 @@ class MainActivity : BaseActivity() {
         displayDisconnectProfileButton(false)
         displayListExchangeButton(false)
     }
+
+    override fun newExchange() {
+        Log.d("TAG", "test")
+    }
+
+    override fun receiveMessage(idConversation: Int) {
+        Log.d("TAG", "test")
+    }
+}
+
+interface onNotification{
+    fun receiveMessage(idConversation: Int)
+    fun newExchange()
 }

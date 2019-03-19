@@ -17,6 +17,8 @@ import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
 import com.example.lpiem.theelderscrolls.viewmodel.ProfileFragmentViewModel
 import com.facebook.AccessToken
 import com.facebook.login.LoginManager
+import com.google.firebase.FirebaseApp
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.fragment_profile.*
 import org.kodein.di.generic.instance
 import timber.log.Timber
@@ -98,6 +100,12 @@ class ProfileFragment : BaseFragment(), DisconnectUserInterface {
                         .placeholder(R.drawable.ic_profile)
                         .into(iv_photo_fragment_profile)
             }
+            FirebaseMessaging.getInstance().subscribeToTopic(it.idUser.toString())
+                    .addOnCompleteListener { task ->
+                    }
+
+            FirebaseMessaging.getInstance().isAutoInitEnabled = true
+            FirebaseApp.initializeApp(activity as MainActivity)
         }
 
     }
