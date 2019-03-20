@@ -23,6 +23,9 @@
         <argument
             android:name="card"
             app:argType="string" />
+        <argument
+            android:name="displayDeconnexion"
+            app:argType="integer" />
     </fragment>
 
 </navigation>

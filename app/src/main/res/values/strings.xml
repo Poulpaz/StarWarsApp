@@ -7,28 +7,45 @@
     <string name="title_home">Boutique</string>
     <string name="title_profile">Profil</string>
     <string name="title_exchange">Echange</string>
-    <string name="title_chat">Conversation</string>
+    <string name="title_chat">Chat</string>
     <string name="title_add_chat">Choisir un joueur</string>
+    <string name="title_add_card_exchange">Choisir une carte</string>
     <string name="title_battle">Combat</string>
     <string name="title_list_exchange">Liste de vos échanges</string>
+    <string name="title_qr_code">CODE QR</string>
+    <string name="title_details_card">Détails d\'une carte</string>
 
     <!-- Home Fragment -->
-    <string name="ti_buy_home_fragment">Acheter</string>
-    <string name="ti_sell_home_fragment">Vendre</string>
+    <string name="ti_shop_home_fragment">Boutique</string>
+    <string name="ti_user_card_home_fragment">Mes cartes</string>
 
     <!-- Card Details Fragment -->
     <string name="tv_pick_card">Choisir une carte</string>
     <string name="tv_pick_player">Choisir un joueur</string>
     <string name="tv_buy_card_success">Votre carte a bien été achetée</string>
+    <string name="tv_sell_card_success">Votre carte a bien été vendue</string>
     <string name="b_buy">Acheter    %d</string>
     <string name="b_sell">Vendre    %d</string>
     <string name="detail_rarity">Rareté</string>
     <string name="detail_type">Type</string>
     <string name="detail_attributes">Attributs</string>
+    <string name="tv_wallet_card_details">Porte Monnaie : %d</string>
+    <string name="tv_error_wallet">Vous n\'avez pas assez de pièces</string>
 
     <!-- Exchange Fragment -->
     <string name="b_exchange">Echanger</string>
     <string name="error_empty_selected_items">Vous devez sélectionner une carte et un joueur</string>
+    <string name="tv_success_add_exchange">L\'échange a été crée, cliquez en haut à droite de l\'écran pour voir la liste</string>
+    <string name="dialog_title_delete_exchange">Suppression d\'échange</string>
+    <string name="dialog_message_delete_exchange">Voulez-vous vraiment supprimer cet échange ?</string>
+    <string name="dialog_validate_delete_exchange">Oui</string>
+    <string name="dialog_cancel_delete_exchange">Non</string>
+    <string name="error_accept_exchange_empty_cards">Il manque au moins une carte pour l\'échange</string>
+    <string name="error_exchange_cards">Une erreur à eu lieu lors de l\'échange</string>
+    <string name="success_exchange_cards">Votre carte a été échangée avec succès</string>
+
+    <!-- Battle Fragment -->
+    <string name="b_batlle">Commencer le duel</string>
 
     <!-- Profile Fragment -->
     <string name="tv_title_dialog_logout">Deconnexion</string>
@@ -48,15 +65,37 @@
 
     <!-- Add Chat Fragment -->
     <string name="b_add_chat_fragment">Démarrer la conversation</string>
+    <string name="tv_add_chat">La conversation a été créée avec succès</string>
+
+    <!-- Chat Fragment -->
+    <string name="tv_send_message">Message envoyé</string>
+
+    <!-- Chat List Fragment -->
+    <string name="tv_title_dialog_delete_chat">Suppression</string>
+    <string name="tv_message_dialog_delete_chat">Voulez-vous vraiment supprimer la conversation ?</string>
+    <string name="tv_delete_chat">La conversation a été supprimée avec succès</string>
 
     <!-- List Exchange Fragment -->
     <string name="tv_card1_fragment_list_exchange">Votre carte</string>
     <string name="tv_card2_fragment_list_exchange">Carte de l\'adversaire</string>
+    <string name="b_card_fragment_list_exchange">Choisir</string>
+    <string name="empty_list_exchange">Vous n\'avez pas d\'échanges</string>
 
     <!-- Error -->
     <string name="tv_error_login">Une erreur a eu lieu lors de la connexion</string>
     <string name="tv_error_signup">Une erreur a eu lieu lors de l\'inscription</string>
     <string name="tv_error_buy_card">Une erreur a eu lieu lors de l\'achat de la carte</string>
+    <string name="tv_error_sell_card">Une erreur a eu lieu lors de la vente de la carte</string>
+    <string name="tv_error_add_exchange">Une erreur a eu lieu lors de la création de l\'échange</string>
+    <string name="tv_error_add_chat">Une erreur a eu lieu lors de la création de la conversation</string>
+    <string name="tv_error_send_message">Une erreur a eu lieu lors de l\'envoie du message</string>
+    <string name="tv_error_delete_chat">Une erreur a eu lieu lors de la suppression de la conversation</string>
+    <string name="tv_error_add_card_exchange">Une erreur a eu lieu lors du choix de la carte</string>
+    <string name="tv_no_user_cards">Vous n\'avez pas de cartes. Achetez-en dans la boutique.</string>
+
+    <!-- Firebase -->
+    <string name="default_notification_channel_id">Channel ID</string>
+    <string name="channelName">News</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

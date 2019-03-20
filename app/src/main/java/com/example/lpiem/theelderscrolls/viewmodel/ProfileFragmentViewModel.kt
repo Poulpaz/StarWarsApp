@@ -23,19 +23,19 @@ class ProfileFragmentViewModel(private val cardsRepository: CardsRepository, pri
     val userCardsList: BehaviorSubject<List<Card>> = BehaviorSubject.create()
     val connectedUser: BehaviorSubject<Optional<User>> = BehaviorSubject.create()
 
-
-    init {
+    fun getConnectedUser(){
         userRepository.connectedUser.subscribe(
                 {
                     connectedUser.onNext(it)
+                    getCardsForConnectedUser()
                 },
                 { Timber.e(it) }
-        )
+        ).disposedBy(disposeBag)
     }
 
     fun getCardsForConnectedUser() {
         val idUser = userRepository.connectedUser.value?.toNullable()?.idUser
-        if(idUser != null) {
+        idUser?.let {
             Flowable.combineLatest(
                     cardsRepository.fetchCards(),
                     cardsRepository.getUserCards(idUser),
@@ -51,8 +51,6 @@ class ProfileFragmentViewModel(private val cardsRepository: CardsRepository, pri
                             },
                             { Timber.e(it) }
                     ).disposedBy(disposeBag)
-        } else {
-
         }
     }
 

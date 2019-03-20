@@ -42,10 +42,27 @@ val viewModelModule = Kodein.Module("ViewModelModule") {
                 .get(ExchangeFragmentViewModel::class.java)
     }
 
-    bind<AddChatFragmentViewModel.Factory>() with provider { AddChatFragmentViewModel.Factory(instance()) }
+    bind<AddChatFragmentViewModel.Factory>() with provider { AddChatFragmentViewModel.Factory(instance(), instance()) }
     bind<AddChatFragmentViewModel>() with factory { fragment: Fragment ->
         ViewModelProvider(fragment, instance<AddChatFragmentViewModel.Factory>())
                 .get(AddChatFragmentViewModel::class.java)
     }
 
+    bind<ListExchangeFragmentViewModel.Factory>() with provider { ListExchangeFragmentViewModel.Factory(instance(), instance()) }
+    bind<ListExchangeFragmentViewModel>() with factory { fragment: Fragment ->
+        ViewModelProvider(fragment, instance<ListExchangeFragmentViewModel.Factory>())
+                .get(ListExchangeFragmentViewModel::class.java)
+    }
+
+    bind<ChatListFragmentViewModel.Factory>() with provider { ChatListFragmentViewModel.Factory(instance(), instance()) }
+    bind<ChatListFragmentViewModel>() with factory { fragment: Fragment ->
+        ViewModelProvider(fragment, instance<ChatListFragmentViewModel.Factory>())
+                .get(ChatListFragmentViewModel::class.java)
+    }
+
+    bind<ChatFragmentViewModel.Factory>() with factory { idConversation : Int -> ChatFragmentViewModel.Factory(instance(),instance(), idConversation) }
+    bind<ChatFragmentViewModel>() with factory { fragment: Fragment, idConversation : Int ->
+        ViewModelProvider(fragment, instance<Int, ChatFragmentViewModel.Factory>(arg = idConversation))
+                .get(ChatFragmentViewModel::class.java)
+    }
 }

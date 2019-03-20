@@ -9,8 +9,11 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.adapter.ListCardAdapter
+import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
 import com.example.lpiem.theelderscrolls.viewmodel.HomeFragmentViewModel
+import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_buy_card.*
+import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_sell_card.*
 import org.kodein.di.generic.instance
 import timber.log.Timber
@@ -37,23 +40,33 @@ class SellCardFragment : BaseFragment() {
         rv_cards_sell_fragment.setItemAnimator(DefaultItemAnimator())
         rv_cards_sell_fragment.adapter = adapter
 
+        swiperefresh_fragment_sell.setOnRefreshListener { viewModel.getCardsForConnectedUser() }
+
         viewModel.userCardsList
                 .subscribe(
                         {
-                            adapter.submitList(it)
+                            if(it.isEmpty()){
+                                rv_cards_sell_fragment.visibility = View.INVISIBLE
+                                tv_no_user_cards_sell_fragment.visibility = View.VISIBLE
+                            } else {
+                                rv_cards_sell_fragment.visibility = View.VISIBLE
+                                tv_no_user_cards_sell_fragment.visibility = View.INVISIBLE
+                                adapter.submitList(it)
+                            }
+                            swiperefresh_fragment_sell.isRefreshing = false
                         },
                         { Timber.e(it) }
-                )
+                ).addTo(viewDisposable)
 
         adapter.cardsClickPublisher
                 .subscribe(
                         {
-                            val action = HomeFragmentDirections.actionMyHomeFragmentToCardDetailsFragment(it)
+                            val action = HomeFragmentDirections.actionMyHomeFragmentToCardDetailsFragment(it, 0)
 
                             NavHostFragment.findNavController(this).navigate(action)
                         },
                         { Timber.e(it) }
-                )
+                ).addTo(viewDisposable)
 
         viewModel.getCardsForConnectedUser()
     }

@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/white</item>
     </style>
 
     <style name="Chip" parent="TextAppearance.MaterialComponents.Chip">
@@ -38,6 +39,12 @@
     <style name="Body">
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textSize">@dimen/body</item>
+    </style>
+
+    <style name="TextItemCard">
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textSize">@dimen/itemCard</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>

@@ -13,13 +13,17 @@ import com.example.lpiem.theelderscrolls.model.User
 import com.example.lpiem.theelderscrolls.ui.activity.ConnectionActivity
 import com.example.lpiem.theelderscrolls.ui.activity.MainActivity
 import com.example.lpiem.theelderscrolls.utils.CircleTransform
+import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
 import com.example.lpiem.theelderscrolls.viewmodel.ProfileFragmentViewModel
 import com.facebook.AccessToken
 import com.facebook.login.LoginManager
+import com.google.firebase.FirebaseApp
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.fragment_profile.*
 import org.kodein.di.generic.instance
 import timber.log.Timber
 import com.squareup.picasso.Picasso
+import io.reactivex.rxkotlin.addTo
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -57,27 +61,31 @@ class ProfileFragment : BaseFragment(), DisconnectUserInterface {
                             onConnectedUserChange(it.toNullable())
                         },
                         { Timber.e(it) }
-                )
+                ).addTo(viewDisposable)
 
         viewModel.userCardsList
                 .subscribe(
                         {
-                            adapter.submitList(it)
+                            if(it.isEmpty()){
+                                rv_cards_profile_fragment.visibility = View.INVISIBLE
+                                tv_no_user_cards_profile.visibility = View.VISIBLE
+                            } else {
+                                rv_cards_profile_fragment.visibility = View.VISIBLE
+                                tv_no_user_cards_profile.visibility = View.INVISIBLE
+                                adapter.submitList(it)
+                            }
                         },
                         { Timber.e(it) }
-                )
+                ).addTo(viewDisposable)
 
         adapter.cardsClickPublisher
                 .subscribe(
                         {
-                            val action = ProfileFragmentDirections.actionMyProfileFragmentToCardDetailsFragment(it)
-
+                            val action = ProfileFragmentDirections.actionMyProfileFragmentToCardDetailsFragment(it, 1)
                             NavHostFragment.findNavController(this).navigate(action)
                         },
                         { Timber.e(it) }
-                )
-
-        viewModel.getCardsForConnectedUser()
+                ).addTo(viewDisposable)
 
     }
 
@@ -92,6 +100,12 @@ class ProfileFragment : BaseFragment(), DisconnectUserInterface {
                         .placeholder(R.drawable.ic_profile)
                         .into(iv_photo_fragment_profile)
             }
+            FirebaseMessaging.getInstance().subscribeToTopic(it.idUser.toString())
+                    .addOnCompleteListener { task ->
+                    }
+
+            FirebaseMessaging.getInstance().isAutoInitEnabled = true
+            FirebaseApp.initializeApp(activity as MainActivity)
         }
 
     }
@@ -104,8 +118,8 @@ class ProfileFragment : BaseFragment(), DisconnectUserInterface {
         val dialog = AlertDialog.Builder(requireContext())
         dialog.setTitle(R.string.tv_title_dialog_logout)
                 .setMessage(R.string.tv_message_dialog_logout)
-                .setNegativeButton(R.string.b_cancel_dialog_logout) { _, i -> }
-                .setPositiveButton(R.string.b_validate_dialog_logout) { _, i ->
+                .setNegativeButton(R.string.b_cancel_dialog_logout) { _, _ -> }
+                .setPositiveButton(R.string.b_validate_dialog_logout) { _, _ ->
                     AccessToken.getCurrentAccessToken()?.let {
                         LoginManager.getInstance().logOut()
                         ConnectionActivity.start(activity as MainActivity)
@@ -116,6 +130,13 @@ class ProfileFragment : BaseFragment(), DisconnectUserInterface {
                         closeMainActivity()
                     }
                 }.show()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getCardsForConnectedUser()
+        viewModel.getConnectedUser()
+        setTitleToolbar(getString(R.string.title_profile))
     }
 }
 

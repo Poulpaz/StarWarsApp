@@ -6,5 +6,7 @@
 
     <color name="transparent">#FFFFFFFF</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="color_primary_transparent">#AA424242</color>
 
 </resources>

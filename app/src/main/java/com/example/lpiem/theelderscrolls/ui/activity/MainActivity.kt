@@ -1,25 +1,30 @@
 package com.example.lpiem.theelderscrolls.ui.activity
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.lpiem.theelderscrolls.R
+import com.example.lpiem.theelderscrolls.manager.PermissionManager
 import com.example.lpiem.theelderscrolls.ui.fragment.DisconnectUserInterface
 import com.example.lpiem.theelderscrolls.ui.fragment.ExchangeInterface
+import com.example.lpiem.theelderscrolls.ui.fragment.HomeInterface
 import com.example.lpiem.theelderscrolls.utils.or
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import com.facebook.AccessToken
+import android.app.Activity
+import android.view.*
+import com.google.firebase.FirebaseApp
+import com.google.firebase.messaging.FirebaseMessaging
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity(), onNotification {
 
     companion object {
         fun start(fromActivity: AppCompatActivity) {
@@ -224,9 +229,62 @@ class MainActivity : AppCompatActivity() {
         listExchangeButtonMenu?.isVisible = value
     }
 
+    fun requestCameraPermission(){
+        if (permissionManager.requestCameraPermission(this)) {
+            openQrCode()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PermissionManager.REQUEST_PERMISSION_CAMERA && grantResults[permissions.indexOf(Manifest.permission.CAMERA)] == PackageManager.PERMISSION_GRANTED) {
+                openQrCode()
+        }
+    }
+
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            ScannerQrCodeActivity.QrCodeRequestCode -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    data?.getStringExtra(ScannerQrCodeActivity.QrCodeKey)?.let {
+                        val container = supportFragmentManager.findFragmentById(R.id.content_home)
+                        val frg = container?.childFragmentManager?.findFragmentById(R.id.content_home)
+                        if (frg is HomeInterface) {
+                            frg.openCardDetails(it)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun openQrCode(){
+        ScannerQrCodeActivity.start(this)
+    }
+
     override fun onBackPressed() {
         currentController
                 .let { if (it.popBackStack().not()) finish() }
                 .or { finish ()}
     }
+
+    override fun onResume() {
+        super.onResume()
+        displayDisconnectProfileButton(false)
+        displayListExchangeButton(false)
+    }
+
+    override fun newExchange() {
+        Log.d("TAG", "test")
+    }
+
+    override fun receiveMessage(idConversation: Int) {
+        Log.d("TAG", "test")
+    }
+}
+
+interface onNotification{
+    fun receiveMessage(idConversation: Int)
+    fun newExchange()
 }

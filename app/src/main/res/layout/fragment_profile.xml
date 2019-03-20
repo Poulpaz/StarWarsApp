@@ -81,6 +81,18 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_wallet_fragment_profile"
                 tools:listitem="@layout/item_card" />
 
+            <TextView
+                android:id="@+id/tv_no_user_cards_profile"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/tv_no_user_cards"
+                android:gravity="center"
+                android:layout_margin="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_wallet_fragment_profile" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 

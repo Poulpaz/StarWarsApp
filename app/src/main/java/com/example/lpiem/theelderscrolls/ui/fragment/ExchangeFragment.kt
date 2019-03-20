@@ -12,15 +12,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.adapter.ListCardExchangeAdapter
 import com.example.lpiem.theelderscrolls.adapter.ListPlayersAdapter
+import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
 import com.example.lpiem.theelderscrolls.datasource.response.IdCardResponse
 import com.example.lpiem.theelderscrolls.model.Card
+import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
 import com.example.lpiem.theelderscrolls.utils.disposedBy
 import com.example.lpiem.theelderscrolls.viewmodel.ExchangeFragmentViewModel
 import com.jakewharton.rxbinding2.view.clicks
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_exchange.*
+import kotlinx.android.synthetic.main.fragment_sell_card.*
 import org.kodein.di.direct
 import org.kodein.di.generic.instance
 import timber.log.Timber
@@ -63,10 +67,17 @@ class ExchangeFragment : BaseFragment(), ExchangeInterface{
         viewModel.userCardsList
                 .subscribe(
                         {
-                            adapterCards.submitList(it)
+                            if(it.isEmpty()){
+                                rv_cards_exchange_fragment.visibility = View.INVISIBLE
+                                tv_no_user_cards_exchange.visibility = View.VISIBLE
+                            } else {
+                                rv_cards_exchange_fragment.visibility = View.VISIBLE
+                                tv_no_user_cards_exchange.visibility = View.INVISIBLE
+                                adapterCards.submitList(it)
+                            }
                         },
                         { Timber.e(it) }
-                )
+                ).addTo(viewDisposable)
 
         viewModel.usersList
                 .subscribe(
@@ -74,10 +85,26 @@ class ExchangeFragment : BaseFragment(), ExchangeInterface{
                             adapterPlayers.submitList(it)
                         },
                         { Timber.e(it) }
-                )
+                ).addTo(viewDisposable)
 
-        viewModel.getAllUsers()
-        viewModel.getCardsForConnectedUser()
+        viewModel.exchangeState
+                .subscribe({
+                    when (it) {
+                        is NetworkEvent.InProgress -> {
+                            b_exchange_fragment.isEnabled = false
+                        }
+                        is NetworkEvent.Error -> {
+                            b_exchange_fragment.isEnabled = true
+                            Toast.makeText(activity, getString(R.string.tv_error_add_exchange), Toast.LENGTH_SHORT).show()
+                        }
+                        is NetworkEvent.Success -> {
+                            b_exchange_fragment.isEnabled = true
+                            Toast.makeText(activity, getString(R.string.tv_success_add_exchange), Toast.LENGTH_LONG).show()
+                        }
+                    }
+
+                }, { Timber.e(it) }
+                ).addTo(viewDisposable)
 
         PublishSubject.combineLatest(
                 adapterCards.indexClickPublisher,
@@ -92,11 +119,11 @@ class ExchangeFragment : BaseFragment(), ExchangeInterface{
                             }
                         },
                         { Timber.e(it) }
-                )
+                ).addTo(viewDisposable)
 
         b_exchange_fragment.setOnClickListener {
             valuesExchange?.let {
-
+                viewModel.exchangeCards(it.first, it.second)
             } ?: Toast.makeText(context, getString(R.string.error_empty_selected_items), Toast.LENGTH_SHORT).show()
         }
 
@@ -105,6 +132,12 @@ class ExchangeFragment : BaseFragment(), ExchangeInterface{
     override fun displayListExchange() {
         val action = ExchangeFragmentDirections.actionExchangeFragmentToListExchangeFragment()
         NavHostFragment.findNavController(this).navigate(action)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getAllUsers()
+        viewModel.getCardsForConnectedUser()
     }
 }
 

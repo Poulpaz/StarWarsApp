@@ -33,11 +33,7 @@ val networkModule = Kodein.Module("Network") {
 
     bind<Interceptor>(tagLoggingInterceptor) with singleton {
         val hli = HttpLoggingInterceptor()
-        if (BuildConfig.DEBUG) {
-            hli.level = HttpLoggingInterceptor.Level.BODY
-        } else {
-            hli.level = HttpLoggingInterceptor.Level.NONE
-        }
+        hli.level = HttpLoggingInterceptor.Level.BODY
         hli
     }
 

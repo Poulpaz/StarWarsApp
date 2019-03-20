@@ -11,6 +11,8 @@ import com.example.lpiem.theelderscrolls.R
 import com.example.lpiem.theelderscrolls.datasource.NetworkEvent
 import com.example.lpiem.theelderscrolls.datasource.request.RegisterData
 import com.example.lpiem.theelderscrolls.manager.GoogleConnectionManager
+import com.example.lpiem.theelderscrolls.utils.RxLifecycleDelegate
+import com.example.lpiem.theelderscrolls.utils.disposedBy
 import com.example.lpiem.theelderscrolls.viewmodel.ConnectionActivityViewModel
 import com.facebook.*
 import com.jakewharton.rxbinding2.view.clicks
@@ -33,7 +35,7 @@ class ConnectionActivity : BaseActivity() {
     private val viewModel: ConnectionActivityViewModel by instance(arg = this)
 
     private val RC_SIGN_IN = 0
-    private var TAG = "ConectionActivity"
+    private var TAG = "ConnectionActivity"
     private var callbackManager: CallbackManager? = null
     private val googleManager: GoogleConnectionManager by instance()
 
@@ -51,21 +53,17 @@ class ConnectionActivity : BaseActivity() {
         FacebookSdk.sdkInitialize(applicationContext)
         AppEventsLogger.activateApp(this)
 
-        testUserConnected()
+        b_login_google.setOnClickListener {
+            loginWithGoogle()
+        }
 
-        b_login_google.clicks()
+        b_login_facebook.setOnClickListener {
+            loginWithFacebook()
+        }
+
+        viewModel.signInState
+                .takeUntil(lifecycle(RxLifecycleDelegate.ActivityEvent.DESTROY))
                 .subscribe(
-                        { loginWithGoogle() },
-                        { Timber.e(it) }
-                )
-
-        b_login_facebook.clicks()
-                .subscribe(
-                        { loginWithFacebook() },
-                        { Timber.e(it) }
-                )
-
-        viewModel.signInState.subscribe(
                 {
                     when (it) {
                         NetworkEvent.None -> {
@@ -75,14 +73,14 @@ class ConnectionActivity : BaseActivity() {
                             onSignInStateInProgress()
                         }
                         is NetworkEvent.Error -> {
-                            onSignInStateError(it)
+                            onSignInStateError()
                         }
                         is NetworkEvent.Success -> {
                             onSignInStateSuccess()
                         }
                     }
                 }, { Timber.e(it) }
-        )
+        ).disposedBy(viewDisposable)
     }
 
     //region Facebook & Google
@@ -92,7 +90,7 @@ class ConnectionActivity : BaseActivity() {
         progress_bar_connection_activity.visibility = View.GONE
     }
 
-    private fun onSignInStateError(error: NetworkEvent.Error) {
+    private fun onSignInStateError() {
         AccessToken.getCurrentAccessToken()?.let {
             LoginManager.getInstance().logOut()
         }
@@ -110,24 +108,13 @@ class ConnectionActivity : BaseActivity() {
         progress_bar_connection_activity.visibility = View.GONE
     }
 
-    private fun onSignUpStateError(it: NetworkEvent.Error) {
+    private fun onSignUpStateError() {
         Toast.makeText(this, getString(R.string.tv_error_signup), Toast.LENGTH_SHORT).show()
         progress_bar_connection_activity.visibility = View.GONE
     }
 
     private fun onSignUpStateInProgress() {
         progress_bar_connection_activity.visibility = View.VISIBLE
-    }
-
-    private fun testUserConnected() {
-        val accessToken = AccessToken.getCurrentAccessToken()
-        val googleAccount = GoogleSignIn.getLastSignedInAccount(this)
-        if (accessToken != null && !accessToken.isExpired) {
-            viewModel.loadUser()
-        }
-        googleAccount?.let {
-            viewModel.loadUser()
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -148,28 +135,27 @@ class ConnectionActivity : BaseActivity() {
         LoginManager.getInstance().registerCallback(callbackManager,
                 object : FacebookCallback<LoginResult> {
                     override fun onSuccess(loginResult: LoginResult) {
-                        val token = loginResult.accessToken.token
-                        Log.d(TAG, "Facebook token: " + token)
                         signInUserWithFacebook(loginResult)
                     }
 
-                    override fun onCancel() {
-                        Log.d(TAG, "Facebook onCancel.")
-                    }
+                    override fun onCancel() {}
 
                     override fun onError(error: FacebookException) {
-                        Log.d(TAG, "Facebook onError.")
+                        displayErrorFacebook()
                     }
                 })
+    }
+
+    private fun displayErrorFacebook(){
+        Toast.makeText(this, getString(R.string.tv_error_signup), Toast.LENGTH_SHORT).show()
     }
 
     private fun signInUserWithFacebook(loginResult: LoginResult) {
         val request = GraphRequest.newMeRequest(
                 loginResult.accessToken
-        ) { `object`, response ->
+        ) { _, _ ->
 
             try {
-                Log.i("Response", response.toString())
 
                 val profile = Profile.getCurrentProfile()
 
@@ -178,21 +164,21 @@ class ConnectionActivity : BaseActivity() {
                     val firstName = profile.firstName
                     val lastName = profile.lastName
                     val photoUri = Profile.getCurrentProfile().getProfilePictureUri(200, 200)
-                    val registerData = RegisterData(id, firstName, lastName, 10, photoUri.toString())
+                    val registerData = RegisterData(id, firstName, lastName, 30, photoUri.toString())
                     viewModel.accountExistState.subscribe(
                             {
                                 if (!it) {
                                     val dialog = AlertDialog.Builder(this)
                                     dialog.setTitle(R.string.tv_title_dialog_signup)
                                             .setMessage(R.string.tv_message_dialog_signup)
-                                            .setNegativeButton(R.string.b_cancel_dialog_signup, { dialoginterface, i -> })
-                                            .setPositiveButton(R.string.b_validate_dialog_signup) { dialoginterface, i ->
+                                            .setNegativeButton(R.string.b_cancel_dialog_signup) { _, _ -> }
+                                            .setPositiveButton(R.string.b_validate_dialog_signup) { _, _ ->
                                                 signUpWithFacebook(registerData)
                                             }.show()
                                 }
                             },
                             { Timber.e(it) }
-                    )
+                    ).disposedBy(viewDisposable)
                     viewModel.signIn(id)
                 }
             } catch (e: JSONException) {
@@ -213,14 +199,14 @@ class ConnectionActivity : BaseActivity() {
                             onSignUpStateInProgress()
                         }
                         is NetworkEvent.Error -> {
-                            onSignUpStateError(it)
+                            onSignUpStateError()
                         }
                         is NetworkEvent.Success -> {
                             onSignUpStateSuccess(registerData.id)
                         }
                     }
                 }, { Timber.e(it) }
-        )
+        ).disposedBy(viewDisposable)
     }
 
     //region Google
@@ -249,21 +235,21 @@ class ConnectionActivity : BaseActivity() {
             if(id.isNullOrEmpty() || firstName.isNullOrEmpty() || lastName.isNullOrEmpty()){
                 Toast.makeText(this, getString(R.string.tv_error_login), Toast.LENGTH_SHORT).show()
             } else {
-                val registerData = RegisterData(id, firstName, lastName, 10, photoUri.toString())
+                val registerData = RegisterData(id, firstName, lastName, 30, photoUri.toString())
                 viewModel.accountExistState.subscribe(
                         {
                             if (!it) {
                                 val dialog = AlertDialog.Builder(this)
                                 dialog.setTitle(R.string.tv_title_dialog_signup)
                                         .setMessage(R.string.tv_message_dialog_signup)
-                                        .setNegativeButton(R.string.b_cancel_dialog_signup, { dialoginterface, i -> })
-                                        .setPositiveButton(R.string.b_validate_dialog_signup) { dialoginterface, i ->
+                                        .setNegativeButton(R.string.b_cancel_dialog_signup, { _, _ -> })
+                                        .setPositiveButton(R.string.b_validate_dialog_signup) { _, _ ->
                                             signUpWithFacebook(registerData)
                                         }.show()
                             }
                         },
                         { Timber.e(it) }
-                )
+                ).disposedBy(viewDisposable)
                 viewModel.signIn(id)
             }
         }
@@ -277,5 +263,4 @@ class ConnectionActivity : BaseActivity() {
         super.onStop()
         finish()
     }
-
 }
