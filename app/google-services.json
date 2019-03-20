@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "576471170537",
+    "firebase_url": "https://theelderscrolls-3377f.firebaseio.com",
+    "project_id": "theelderscrolls-3377f",
+    "storage_bucket": "theelderscrolls-3377f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:576471170537:android:21790e00d20c67f7",
+        "android_client_info": {
+          "package_name": "com.example.lpiem.theelderscrolls"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "576471170537-h82nbvrl92hggc8ja5gkbehpev4tpjjf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArs9g2L4AoE6JnyqCgMeetxFPMS_90Sug"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
