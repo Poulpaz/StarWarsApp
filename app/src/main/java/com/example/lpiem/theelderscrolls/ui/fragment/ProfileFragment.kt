@@ -136,6 +136,7 @@ class ProfileFragment : BaseFragment(), DisconnectUserInterface {
         super.onResume()
         viewModel.getCardsForConnectedUser()
         viewModel.getConnectedUser()
+        setTitleToolbar(getString(R.string.title_profile))
     }
 }
 
