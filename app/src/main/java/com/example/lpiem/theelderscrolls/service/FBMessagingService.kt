@@ -14,6 +14,7 @@ import com.example.lpiem.theelderscrolls.ui.activity.onNotification
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import timber.log.Timber
+import java.net.URLDecoder
 
 
 /**
@@ -39,7 +40,7 @@ class FBMessagingService : FirebaseMessagingService() {
             Timber.d("Message data payload: " + remoteMessage.data)
 
             val title = remoteMessage.notification?.title
-            val text = remoteMessage.notification?.body
+            val text = URLDecoder.decode(remoteMessage.notification?.body, "utf-8")
             val id = remoteMessage.data["idNotif"]
             val type = remoteMessage.data["type"]
 
